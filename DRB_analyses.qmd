@@ -65,6 +65,20 @@ editor: source
   - strange DEBRA method for discarding lowly differentially expressed barcodes.
   - trended or shrinkage to deal with mean-variance deviation -> seems *trended* is better
 
+# Analyses
+
+## Data management
+
+[Original Online repository](https://drive.google.com/drive/folders/1pMSX4M4kHcDGxcsCzsMYHHM6VRvBHHUO?usp=drive_link).
+
+These `bash` instructions below are really useful to track large Github files, and overcome Github limit sizes^[Note that Github repos are mostly used for storign code snippets and not datasets, however].
+
+```bash
+git lfs install # only if git lfs is not installed locally.
+git lfs track "data/data-raw/barcode-counts/**"
+git add .gitattributes
+git commit -m "Added expression counts with Git LFS"
+```
 
 # Future perspectives
 
