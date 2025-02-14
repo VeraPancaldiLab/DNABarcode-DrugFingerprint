@@ -1,0 +1,92 @@
+---
+title: "Inferring the MOA of new drugs through the analysis of heterogeneous response to treatment of different subpopulations of cancer cells"
+author: "Bastien CHASSAGNOL and Vera PANCALDI"
+date: last-modified	
+number-sections: true
+toc: true
+toc-depth: 3
+lang: en-GB
+# subject: "Cell-cell benchmark"
+# keywords: ["cell-cell communication", "benchmark", "spatial transcriptomics", "single-cell"]
+# bibliographic options
+bibliography: DRB_fingerprints.bib
+link-citations: true
+highlight-style: github
+filters:
+  - highlight-text
+# code options
+execute:
+  message: false
+  warning: false
+  error: false
+# Table options
+tbl-cap-location: bottom
+format: 
+  html:
+    embed-resources: true
+    theme:
+      light: cosmo
+      dark: cosmo
+    sidebar: true
+    lightbox: true # Allows to zoom out on figures.
+    toc-expand: 2 # by default, level 2 is visible before scrolling
+    comments: 
+      hypothesis: true
+    # code options
+    code-fold: show
+    code-link: true
+    page-layout: full
+    collapse: true
+  pdf:
+    colourlinks: true
+    cite-method: biblatex
+  # docx:
+  #   toc-title: Contents
+editor: source
+---
+
+# DNA Barcoding applications
+
+- DNA barcoding not for environmental, species abundancies, metagenomics (same statistical issues met in my team)
+- Lack of systematic reviews and benchmarks.
+
+- Pros DNA barcoding:
+  - Better capture of cell population sizes
+  - Better tracking of tagged clones.
+- Key principles:
+  - Transfection by virus?
+  - Clonal amplification, unique tagging per cell using MOI
+  - clone sizes are assumed to be proportional to the barcode abundances
+  
+- Issues:
+  - Use RNASeq based tools
+  - Assumptions that tagwise variance is homogeneous and read counts follow a negative binomial distribution uncertain.
+  - even DEBRA does not account for outliers expression, nor zero-inflated counts. -> recommendation of glmQLFit and glmQLFTest for routine GLM-based DE analyses, from [EdgeR: Explaning dispersion types to newbies](https://support.bioconductor.org/p/110273/). 
+  - strange DEBRA method for discarding lowly differentially expressed barcodes.
+  - trended or shrinkage to deal with mean-variance deviation -> seems *trended* is better
+
+
+# Future perspectives
+
+- Isssues specific to the poster study:
+  - Analysis of synthetic cellular barcodes in the genome and transcriptome with `BARtab` and `bartools`
+  - DNA Barcoding and single cell profiling and lienages, as it's quoted it's "possible to combine **lineage tracing** and **gene expression single cell analysis**". It's scRNA-Seq analysis, isn't it? 
+    - Single-cell lineage capture across genomic modalities with `CellTag-multi` reveals fate-specific gene regulatory changes -> use of **single-cell lineage-tracing (scLT)**, 
+    - High-resolution, noninvasive single-cell lineage tracing in mice and humans based on DNA methylation epimutations
+  - Use of graph clustering approaches? Like Louvain? + multiple case studies, how to combine them (2 vials of cell lines)? 
+
+# TODO
+  
+- Tools:
+  - GitHub (privacy), language (R)
+  - Datasets storage and access
+  - Computational resources (create a dedicated project on the IFB core cluster)?
+  - Zotero for sharing biblio resources.
+  - Paper reporting + Position in the paper.
+  
+- Other perspectives:
+  - Nathanael
+  - Digital twins and Early and intermediate integration aproaches with Andrea Rau, call starting from September + application in `IMMUcan`.
+  - Papers to review in BioInformatics Advances (after the end of March)
+  - quantum job
+  - Workshop and JOBIM Videos
