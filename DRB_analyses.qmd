@@ -80,6 +80,15 @@ git add .gitattributes
 git commit -m "Added expression counts with Git LFS"
 ```
 
+```bash
+git lfs untrack "data/data-raw/barcode-counts/**"
+git rm --cached "data/data-raw/barcode-counts/**"
+git commit -m "Removed large file from tracking"
+
+
+java -jar bfg.jar bfg --delete-files "data/data-raw/barcode-counts/**"
+```
+
 # Future perspectives
 
 - Isssues specific to the poster study:
