@@ -1,0 +1,38 @@
+---
+title: "Miscelleaneous"
+format: html
+---
+
+These `bash` instructions below are useful to track large Github files, and overcome Github limit sizes^[Note that Github repos are mostly used for storing code snippets and not datasets].
+
+```bash
+
+git lfs install # only if git lfs is not installed locally.
+
+git lfs track "data/data-raw/barcode-counts/**"
+
+git add .gitattributes
+
+git commit -m "Added expression counts with Git LFS"
+
+```
+
+On the other hand, these `bash` instructions can be used to rewrite git history, and clean large files committed and pushed inadventertly^[See [BFG repo](https://rtyley.github.io/bfg-repo-cleaner/) for details].
+
+```bash
+
+git lfs untrack "data/data-raw/barcode-counts/**"
+
+git rm --cached "data/data-raw/barcode-counts/**"
+
+git commit -m "Removed large file from tracking"
+
+git clone --mirror git://example.com/some-big-repo.git
+
+java -jar bfg.jar bfg --delete-files "data\data-raw\barcode-counts\exp040821.csv" DNABarcode-DrugFingerprint.git
+
+bfg --delete-files id_{dsa,rsa}  my-repo.git
+
+git reflog expire --expire=now --all && git gc --prune=now --aggressive
+
+```

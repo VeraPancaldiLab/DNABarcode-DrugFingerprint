@@ -1,6 +1,8 @@
 ### IMPORTANT for 281022 the last cols of the files were removed _75 and P...
 ## so the file include is exp281022_proc. the original file is in excluded
 
+pheno_data <- readr::read_csv("data/data-derived/pheno_data.csv")
+
 source("R/process_barcode.R")
 
 # Read barcode files ----
