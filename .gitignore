@@ -3,6 +3,8 @@
 .RData
 .Ruserdata
 biblio/Thesis Houssein_270922.pdf
-data/data-raw/barcode-counts/**
+old-data-backup/**
 bfg.jar
 miscelleaneous.qmd
+data/barcode-counts/**
+data/Summary_experiments and runs_selected_310325.xlsx

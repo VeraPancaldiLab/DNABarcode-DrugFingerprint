@@ -40,8 +40,8 @@ format:
   # pdf:
   #   colourlinks: true
   #   cite-method: biblatex
-  docx:
-    toc-title: Contents
+  # docx:
+  #   toc-title: Contents
 editor: source
 ---
 
@@ -75,7 +75,7 @@ editor: source
 
 
 
-I list below some R packages (mostly related to data reading and wrangling), required to reproduce the analyses.
+I list below the R packages required to reproduce the analyses.
 
 ```{r}
 #| label: "setup"
@@ -120,51 +120,97 @@ selected_dataset <- compare_dataframes(exp130921_expression, exp130921_1_express
 
 [Conclusion: Keep `exp130921.csv`]{fg="red"}
 
+<!-- ```{r} -->
+<!-- #| label: select-expression-2 -->
+<!-- #| eval: false -->
+
+<!-- exp211221_expression <- readr::read_csv2("data/data-raw/barcode-counts/exp211221.csv") |> -->
+<!--   rename(key_barcode = 1) -->
+
+<!-- exp211221cor_expression <- readr::read_csv2("data/data-raw/barcode-counts/exp211221cor.csv") |> -->
+<!--   rename(key_barcode = 1) -->
+
+<!-- selected_dataset <- compare_dataframes(exp211221_expression, exp211221cor_expression) -->
+<!-- ``` -->
+
+<!-- [**Conclusion**: Keep `exp211221cor.csv`]{fg="red"} -->
+
+<!-- ```{r} -->
+<!-- #| label: select-expression-3 -->
+<!-- #| eval: false -->
+
+<!-- exp300821_expression <- readr::read_csv2("data/data-raw/barcode-counts/exp300821.csv") |> -->
+<!--   rename(key_barcode = 1) -->
+
+<!-- exp300821cor_expression <- readr::read_csv2("data/data-raw/barcode-counts/exp300821_cor.csv") |> -->
+<!--   rename(key_barcode = 1) -->
+
+<!-- selected_dataset <- compare_dataframes(exp300821_expression, exp300821cor_expression) -->
+<!-- ``` -->
+
+<!-- [**Conclusion**:Keep `exp300821_cor.csv` (`exp300821` has empty colnames).]{fg="red"} -->
+
+
 ```{r}
-#| label: select-expression-2
+#| label: select-expression-281022
 #| eval: false
+#| echo: true
 
-exp211221_expression <- readr::read_csv2("data/data-raw/barcode-counts/exp211221.csv") |>
+# extract old colnames
+exp281022_expression <- readr::read_csv2("data/barcode-counts/exp281022.csv") |>
   rename(key_barcode = 1)
+# cat(colnames(exp281022_expression), file = "281022_old_labels.txt", sep = "\n")
 
-exp211221cor_expression <- readr::read_csv2("data/data-raw/barcode-counts/exp211221cor.csv") |>
-  rename(key_barcode = 1)
+# extract mapping old_names with new_names
+mapping_old_new_281022 <- readxl::read_excel("data/Table of compounds.xlsx", 
+                                             sheet = "Sample Mapping 281022")
 
-selected_dataset <- compare_dataframes(exp211221_expression, exp211221cor_expression)
+labels_old_new_281022 <- setNames(object = mapping_old_new_281022$OLD_replicate_label, 
+                                  nm = mapping_old_new_281022$NEW_replicate_label)
+
+# apply change labelling
+exp281022_expression <- exp281022_expression |> 
+  dplyr::rename(dplyr::all_of(labels_old_new_281022))
+
+readr::write_csv(exp281022_expression, "data/barcode-counts/exp281022.csv")
 ```
 
-[**Conclusion**: Keep `exp211221cor.csv`]{fg="red"}
+[**Conclusion**: ]{fg="red"}.
 
 ```{r}
-#| label: select-expression-3
+#| label: select-expression-281022-time-course
 #| eval: false
+#| echo: true
 
-exp300821_expression <- readr::read_csv2("data/data-raw/barcode-counts/exp300821.csv") |>
+
+exp281022_expression_timecourse <- readr::read_csv2("data/barcode-counts/exp281022_time course.csv") |>
   rename(key_barcode = 1)
+# cat(colnames(exp281022_expression_timecourse), file = "281022_timecourse_old_labels.txt", sep = "\n")
 
-exp300821cor_expression <- readr::read_csv2("data/data-raw/barcode-counts/exp300821_cor.csv") |>
-  rename(key_barcode = 1)
+# update colnames ----
 
-selected_dataset <- compare_dataframes(exp300821_expression, exp300821cor_expression)
+mapping_old_new_time_course <- read_excel("data/Table of compounds.xlsx", 
+                                     sheet = "Sample Mapping Time Course")
+
+labels_old_new_time_course <- setNames(object = mapping_old_new_time_course$OLD_replicate_label, 
+                                       nm = mapping_old_new_time_course$NEW_replicate_label)
+
+# apply change labelling
+exp281022_expression_timecourse <- exp281022_expression_timecourse |> 
+  dplyr::rename(dplyr::all_of(labels_old_new_time_course))
+
+readr::write_csv(exp281022_expression_timecourse,
+                 "data/barcode-counts/exp281022_time course.csv")
+
+# To evaluate whether controls are different between experiment 281022 and 281022 Time Course
+controls_exp281022 <- exp281022_expression |> 
+  select(key_barcode, dplyr::matches("^ctl")) |> 
+  dplyr::inner_join(exp281022_expression_timecourse |> 
+                      select(key_barcode, dplyr::matches("^Ctrl")),
+                    by="key_barcode")
+cor(controls_exp281022$ctl2, controls_exp281022$Ctrl2) # they strongly correlate with each other, but not a perfect mapping
+
 ```
-
-[**Conclusion**:Keep `exp300821_cor.csv` (`exp300821` has empty colnames).]{fg="red"}
-
-
-```{r}
-#| label: select-expression-4
-#| eval: false
-
-exp281022_expression <- readr::read_csv2("data/data-raw/barcode-counts/exp281022.csv") |>
-  rename(key_barcode = 1)
-
-exp281022mod_expression <- readr::read_csv2("data/data-raw/barcode-counts/exp281022_mod.csv") |>
-  rename(key_barcode = 1)
-
-selected_dataset <- compare_dataframes(exp281022_expression, exp281022mod_expression)
-```
-
-[**Conclusion**:Keep `exp281022.csv` as the most complete (same number of sequenced barcode IDs, but more drugs sequenced)]{fg="red"}.
 
 ```{r}
 #| label: select-expression-5
@@ -182,15 +228,15 @@ selected_dataset <- compare_dataframes(exp200921_expression, exp200921_dose_resp
 
 Definitely the most challenging to handle with:
 
-  - `exp200921_dose response osim` deals with distinct biological objective. 
+  - `exp200921_dose response osim` has distinct biological objective. 
   
-  - [On the other hand, the 4 controls are shared in both experiences, but **the number of sequenced barcode IDs differ in both experiences, with some only present in `exp200921`, and some others only present in dose response (overall, dose response is the msot comprehensive)**.]{fg="red"}
+  - [On the other hand, the 4 control biological replicates are shared in both experiences, but **the number of sequenced barcode IDs differ in both experiences, with some only present in `exp200921`, and some others only present in dose response (overall, dose response is the most comprehensive)**.]{fg="red"}
 
 ### Additional comments
 
-- `exp130921_in_vivo`: cells injected in living mice.
-- `exp281022_time course`: time course experiement
-- `exp281022`: control, protac, cetuximab and gefitinib were tested in T25 flasks. P42 and P43 correspond to cells grown without treatment for 42 or 43 passages, evaluating *barcode drift*.
+- `exp130921_in_vivo`: cells injected in living mice (control versus osermintinimb).
+- `exp281022_time course`: time course experiment
+- `exp281022`: control, protac, cetuximab and gefitinib ($n=4$ replicates each time) were sampled in T25 flasks. P42 and P43 correspond to cells grown without treatment for 42 or 43 passages, and were used for evaluating *barcode drift* technical artefact.
 - `exp281022` and `exp281022_time course` are not reported on the Phd thesis, as defence was legit prior to the generation of these datasets. Would be great adding in `Table of Compounds` concentration, chemical species and time run for the `exp281022_time course`.
 
 ## Phenotypes
@@ -217,7 +263,7 @@ pheno_colnames <- c(Level1 = "Pathways", Level2 = "...2",
                     Concentrations = "Concentrations", Date = "Experiment date",
                     `Run date` = "Run date", Comments = "Comments")
 
-pheno_data <- readxl::read_xlsx("data/data-raw/Table of compounds_030622.xlsx",
+pheno_data <- readxl::read_xlsx("data/data-raw/Table of compounds.xlsx",
                                 sheet = "Experimental Design",
                                 col_types = c(rep("text", 3), "numeric", rep("text", 4))) |>
   # rename and remove irrelant colnames for the analysis
@@ -299,7 +345,7 @@ In @lst-process-pheno2, we identify which raw barcode expression matrices avalai
 barcodes_filenames <- list.files("./data/data-raw/barcode-counts/",
                                 pattern = "^exp.*\\.csv$")
 
-barcodes_IDs <- readxl::read_xlsx("data/data-raw/Table of compounds_030622.xlsx",
+barcodes_IDs <- readxl::read_xlsx("data/data-raw/Table of compounds.xlsx",
                                        sheet="Batch Mapping") |> 
   select(Filename, Batch_ID) |> 
   filter(!Batch_ID %in% c("exp281022_time", "exp281022")) |> # remove se far recent experiences not reported in Table of compounds
@@ -314,7 +360,7 @@ In Appendix @sec-ID-mapping, we report a semi-automated approach to ensure prope
 
 Best next time: ensure a 1-1 mapping with full `Samples` names^[`Dorsomorphin (Compound C) 2HCl` to shorter `Samples_ID:Compou` was definitely hard to guess].
 
-[**Please ensure now that the added *Sheet* `Drugs Mapping` in [`Table of compounds_030622`](data/data-raw/Table of compounds_030622.xlsx) is correct.**]{fg="red"}
+[**Please ensure now that the added *Sheet* `Drugs Mapping` in [`Table of compounds_030622`](data/data-raw/Table of compounds.xlsx) is correct.**]{fg="red"}
 
 :::
 
@@ -386,7 +432,7 @@ ID_mapping <- ID_mapping |>
 
 # step 3) map sample IDs with full sample (drugs) names
 ## map short samples (drugs) with full sample names in Table of compounds
-mapping_compounds <- readxl::read_xlsx("data/data-raw/Table of compounds_030622.xlsx",
+mapping_compounds <- readxl::read_xlsx("data/data-raw/Table of compounds.xlsx",
                                 sheet = "Drugs Mapping")
 ID_mapping <- ID_mapping |> inner_join(mapping_compounds, by = "Samples_ID")
 # mapping_compounds |> anti_join(ID_mapping, by = "Samples_ID")
@@ -486,6 +532,10 @@ flextable(replicate_inconsistencies) |>
 # step 5) save the comprehensive phenotype table
 readr::write_csv(pheno_data_detailed,
                  file = "data/data-derived/pheno_data.csv")
+
+flextable::flextable(head(pheno_data_detailed)) |> 
+  autofit() |> 
+  bold(part="header")
 ```
 
 
@@ -558,18 +608,23 @@ Things to consider:
 -   [To select barcodes highly correlated within each other, must correlate, with $CC > 0.8$ with at least 4 others (or 5, do you remove the barcode itself?)]{fg="blue"}.
 -   [Not done.]{fg="green"}
 
-## Future perspectives
+## Perspectives
+
+### Map Results with Single Cell Analyses
 
 - [Single cell and drug response largest database](https://www.linkedin.com/posts/independent-data-lab_check-out-the-preprint-activity-7300471798029012993-YRjy)
 - [Biologist perspective](https://docs.google.com/document/d/1UHD6IG9Rti2tD77zwHfSyh5XyTbnJ25S/edit)
+- - Single-cell lineage capture across genomic modalities with `CellTag-multi` reveals fate-specific gene regulatory changes -> use of **single-cell lineage-tracing (scLT)**. 
+- High-resolution, noninvasive single-cell lineage tracing in mice and humans based on DNA methylation epimutations
 
-- Isssues specific to the poster study:
-  - Analysis of synthetic cellular barcodes in the genome and transcriptome with `BARtab` and `bartools`
-  - DNA Barcoding and single cell profiling and lienages, as it's quoted it's "possible to combine **lineage tracing** and **gene expression single cell analysis**". It's scRNA-Seq analysis, isn't it?
-    - Single-cell lineage capture across genomic modalities with `CellTag-multi` reveals fate-specific gene regulatory changes -> use of **single-cell lineage-tracing (scLT)**. 
-    - High-resolution, noninvasive single-cell lineage tracing in mice and humans based on DNA methylation epimutations
+### Pipeline tracks of improvement
 
-  - Use of graph clustering approaches? Like Louvain? + multiple case studies, how to combine them (2 vials of cell lines)?
+- Analysis of synthetic cellular barcodes in the genome and transcriptome with `BARtab` and `bartools`. 
+
+### Drug clustering and mapping
+
+- Use of graph clustering approaches? Like Louvain? + multiple case studies, how to combine them (2 vials of cell lines)?
+- Compare with ATC prediction and clustering: [`PDATC-NCPMKL-updated` GH Repo](https://github.com/Lywhere/PDATC-NCPMKL-updated), from 
 
 # TODO
 
@@ -578,21 +633,15 @@ Things to consider:
   - Datasets storage and access
   - Computational resources (create a dedicated project on the IFB core cluster?)
   - Zotero for sharing biblio resources.
-  - Paper reporting + Position.
 
-<!-- - Other perspectives: -->
-
-<!--   - Nathanael -->
-
-<!--   - Digital twins and Early and intermediate integration aproaches with Andrea Rau, call starting from September + application in `IMMUcan`. -->
-
-<!--   - Papers to review in BioInformatics Advances (after the end of March) -->
-
-<!--   - quantum job -->
-
-<!--   - Workshop and JOBIM Videos -->
+- Paper reporting + Position.
 
 # Appendix {.appendix}
+
+## Store and Publish cell lines
+
+- [`cellosaurus` General Comments](https://www.expasy.org/resources/cellosaurus) and [`cellosaurus` Official Website](https://www.cellosaurus.org/). The paper is associated with @bairoch2018jbt, and @robin2020ijc introduces `CLASTR` that utilises one or more STR (*short-tandem repeat*) profiles to map user-provided cell lines with the ones available in the `Cellosaurus` online resource.
+- [`Bgee`](https://www.bgee.org/), from [@bastian2021nar; @bastian2025nar].
 
 ## Mapping short and full samples IDs {#sec-ID-mapping}
 
