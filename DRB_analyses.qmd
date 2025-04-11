@@ -69,7 +69,7 @@ editor: source
   - Better characterisation of the mean-variance deviation -> between `trended` or `shrinkage`, `trended` is favoured.
 
 - Cons DEBRA:
-  - DEBRA does not account for outliers expression, nor zero-inflated counts -> recommendation of `glmQLFit` and `glmQLFTest` for routine GLM-based DE analyses, from [EdgeR: Explaning dispersion types to newbies](https://support.bioconductor.org/p/110273/).
+  - DEBRA does not account for outliers expression, nor zero-inflated counts -> recommendation of `glmQLFit` and `glmQLFTest` for routine GLM-based DE analyses, from [`EdgeR`: Explaning dispersion types to newbies](https://support.bioconductor.org/p/110273/).
   - Complex protocol for discarding lowly differentially expressed barcodes.
   - No available BioConductor/CRAN Repository, while latest [`DEBRA` GitHub update](https://github.com/YevhenAkimov/DEBRA_1.01) dates back more than 4 years.
 
