@@ -103,6 +103,31 @@ source("R/utils.R")
 -   **File structure organisation**:
     -   `data` stores all datasets, and is further split between `data-raw` (original datasets), and `data-derived` (`tidy` format with proper mapping between phenotype metadata and expression matrices).
     
+```{r}
+#| label: format-barcode-csv
+#| echo: false
+#| eval: false
+
+
+expression_files <- list.files("./data/barcode-counts/", 
+                               pattern = "exp.*\\.xlsx", 
+                               full.names = TRUE)
+
+# change format + barcode name
+expression_matrices <- lapply(expression_files, function(old_filename) {
+  expression_matrix <- readxl::read_excel(old_filename) |> 
+    rename(barcode_id = 1)
+  
+  new_filename <- old_filename |> basename() |> tools::file_path_sans_ext()
+  
+  readr::write_csv(expression_matrix, 
+                   file = file.path("data", "barcode-counts", paste0(new_filename, ".csv")))
+  
+})
+
+```
+
+    
 ## Experiment selection {#sec-select-exp}
 
 ```{r}
@@ -110,10 +135,10 @@ source("R/utils.R")
 #| eval: false
 
 exp130921_expression <- readr::read_csv2("data/data-raw/barcode-counts/exp130921.csv") |>
-  rename(key_barcode = 1)
+  rename(barcode_id = 1)
 
 exp130921_1_expression <- readr::read_csv2("data/data-raw/barcode-counts/exp130921_1.csv") |>
-  rename(key_barcode = 1)
+  rename(barcode_id = 1)
 
 selected_dataset <- compare_dataframes(exp130921_expression, exp130921_1_expression)
 ```
@@ -125,10 +150,10 @@ selected_dataset <- compare_dataframes(exp130921_expression, exp130921_1_express
 <!-- #| eval: false -->
 
 <!-- exp211221_expression <- readr::read_csv2("data/data-raw/barcode-counts/exp211221.csv") |> -->
-<!--   rename(key_barcode = 1) -->
+<!--   rename(barcode_id = 1) -->
 
 <!-- exp211221cor_expression <- readr::read_csv2("data/data-raw/barcode-counts/exp211221cor.csv") |> -->
-<!--   rename(key_barcode = 1) -->
+<!--   rename(barcode_id = 1) -->
 
 <!-- selected_dataset <- compare_dataframes(exp211221_expression, exp211221cor_expression) -->
 <!-- ``` -->
@@ -140,10 +165,10 @@ selected_dataset <- compare_dataframes(exp130921_expression, exp130921_1_express
 <!-- #| eval: false -->
 
 <!-- exp300821_expression <- readr::read_csv2("data/data-raw/barcode-counts/exp300821.csv") |> -->
-<!--   rename(key_barcode = 1) -->
+<!--   rename(barcode_id = 1) -->
 
 <!-- exp300821cor_expression <- readr::read_csv2("data/data-raw/barcode-counts/exp300821_cor.csv") |> -->
-<!--   rename(key_barcode = 1) -->
+<!--   rename(barcode_id = 1) -->
 
 <!-- selected_dataset <- compare_dataframes(exp300821_expression, exp300821cor_expression) -->
 <!-- ``` -->
@@ -158,7 +183,7 @@ selected_dataset <- compare_dataframes(exp130921_expression, exp130921_1_express
 
 # extract old colnames
 exp281022_expression <- readr::read_csv2("data/barcode-counts/exp281022.csv") |>
-  rename(key_barcode = 1)
+  rename(barcode_id = 1)
 # cat(colnames(exp281022_expression), file = "281022_old_labels.txt", sep = "\n")
 
 # extract mapping old_names with new_names
@@ -184,7 +209,7 @@ readr::write_csv(exp281022_expression, "data/barcode-counts/exp281022.csv")
 
 
 exp281022_expression_timecourse <- readr::read_csv2("data/barcode-counts/exp281022_time course.csv") |>
-  rename(key_barcode = 1)
+  rename(barcode_id = 1)
 # cat(colnames(exp281022_expression_timecourse), file = "281022_timecourse_old_labels.txt", sep = "\n")
 
 # update colnames ----
@@ -217,10 +242,10 @@ cor(controls_exp281022$ctl2, controls_exp281022$Ctrl2) # they strongly correlate
 #| eval: false
 
 exp200921_expression <- readr::read_csv2("data/data-raw/barcode-counts/exp200921.csv") |>
-  rename(key_barcode = 1)
+  rename(barcode_id = 1)
 
 exp200921_dose_response <- readr::read_csv2("data/data-raw/barcode-counts/exp200921_dose response osim.csv") |>
-  rename(key_barcode = 1)
+  rename(barcode_id = 1)
 
 selected_dataset <- compare_dataframes(exp200921_expression, exp200921_dose_response)
 # Alternative to custom R function `compare_dataframes`: `arsenal::comparedf`.
