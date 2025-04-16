@@ -1,6 +1,6 @@
 ---
 title: "Inferring the MOA of new drugs through the analysis of heterogeneous response to treatment of different subpopulations of cancer cells"
-author: "Bastien CHASSAGNOL and Vera PANCALDI"
+author: "Bastien CHASSAGNOL and Vera PANCALDI and Luca GRUMULATO"
 date: last-modified	
 number-sections: true
 toc: true
@@ -244,17 +244,20 @@ Things to consider:
 
 ### Overview of barcode samples
 
-In @tbl-overview-barcode-samples, we list the final selection of `{r} ncol(barcode_summaries)` barcode experiences considered so far in the analysis.
 
 ```{r}
 #| label: tbl-overview-barcode-samples
-#| tbl-cap: "Overview of the 11 Barcode experiences preserved in the pipeline."
+#| tbl-cap: "Overview of the Barcoding Batches."
+#| cache: true
+#| tbl-subcap:
+#|   - "Kept Batches"
+#|   - "Removed batches"
+#| layout-ncol: 2
 
+# 1) summarise kept batches ----
 barcode_files <- list.files("./data/barcode-counts/",
                             pattern = "exp.*\\.csv",
                             full.names = TRUE)
-
-# change format + barcode name
 barcode_summaries <- purrr::map(barcode_files, function(filename) {
   barcode_counts <- readr::read_csv(filename, show_col_types = FALSE)
   experience_name <- filename |> basename() |> tools::file_path_sans_ext()
@@ -266,11 +269,32 @@ barcode_summaries <- purrr::map(barcode_files, function(filename) {
   return(experience_summary)
 }) |>
   purrr::list_rbind()
-
 flextable::flextable(barcode_summaries) |> 
   bold(part="header")
 
+# 2) summarise discarded batches ----
+
+discarded_files <- list.files("./data/barcode-counts/temp discarded/",
+                            pattern = "exp.*\\.csv",
+                            full.names = TRUE)
+
+# change format + barcode name
+barcode_discarded_summaries <- purrr::map(discarded_files, function(filename) {
+  barcode_counts <- readr::read_csv(filename, show_col_types = FALSE)
+  experience_name <- filename |> basename() |> tools::file_path_sans_ext()
+  experience_summary <- tibble::tibble(`Experience Name`= experience_name,
+                                       Features= paste0("Barcode matrix contains: ",
+                                                        nrow(barcode_counts),
+                                                        " unique barcode IDs, and ",
+                                                        ncol(barcode_counts)-1, " replicates."))
+  return(experience_summary)
+}) |>
+  purrr::list_rbind()
+
+flextable::flextable(barcode_discarded_summaries) |> 
+  bold(part="header")
 ```
+In @tbl-overview-barcode-samples, we list the final selection of `{r} ncol(barcode_summaries)` barcode experiences considered so far in the analysis, while `{r} ncol(discarded_files)` were not considered for inclusion at all.
 
 
 ## Phenotypes {#sec-metadata-phenotypes}
@@ -285,7 +309,7 @@ Most of the R instructions reported in this section aim at rendering the `Table 
 
 3. In @lst-process-pheno3, we merge together in a comprehensive phenotype table the short `Samples_ID` (short term referring to drugs listed in `Samples` column), the full `Samples` (complete name of drugs) and map each of them to its complete list of replicates (from 2 to 8). We save the output in `data-derived`.
 
-4. Finally, in @lst-check-pheno-data and @lst-check-pheno-data-2, we perform several posterior *data integrity checks* to verify if i) we were able to map each individual replicate ID to its original ID in `Table of compounds`, and ii) if the number of replicates reported in [`Table of compounds`](data/Table of compounds.xlsx) was consistent with the number of barcode profiles.
+4. Finally, in @lst-check-pheno-data-1 and @lst-check-pheno-data-2, we perform several posterior *data integrity checks* to verify if i) we were able to map each individual replicate ID to its original ID in `Table of compounds`, and ii) if the number of replicates reported in [`Table of compounds`](data/Table of compounds.xlsx) was consistent with the number of barcode profiles.
 
 ```{r}
 #| label: process-pheno1
@@ -375,7 +399,7 @@ pheno_data <- pheno_data |>
 
 :::
 
-In @lst-process-pheno2 and @lst-process-pheno3, we identify which raw barcode counts matrices avalaible in folder `barcode-counts` are not reported in the global experimental dataset, and reciprocally. Finally, we only **keep experiences that are both reported in `Table of compounds` and present in `barcode-counts` folder.**
+In @lst-process-pheno2 and @lst-process-pheno3, we identify which raw barcode counts matrices avalaible in folder `barcode-counts` are not reported in the global experimental dataset, and reciprocally. Finally, we only **keep experiences that are both reported in `Table of compounds` and present in `barcode-counts` folder.**.
 
 ```{r}
 #| label: process-pheno2
@@ -395,15 +419,6 @@ barcodes_IDs <- readxl::read_xlsx("data/Table of compounds.xlsx",
 
 ```
 
-::: {#tip-ID-creation .callout-tip title="" collapse="true"}
-
-In Appendix @sec-ID-mapping, we report a semi-automated approach to ensure proper mapping between shortID notation used in barcode counts matrices, and their respective full `Samples` ID peers in `Table of Compounds`.
-
-Best next time: ensure a 1-1 mapping with full `Samples` names^[`Dorsomorphin (Compound C) 2HCl` to shorter `Samples_ID:Compou` was especially hard to infer].
-
-[**Please ensure now that the *Sheet* `Drugs Mapping` in [`Table of compounds`](data/Table of compounds.xlsx) is correct.**]{fg="red"}
-
-:::
 
 <!-- ::: {.callout-important title="Missing information on Table of Compounds and missing Experiences"} -->
 
@@ -417,7 +432,7 @@ Best next time: ensure a 1-1 mapping with full `Samples` names^[`Dorsomorphin (C
 
 <!-- ::: -->
 
-To generate the final phenotype dataset, we only keep experiences that were reported both in `Table of Compounds` and folder `barcode-counts`, and pair `Table of Compounds` with individual replicate IDs in @lst-process-pheno3, based on `Date`, `Run date`, short drug ID and `Concentration` for unequivocal mapping.
+To generate the final phenotype dataset, we only keep experiences that were reported both in `Table of Compounds` and folder `barcode-counts`, and pair `Table of Compounds` with individual replicate IDs in @lst-process-pheno3, based on `Date`, `Run date`, short drug ID and `Concentration` for unequivocal mapping. [**Please ensure that `Drugs Mapping` sheet in [`Table of compounds`](data/Table of compounds.xlsx) is correct.**]{fg="red"}
 
 ```{r}
 #| label: process-pheno3
@@ -501,8 +516,9 @@ ID_mapping <- ID_mapping |> inner_join(mapping_compounds, by = "Samples_ID")
 
 ```{r}
 #| label: tbl-check-pheno-data
+#| lst-label: lst-check-pheno-data-1 
+#| lst-cap: "Extract discarded replicates"
 #| tbl-cap: Identify set of experiences reported in `Table of compounds` that could not be mapped against their corresponding Barcode counts replicates. We check this information with an `anti_join` between original *phenotype* and *counts*, returning samples from `Table of Compounds` that could not have been mapped back.
-<!-- #|   - "Anti-join between *counts* and *phenotype*, returning counts counts that could not have been mapped back to `Table of Compounds`." -->
 
 pheno_data_unmapped <- dplyr::anti_join(pheno_data,
                                      ID_mapping,
@@ -523,6 +539,7 @@ today_date <- format(Sys.Date(), "%Y-%m-%d")
 readr::write_csv(replicates_discarded, 
                  file = paste0("data/discarded_replicates_", today_date,".csv"))
 ```
+
 In @tbl-check-pheno-data-2, we check discrepancies between the final selection of barcode experiences with the reported number of replicates. [Great point: no discrepancies witnessed, hence the empty table!!]{fg="green"}
 
 ```{r}
@@ -531,7 +548,11 @@ In @tbl-check-pheno-data-2, we check discrepancies between the final selection o
 #| lst-cap: Secound round of data wrangling quality controls on *counts* versus *phenotype data*, focusing on divergent number of replicates.
 #| tbl-cap: Secound round of data wrangling quality controls on *counts* versus *phenotype data*, focusing on divergent number of replicates.
 
-replicate_inconsistencies <- pheno_data_detailed |>
+replicate_inconsistencies <- pheno_data |> 
+  dplyr::inner_join(ID_mapping,
+                    by = c("Batch_ID", "Date", 
+                           "Samples", "Run date",
+                           "Concentrations_ID", "Duration_ID")) |>
   group_by(Batch_ID, Samples, Date, Replicates, Concentrations_ID,Duration_ID) |>
   summarise(n=n()) |>
   filter(n!=Replicates)
@@ -577,10 +598,11 @@ This format streamlines data wrangling, and generally speaking, data analysis an
 #| lst-cap: Save the final metadata annotations for barcodes, using Today's date for historical versioning.
 
 # step 4) Use international date formats ----
-pheno_data_formatted <- pheno_data |> dplyr::inner_join(ID_mapping,
-                                                        by = c("Batch_ID", "Date", 
-                                                               "Samples", "Run date",
-                                                               "Concentrations_ID", "Duration_ID")) |>
+pheno_data_formatted <- pheno_data |> 
+  dplyr::inner_join(ID_mapping,
+                    by = c("Batch_ID", "Date", 
+                           "Samples", "Run date",
+                           "Concentrations_ID", "Duration_ID")) |> 
   dplyr::select(Batch_ID,
                 # samples names
                 Pathway=Level1, MoA=Level2,
