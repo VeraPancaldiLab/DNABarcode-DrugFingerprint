@@ -33,3 +33,10 @@ barcode_summaries <- purrr::map(barcode_files, function(filename) {
 
 
 
+usethis::use_git_remote(name = "origin",
+                        url = "https://github.com/VeraPancaldiLab/DNABarcode-DrugFingerprint.git",
+                        overwrite = TRUE)
+
+usethis::use_git_remote(name = "upstream",
+                        url="https://github.com/bastienchassagnol/DNABarcode-DrugFingerprint.git",
+                        overwrite = TRUE)

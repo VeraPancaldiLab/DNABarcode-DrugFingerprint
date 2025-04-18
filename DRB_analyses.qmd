@@ -142,6 +142,7 @@ selected_dataset <- compare_dataframes(exp130921_expression, exp130921_1_express
 
 
 ```{r}
+#| label: rename-erroneous-date
 #| eval: false
 #| echo: true
 #| lst-label: lst-rename-bad-date
@@ -740,7 +741,7 @@ barcode_counts_discretised <- barcode_counts_discretised |>
 ```{r}
 #| label: drug-fingerprint-estimation
 #| lst-label: lst-drug-fingerprint-estimation
-#| lst-cap:  .
+#| lst-cap: "Aggregate at the drug level, assigning a 1 if, and only if, barcode cell lines were found significant in a given drug."
 
 barcode_counts_discretised_drug <- barcode_counts_discretised |> 
   group_by(Batch_ID, Concentrations, Duration, Date, `Run date`, barcode_id, Compound) |> 
@@ -769,7 +770,7 @@ saveRDS(barcode_counts_discretised_drug,
 1. [Actual computation of the correlation matrix using `stats::cor`.]{fg="blue"} [Yet, we have to try other correlation methods on the continuous space, or consider other metrics if working on the discrete space. Unbalanced Wassertein distance, or relatives, for distinct input and output dimensions.]{fg="red"}
 
 ```{r}
-
+#| label: convert-to-matrices
 barcode_replicates_mat <- barcode_counts_discretised_replicates |> 
   tibble::column_to_rownames(var="barcode_id") |> 
   as.matrix()
@@ -795,8 +796,11 @@ cor_drugs <- cor(barcode_drugs_mat)
 
 - [Blend of useful resources on generating Heatmaps](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_making-a-heatmap-is-an-essential-skill-for-activity-7317543424511868928-F25t)
 
+- Heamaps at the drug and replicate level are reported in @fig-generate-heatmap-drug.
+
 ```{r}
-#| label: generate-heatmap-drug
+#| label: fig-generate-heatmap-drug
+#| fig-cap: "Heamaps at the drug and replicate level."
 # define clustering colours
 col_cor_scale <- circlize::colorRamp2(c(-1, 0, 1), c("blue", "white", "red"))
 
@@ -808,8 +812,9 @@ p2 <- grid.grabExpr(ComplexHeatmap::draw(heatmap_replicates))
 heatmaps_global <- plot_grid(p1, p2, nrow = 1, labels = c("A", "B"))
 ggsave("figures/heatmap_fingerprints.pdf", 
        heatmaps_global, dpi = 600)
-```
 
+heatmaps_global
+```
 
 # Perspectives
 
