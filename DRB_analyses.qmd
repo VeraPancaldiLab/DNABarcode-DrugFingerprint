@@ -156,9 +156,9 @@ file.rename("data/barcode-counts/exp211221.csv", "data/barcode-counts/exp271221.
 
 ```{r}
 #| label: select-expression-dose-response
-#| eval: false
+#| eval: true
 
-exp200921_expression <- readr::read_csv("data/barcode-counts/exp200921.csv") 
+exp200921_expression <- readr::read_csv("data/barcode-counts/temp discarded/exp200921.csv") 
 exp200921_dose_response <- readr::read_csv("data/barcode-counts/exp200921_dose response osim.csv")
 selected_dataset <- compare_dataframes(exp200921_expression, exp200921_dose_response)
 ```
@@ -278,6 +278,9 @@ barcode_summaries <- purrr::map(barcode_files, function(filename) {
 flextable::flextable(barcode_summaries) |> 
   bold(part="header")
 
+openxlsx::write.xlsx(barcode_summaries, 
+                     file = "./data/kept_experiences_overview.xlsx")
+
 # 2) summarise discarded batches ----
 
 discarded_files <- list.files("./data/barcode-counts/temp discarded/",
@@ -296,6 +299,9 @@ barcode_discarded_summaries <- purrr::map(discarded_files, function(filename) {
   return(experience_summary)
 }) |>
   purrr::list_rbind()
+
+openxlsx::write.xlsx(barcode_discarded_summaries, 
+                     file = "./data/discarded_experiences_overview.xlsx")
 
 flextable::flextable(barcode_discarded_summaries) |> 
   bold(part="header")
@@ -850,9 +856,7 @@ heatmaps_global
 # TODO
 
 - Tools:
-  - `GitHub` repository on Vera's organisation
   - Computational resources (create a dedicated project on the IFB core cluster?)
-  - Zotero for sharing biblio resources.
 
 # Appendix {.appendix}
 

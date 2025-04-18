@@ -1,42 +1,44 @@
 library(dplyr)
-
-# expression_files <- list.files("./data/barcode-counts/",
-#                                pattern = "exp.*\\.xlsx",
-#                                full.names = TRUE)
-#
-# # change format + barcode name
-# expression_matrices <- lapply(expression_files, function(old_filename) {
-#   expression_matrix <- readxl::read_excel(old_filename) |>
-#     dplyr::rename(barcode_id = 1)
-#
-#   new_filename <- old_filename |> basename() |> tools::file_path_sans_ext()
-#
-#   readr::write_csv(expression_matrix,
-#                    file = file.path("data", "barcode-counts", paste0(new_filename, ".csv")))
-#
-# })
+library(flextable)
 
 barcode_files <- list.files("./data/barcode-counts/",
                             pattern = "exp.*\\.csv",
                             full.names = TRUE)
-
-# change format + barcode name
 barcode_summaries <- purrr::map(barcode_files, function(filename) {
   barcode_counts <- readr::read_csv(filename, show_col_types = FALSE)
   experience_name <- filename |> basename() |> tools::file_path_sans_ext()
   experience_summary <- tibble::tibble(`Experience Name`= experience_name,
-                                       Features= paste0("Barcode matrix contains: ", nrow(barcode_counts),
-                                                        " unique barcode IDs, and ", ncol(barcode_counts)-1, " replicates."))
+                                       Features= paste0("Barcode matrix contains: ",
+                                                        nrow(barcode_counts),
+                                                        " unique barcode IDs, and ",
+                                                        ncol(barcode_counts)-1, " replicates."))
   return(experience_summary)
 }) |>
   purrr::list_rbind()
 
 
+openxlsx::write.xlsx(barcode_summaries,
+                     file = "./data/kept_experiences_overview.xlsx")
 
-usethis::use_git_remote(name = "origin",
-                        url = "https://github.com/VeraPancaldiLab/DNABarcode-DrugFingerprint.git",
-                        overwrite = TRUE)
+# 2) summarise discarded batches ----
 
-usethis::use_git_remote(name = "upstream",
-                        url="https://github.com/bastienchassagnol/DNABarcode-DrugFingerprint.git",
-                        overwrite = TRUE)
+discarded_files <- list.files("./data/barcode-counts/temp discarded/",
+                              pattern = "exp.*\\.csv",
+                              full.names = TRUE)
+
+# change format + barcode name
+barcode_discarded_summaries <- purrr::map(discarded_files, function(filename) {
+  barcode_counts <- readr::read_csv(filename, show_col_types = FALSE)
+  experience_name <- filename |> basename() |> tools::file_path_sans_ext()
+  experience_summary <- tibble::tibble(`Experience Name`= experience_name,
+                                       Features= paste0("Barcode matrix contains: ",
+                                                        nrow(barcode_counts),
+                                                        " unique barcode IDs, and ",
+                                                        ncol(barcode_counts)-1, " replicates."))
+  return(experience_summary)
+}) |>
+  purrr::list_rbind()
+
+openxlsx::write.xlsx(barcode_discarded_summaries,
+                     file = "./data/discarded_experiences_overview.xlsx")
+
