@@ -68,11 +68,10 @@ editor: source
 I list below the R packages required to reproduce the analyses.
 
 ```{r}
-#| label: "setup"
+#| label: setup
 
 # data wrangling
 library(dplyr)
-library(ggplot2)
 library(tidyr)
 library(stringr)
 library(readr)
@@ -82,6 +81,12 @@ library(purrr)
 # reporting
 library(flextable)
 library(testthat)
+
+# plotting
+library(ggplot2)
+library(ComplexHeatmap)
+library(cowplot)
+library(grid)
 
 # auxiliary functions
 source("R/utils.R")
@@ -157,7 +162,7 @@ exp200921_dose_response <- readr::read_csv("data/barcode-counts/exp200921_dose r
 selected_dataset <- compare_dataframes(exp200921_expression, exp200921_dose_response)
 ```
 
-[While the *dose-response* experience `exp200921_dose response osim` exhibits distinct biological objective, it turned out that the 4 control biological replicates are shared in both experiences. However, **the number of sequenced barcode IDs differ in both experiences.**.]{fg="red"}
+[While the *dose-response* experience `exp200921_dose response osim` exhibits distinct biological objective, it turned out that the 4 control biological replicates are shared with classical drug response comparison `exp200921.csv`. However, **the number of sequenced barcode IDs differ in both experiences!!** In addition, note that `exp200921.csv` has been tagged as discarded, except for the Controls!!]{fg="red"}
   
   
 Code snippets in @lst-281022 and @lst-281022-time-course aim at replacing unprecise labelling of barcode IDs (no concentration, no time duration, ...) in the 2022 batch experiences.
@@ -340,19 +345,24 @@ pheno_data <- pheno_data |>
                                   Level2, Samples),
                 `Run date` = stringr::str_sub(`Run date`, -6, -1),
                 Batch_ID= paste0("exp", Date)) |> 
-                # Date = if_else(Samples %in% "SBI-0206965", "181021", Date),
-                # `Run date` = if_else(Samples %in% "SBI-0206965", "251121", `Run date`)) |>
+  # Date = if_else(Samples %in% "SBI-0206965", "181021", Date),
+  # `Run date` = if_else(Samples %in% "SBI-0206965", "251121", `Run date`)) |>
   tidyr::fill(Samples, .direction = "down") |>
   # remove unwanted replicates
   dplyr::filter(Kept) |> 
-  # generate batch id to map specifically dose and vivo experiences
-  # dplyr::mutate(Batch_ID = if_else(Date=="130921" & Replicates == 8 & `Run date` =="101121", 
-  #        "exp130921_vivo", Batch_ID)) |> 
-  dplyr::mutate(Batch_ID = dplyr::if_else(Date=="200921" & Samples == "Osimertinb" & `Run date` =="101121", 
-         "exp200921_dose response osim", Batch_ID)) |> 
-    dplyr::mutate(Batch_ID = dplyr::if_else(Comments %in% c("Time Course"), 
-         "exp281022_time course", Batch_ID)) |> 
-    dplyr::select(- Comments, -Kept)
+  dplyr::mutate(Batch_ID = dplyr::if_else(Date=="200921" & 
+                                            `Run date` =="101121" & 
+                                            Samples == "Osimertinb", 
+                                          "exp200921_dose response osim", Batch_ID)) |> 
+  dplyr::mutate(Batch_ID = dplyr::if_else(Date=="200921" & 
+                                            `Run date` =="111021" & 
+                                            Samples == "Control", 
+                                          "exp200921_dose response osim", Batch_ID)) |> 
+  dplyr::mutate(Batch_ID = dplyr::if_else(Comments %in% c("Time Course"), 
+                                          "exp281022_time course", Batch_ID)) |> 
+  dplyr::select(- Comments, -Kept) |> 
+  # remove duplicates
+  dplyr::distinct(.keep_all = TRUE)
 
 # format concentrations, creating both 'Concentrations_ID' and 'Concentrations' in Moles ----
 pheno_data <- pheno_data |> 
@@ -442,6 +452,7 @@ To generate the final phenotype dataset, we only keep experiences that were repo
 # step 1) keep only shared Batch_ID experiences ----
 barcodes_IDs <- barcodes_IDs |>
   dplyr::semi_join(pheno_data, by="Batch_ID")
+# exp201021 is discarded, that's normal, we just want to keep the controls!!
 pheno_data <- pheno_data |>
   dplyr::semi_join(barcodes_IDs, by="Batch_ID")
 
@@ -489,16 +500,6 @@ ID_mapping <- purrr::pmap(barcodes_IDs, function(Filename, Batch_ID, Date) {
   return(dataset_ID)
 }) |>
   purrr::list_rbind()
-
-# reframe concentrations_ID
-# ID_mapping <- ID_mapping |> 
-#   dplyr::mutate(Concentrations_ID = case_when(
-#     Concentrations_ID == "0.5x" ~ "0.50u", 
-#     Concentrations_ID == "1.5u" ~ "1.50u",
-#     Concentrations_ID == "1.2n" ~ "1.20n",
-#     Concentrations_ID == "002x" ~ "0.02u",
-#     .default = as.character(Concentrations_ID)
-#   ))
 
 # step 3) map short drug IDs with full drug names ----
 mapping_compounds <- readxl::read_xlsx("data/Table of compounds.xlsx",
@@ -634,51 +635,181 @@ flextable::flextable(head(pheno_data_formatted)) |>
 
 **Code colour**: [Luca's protocol]{fg="blue"}, and [Bastien's comments and perspectives]{fg="red"}
 
-1.  **Background Noise Removal**:
+### **Background Noise Removal** and `SummarizedExperiment` stantardised storage
 
-  -   [Eliminate barcodes for which the combined counts of the 4 controls per barcode are below 5, and **below 4** for experiments `010821` and `040821`]{fg="blue"}
-  -   [Density plots to evaluate the relevance of this threshold, `HTSFilter`, comparison with existing filtering approaches, ... But removing noise is indeed a great point!!, especially with the original high number of barcodes. However, why only performing this operation on control cases?]{fg="red"}
+-   [Eliminate barcodes for which the combined counts of the 4 controls per barcode are below a given threshold, here `5`.]{fg="blue"} [Temporaly exclude file `./data/barcode-counts/exp200921_dose response osim.csv`, as the filtering does not return any barcode.]{fg="red"}
 
-2.  **Normalisation**
+```{r}
+#| label: background-filtering
+#| lst-label: lst-background-filtering
+#| lst-cap: Remove background noise.
 
-  -   [Normalize barcodes so that the total number of counts per sample is 100 000]{fg="blue"}
-  -   [Close to two existing normalisation methods: **Counts Per Million (CPM)** which additionally scales raw counts by total library size and multiplies by $1,000,000$ and **Total Count Scaling (TCS)**: Scales raw counts by the total number of reads (or mapped reads) in each sample, then multiplies by a fixed number (e.g., 100,000). Would compare other normalisation approaches + ignore biological or technical biases + generate MA plots for verifying the mean-variance correction trend + not suitable for DEG analyses. Apply concatenation phase of all samples before normalising. Comprehensive discussion on the impact of distinct normalisation approaches [here](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_rna-seq-normalization-what-you-need-to-activity-7313919533780516864-6jFm).]{fg="red"}
+barcode_files <- list.files("./data/barcode-counts/",
+                            pattern = "exp.*\\.csv",
+                            full.names = TRUE)
+thresh_background <- 4
+pheno_data <- readr::read_csv("./data/pheno_data_metadata_2025-04-17.csv")
+# filename <- barcode_files[6]
 
-3.  **Derivation of average basal barcoding counts** (in controls, in other words)
+# explicit and data-sound but unefficient code
+barcode_counts_aggregated <- purrr::map(barcode_files, function(filename) {
+  barcode_counts <- readr::read_csv(filename)
+  experience_name <- filename |> basename() |> tools::file_path_sans_ext()
+  replicates_names <- setdiff(colnames(barcode_counts), "barcode_id")
+  
+  ## Remove lowly expressed barcodes ----
+  control_index <- pheno_data |> 
+    dplyr::filter(Batch_ID==experience_name & 
+                    Compound=="Control" &
+                    Replicates_ID %in% replicates_names) |> 
+    dplyr::pull(Replicates_ID)
+  signicant_barcodes_index <- which(rowSums(barcode_counts[, control_index]) > thresh_background)
+  filtered_barcode_counts <- barcode_counts[signicant_barcodes_index,]
+  return(filtered_barcode_counts)
+}) |> 
+  purrr::reduce(~ inner_join(.x, .y, by = "barcode_id"))
+```
 
-  -   [Calculate mean of the 4 controls]{fg="blue"}
-  -   [Batch effect correction for integrating across batches?]{fg="red"}.
 
-4.  **Differential Represented Barcode Analysis**(DRB)
+-   [Density plots to evaluate the relevance of this threshold, `HTSFilter`, comparison with existing filtering approaches, ... But removing noise is indeed a great point!!, especially with the original high number of barcodes. However, why only performing this operation on control cases?]{fg="red"}
 
-  -   [Calculate the fold change (FC) treatment vs control for each drug replicate, set threshold to 3 for keeping barcodes. **Applies discretisation: set value to 1 if Fold change is above 3, 0 otherwise.**]{fg="blue"}
-  -   [As Vera emphasised it out, why keeping only positive values? Negative are also interesting, otherwise, we will bias towards drugs having a positive fitness. Why not pairing $p$-values and fold-change (considering indeed really small sample sizes)? All these operations can be run within one step using `lm`, and a model as such, $\text{Expr} \sim 0 + \text{Gene} + \text{Batch} + \text{Drug}$, with a `contr.treatment` design matrix.]{fg="red"}[^1]
+### **Normalisation**
+
+-   [Normalize barcodes so that the total number of counts per sample is 100 000]{fg="blue"}
+
+```{r}
+#| label: cpm-normalisation
+#| lst-label: lst-cpm-normalisation
+#| lst-cap: Normalise by $100000$.
+replicates_names <- setdiff(colnames(barcode_counts_aggregated),
+                            "barcode_id") # alternatively, select numeric values
+
+barcode_counts_aggregated <- barcode_counts_aggregated |> 
+  mutate(across(
+    .cols = where(is.numeric),                     
+    .fns = ~ (.x / sum(.x)) * 1e5
+  ))
+```
+
+
+-   [Close to two existing normalisation methods: **Counts Per Million (CPM)** which additionally scales raw counts by total library size and multiplies by $1,000,000$ and **Total Count Scaling (TCS)**: Scales raw counts by the total number of reads (or mapped reads) in each sample, then multiplies by a fixed number (e.g., 100,000). Would compare other normalisation approaches + ignore biological or technical biases + generate MA plots for verifying the mean-variance correction trend + not suitable for DEG analyses. Apply concatenation phase of all samples before normalising. Comprehensive discussion on the impact of distinct normalisation approaches [here](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_rna-seq-normalization-what-you-need-to-activity-7313919533780516864-6jFm).]{fg="red"}
+
+### **Differential analyses** and Binarisation
+
+1. [Calculate mean of the 4 controls, followed by **Differential Represented Barcode Analysis**: binarise each replicate, assining a 1 if Fold change is above 3 with respect to Mean value, and 0 otherwise.]{fg="blue"} [Batch effect correction for integrating across batches? As Vera emphasised it out, why keeping only positive values? Negative are also interesting, otherwise, we will bias towards drugs having a positive fitness. Why not pairing $p$-values and fold-change (considering indeed really small sample sizes)? All these operations can be run within one step using `lm`, and a model as such, $\text{Expr} \sim 0 + \text{Gene} + \text{Batch} + \text{Drug}$, with a `contr.treatment` design matrix [^1]]{fg="red"}.
+
+```{r}
+#| label: differential-barcode-analysis
+#| lst-label: lst-differential-barcode-analysis
+#| lst-cap: Compute the averaged basal value, .
+
+barcode_counts_long <- barcode_counts_aggregated |> 
+  tidyr::pivot_longer(-barcode_id, names_to = "Replicates_ID", values_to = "Barcode_Counts") |> dplyr::inner_join(pheno_data, by="Replicates_ID") |> 
+  dplyr::select(-Pathway, -MoA, -Samples_ID, -Replicates, -Concentrations_ID, -Duration_ID)
+threshold_FC <- 3
+
+# Step 1: Compute control means per barcode_id and Batch ----
+control_means <- barcode_counts_long |>
+  filter(Compound == "Control") |>
+  group_by(Batch_ID, barcode_id) |>
+  summarise(Control_Mean = mean(Barcode_Counts), .groups = "drop")
+
+# Step 2: Join control mean to full dataset ----
+barcode_counts_discretised <- barcode_counts_long |>
+  left_join(control_means, 
+            by = c("Batch_ID","barcode_id"))
+
+# Step 3: Compute Fold Change and discretise ----
+barcode_counts_discretised <- barcode_counts_discretised |>
+  filter(Compound != "Control") |>
+  mutate(Diff = Barcode_Counts - Control_Mean,
+    Barcode_Counts = if_else(Diff > threshold_FC, 1, 0)) |>
+  # Final cleanup 
+  select(-Diff, -Control_Mean)  |> 
+  dplyr::mutate(Barcode_Counts=as.logical(Barcode_Counts))
+```
+
 
 [^1]: [Really wants to try the **Helmert contrast** to evaluate drug dose response, or time-course studies. Also For repeated measures across time, see [One Way repeated measure ANOVA in R](https://www.r-bloggers.com/2025/02/one-way-repeated-measure-anova-in-r/)]{fg="red"}
 
-5.  **Derivation of drug fingerprints**:
+### **Derivation of drug fingerprints**:
 
-  -   [Calculate the binarised sum of the four replicates per drug]{fg="blue"}
-  -   [Efficient computation of binary values with a logical `AND` + perform **sensitivity analyses** to evaluate the impact of threshold variation.]{fg="red"}.
+[Aggregate by drug and experience.]{fg="blue"} [Efficient computation of binary values with a logical `AND` + perform **sensitivity analyses** to evaluate the impact of threshold variation.]{fg="red"}
 
-## Correlation across Samples
 
-1.  **Global perturbagen profile derivation**:
+```{r}
+#| label: drug-fingerprint-estimation
+#| lst-label: lst-drug-fingerprint-estimation
+#| lst-cap:  .
 
--   [Merge all barcode counts profiles keeping only the most abundant?]{fg="blue"}
--   [Have to check extension of unbalanced Wassertein distance, or relatives, for distinct input and output dimensions, otherwise, concatenating everything seems legit.]{fg="red"}
+barcode_counts_discretised_drug <- barcode_counts_discretised |> 
+  group_by(Batch_ID, Concentrations, Duration, Date, `Run date`, barcode_id, Compound) |> 
+  summarise(Barcode_Counts = all(Barcode_Counts == 1), .groups = "drop")
 
-2.  **Drug correlation**:
-    i. Actual computation of the correlation matrix using `stats::cor`. [Yet, we have to try other correlation methods on the continuous space, or consider other metrics if working on the discrete space.]{fg="red"}
-    ii. Plot weighted undirected graphs with `igraph::graph_from_adjacency_matrix`
+
+barcode_counts_discretised_replicates <- barcode_counts_discretised |> 
+  select(-Concentrations, -Duration, -Date, -`Run date`, -Batch_ID, -Compound) |> 
+  tidyr::pivot_wider(names_from = Replicates_ID, values_from = Barcode_Counts)
+saveRDS(barcode_counts_discretised_replicates, 
+        file="results/fingerprints_replicates_level.rds")
+
+barcode_counts_discretised_drug <- barcode_counts_discretised_drug |> 
+  dplyr::mutate(Compound=paste0("Drug: ", Compound, " with Batch: ", Batch_ID,
+                                ", Conc: ", Concentrations, " and Days: ", Duration)) |> 
+  select(-Concentrations, -Duration, -Date, -`Run date`, -Batch_ID) |> 
+  tidyr::pivot_wider(names_from = Compound, values_from = Barcode_Counts)
+
+saveRDS(barcode_counts_discretised_drug, 
+        file="results/fingerprints_compounds_level.rds")
+```
+
+
+## Compute Drug Similarities
+
+1. [Actual computation of the correlation matrix using `stats::cor`.]{fg="blue"} [Yet, we have to try other correlation methods on the continuous space, or consider other metrics if working on the discrete space. Unbalanced Wassertein distance, or relatives, for distinct input and output dimensions.]{fg="red"}
+
+```{r}
+
+barcode_replicates_mat <- barcode_counts_discretised_replicates |> 
+  tibble::column_to_rownames(var="barcode_id") |> 
+  as.matrix()
+cor_replicates <- cor(barcode_replicates_mat)
+
+
+barcode_drugs_mat <- barcode_counts_discretised_drug |> 
+  tibble::column_to_rownames(var="barcode_id") |> 
+  as.matrix()
+cor_drugs <- cor(barcode_drugs_mat)
+```
+
+
+2. Plot weighted undirected graphs with `igraph::graph_from_adjacency_matrix`
     
-3.  **Barcode correlation**: [To select barcodes highly correlated within each other, must correlate, with $CC > 0.8$ with at least 4 others.]{fg="blue"}.
+## Compute Barcode aka Cell Lines Similarities
+
+[To select barcodes highly correlated within each other, must correlate, with $CC > 0.8$ with at least 4 others.]{fg="blue"}.
 
 # Results
 
 ## Correlation Heatmaps
 
 - [Blend of useful resources on generating Heatmaps](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_making-a-heatmap-is-an-essential-skill-for-activity-7317543424511868928-F25t)
+
+```{r}
+#| label: generate-heatmap-drug
+# define clustering colours
+col_cor_scale <- circlize::colorRamp2(c(-1, 0, 1), c("blue", "white", "red"))
+
+heatmap_drugs <- ComplexHeatmap::Heatmap(cor_drugs, col=col_cor_scale)
+heatmap_replicates <- ComplexHeatmap::Heatmap(cor_replicates, col=col_cor_scale)
+
+p1 <- grid.grabExpr(ComplexHeatmap::draw(heatmap_drugs))
+p2 <- grid.grabExpr(ComplexHeatmap::draw(heatmap_replicates))
+heatmaps_global <- plot_grid(p1, p2, nrow = 1, labels = c("A", "B"))
+ggsave("figures/heatmap_fingerprints.pdf", 
+       heatmaps_global, dpi = 600)
+```
+
 
 # Perspectives
 

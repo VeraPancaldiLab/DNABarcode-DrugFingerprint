@@ -30,3 +30,6 @@ barcode_summaries <- purrr::map(barcode_files, function(filename) {
   return(experience_summary)
 }) |>
   purrr::list_rbind()
+
+
+
