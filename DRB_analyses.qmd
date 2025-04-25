@@ -699,7 +699,7 @@ barcode_counts_aggregated <- barcode_counts_aggregated |>
 ```
 
 
--   [Close to two existing normalisation methods: **Counts Per Million (CPM)** which additionally scales raw counts by total library size and multiplies by $1,000,000$ and **Total Count Scaling (TCS)**: Scales raw counts by the total number of reads (or mapped reads) in each sample, then multiplies by a fixed number (e.g., 100,000). Would compare other normalisation approaches + ignore biological or technical biases + generate MA plots for verifying the mean-variance correction trend + not suitable for DEG analyses. Apply concatenation phase of all samples before normalising. Comprehensive discussion on the impact of distinct normalisation approaches [here](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_rna-seq-normalization-what-you-need-to-activity-7313919533780516864-6jFm).]{fg="red"}
+-   [Close to two existing normalisation methods: **Counts Per Million (CPM)** which additionally scales raw counts by total library size and multiplies by $1,000,000$ and **Total Count Scaling (TCS)**: Scales raw counts by the total number of reads (or mapped reads) in each sample, then multiplies by a fixed number (e.g., 100,000). Would compare other normalisation approaches + ignore biological or technical biases + generate MA plots for verifying the mean-variance correction trend + not suitable for DEGs analyses. Apply concatenation phase of all samples before normalising. [Preprocessing and normalisation functions for transcriptomics: a general overview](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_rna-seq-normalization-what-you-need-to-activity-7313919533780516864-6jFm)]{fg="red"}
 
 ### **Differential analyses** and Binarisation
 
@@ -800,7 +800,24 @@ cor_drugs <- cor(barcode_drugs_mat)
 
 ## Correlation Heatmaps
 
-- [Blend of useful resources on generating Heatmaps](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_making-a-heatmap-is-an-essential-skill-for-activity-7317543424511868928-F25t)
+### Tutorials for generating Heatmaps
+
+- [Blend of useful resources on generating Heatmaps](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_making-a-heatmap-is-an-essential-skill-for-activity-7317543424511868928-F25t):
+
+- [Mapping quantitative data to color](https://www.nature.com/articles/nmeth.2134), from @gehlenborg2012nm:
+  
+- **Real-Life Examples** with `ComplexHeatmap`: 
+
+  - [Heatmap with transcriptomic expression](https://rpubs.com/crazyhottommy/heatmap_demystified)
+  - [Heatmap with genomic expression](https://jokergoo.github.io/ComplexHeatmap-reference/book/more-examples.html)
+  - [Genome-level Heatmap](https://jokergoo.github.io/ComplexHeatmap-reference/book/genome-level-heatmap.html)
+  - [Plotting large heatmaps in R](https://gdevailly.netlify.app/post/plotting-big-matrices-in-r) and [*Rasterisation*, with thousands of genes to be considered](https://jokergoo.github.io/2020/06/30/rasterization-in-complexheatmap).
+  
+- **Real-life examples** with [`ggplot2`](https://github.com/theislab/atlas-feature-selection-benchmark/blob/b89fc0f66747062e6e1b4b35bd392b27ad035295/analysis/R/plotting.R#L8)
+
+- **Real-Life examples** with [`funkyheatmap` CRAN package](https://funkyheatmap.github.io/)
+
+### Heatmap drugs
 
 - Heamaps at the drug and replicate level are reported in @fig-generate-heatmap-drug.
 
@@ -824,20 +841,31 @@ heatmaps_global
 
 # Perspectives
 
-## Integrate Single Cell Analyses
+## Pair Single Cell with (or without) Drug fingerprints
 
 - [Single cell and drug response largest database](https://www.linkedin.com/posts/independent-data-lab_check-out-the-preprint-activity-7300471798029012993-YRjy)
-- [Biologist perspective](https://docs.google.com/document/d/1UHD6IG9Rti2tD77zwHfSyh5XyTbnJ25S/edit)
-- - Single-cell lineage capture across genomic modalities with `CellTag-multi` reveals fate-specific gene regulatory changes -> use of **single-cell lineage-tracing (scLT)**. 
-- High-resolution, noninvasive single-cell lineage tracing in mice and humans based on DNA methylation epi-mutations.
 
-## Pipeline tracks of improvement
+- [Biologist perspective](https://docs.google.com/document/d/1UHD6IG9Rti2tD77zwHfSyh5XyTbnJ25S/edit)
+  - Single-cell lineage capture across genomic modalities with `CellTag-multi` reveals fate-specific gene regulatory changes -> use of **single-cell lineage-tracing (scLT)**. 
+  - High-resolution, noninvasive single-cell lineage tracing in mice and humans based on DNA methylation epi-mutations.
+  
+- Ming Tommy Tang lists in [Single-cell LinkedIn post](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_pylemur-activity-7320442513671008256-qLJC) trendy papers and tools for multi-sample, single-cell RNAseq differential expression analysis.
+
+### Correct for Batch Effects
+
+- [`DESeq2-MultiBatch`](https://www.biorxiv.org/content/10.1101/2025.04.20.649392v1): Batch Correction for Multi-Factorial RNA-seq Experiments, avalaible as open-source [GH repository](https://github.com/julienroyulaval/DESeq2-MultiBatch), from @roy2025. 
+
+### Drug-response
+
+- [`TRADE`: Transcriptome-wide analysis of differential expression in perturbation atlases](https://www.nature.com/articles/s41588-025-02169-3), from @nadig2025ng. The paper notably reports how to model a drug-dose response curve with a **Hill equation**. Avalaible as an open-source GH repository [`TRADEtools`](https://github.com/ajaynadig/TRADEtools). [R `TRADE` Tutorial](https://www.rna-seqblog.com/trade-ranscriptome-wide-analysis-of-differential-expression/)
+
+## Barcode differential Analysis
 
 ### `bartools` and `BARtab`
 
 - Analysis of synthetic cellular barcodes in the genome and transcriptome with `BARtab` and `bartools`. 
 
-### DEBRA
+### `DEBRA`
 
 - Pros `DEBRA`
   - Better characterisation of the mean-variance deviation -> between `trended` or `shrinkage`, `trended` is favoured.
@@ -855,17 +883,19 @@ heatmaps_global
 
 # TODO
 
-- Tools:
-  - Computational resources (create a dedicated project on the IFB core cluster?)
+- Computational resources (create a dedicated project on the IFB core cluster?)
 
 # Appendix {.appendix}
 
 ## Publish cell lines on Web repositories
 
+- [Homogenise Excel colnames](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_115-every-wet-lab-uses-spreadsheets-activity-7319725287603130368-9ILC)
 - [`cellosaurus` General Comments](https://www.expasy.org/resources/cellosaurus) and [`cellosaurus` Official Website](https://www.cellosaurus.org/), from[@bairoch2018jbt; @robin2020ijc]. Specifically, the `CLASTR` algorithm relies on *short-tandem repeat* patterns to map user-provided cell lines with the ones available in `Cellosaurus` database.
 - [`Bgee`](https://www.bgee.org/), from [@bastian2021nar; @bastian2025nar].
 
 <!-- ## Mapping short and full samples IDs {#sec-ID-mapping} -->
+
+<!-- - [`fuzzyjoin`: Join data frames on inexact matching](https://github.com/dgrtwo/fuzzyjoin) uses Levenshtein/cosine/Jaccard distance for mapping closely related IDs (may account for spurious discrepancies) -->
 
 <!-- In @lst-process-pheno3-appendix, we provide a semi-supervised approach to map short drug IDs in barcode expression colnames to their respective full drug IDs counterparts in `Table of Compounds`. -->
 
