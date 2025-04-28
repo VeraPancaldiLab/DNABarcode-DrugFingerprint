@@ -124,12 +124,9 @@ barcode_matrices <- lapply(barcode_files, function(old_filename) {
 We early discarded the following expression files:
 
 - ['Experiment Date': `130921` and 'Run Date': `101121` `exp130921_in vivo.csv`]{fg="red"}
-- [*In vivo* experience: `exp200921.csv`, 'Experiment Date': `200921` and 'Run Date': `111021`.]{fg="red"}
-- [Latest experience `exp281022.csv`, run in parallel to Time Course: 'Experiment Date': `281022` and 'Run Date': `141222`, based on Luca's recommendations.]{fg="red"}
-
 
 ```{r}
-#| label: select-expression-1
+#| label: select-expression-130921
 #| eval: false
 #| echo: true
 
@@ -142,7 +139,7 @@ selected_dataset <- compare_dataframes(exp130921_expression, exp130921_1_express
 
 
 ```{r}
-#| label: rename-erroneous-date
+#| label: rename-erroneous-date-271221
 #| eval: false
 #| echo: true
 #| lst-label: lst-rename-bad-date
@@ -153,18 +150,42 @@ file.rename("data/barcode-counts/exp211221.csv", "data/barcode-counts/exp271221.
 
 [In @lst-rename-bad-date, we rename expression file `exp211221.csv` into `exp271221.csv`, relying on date annotations.]{fg="red"}
 
-
 ```{r}
-#| label: select-expression-dose-response
+#| label: discriminate-200921-dose-response-standard
 #| eval: true
+#| message: true
 
-exp200921_expression <- readr::read_csv("data/barcode-counts/temp discarded/exp200921.csv") 
+exp200921_standard <- readr::read_csv("data/barcode-counts/exp200921.csv") 
 exp200921_dose_response <- readr::read_csv("data/barcode-counts/exp200921_dose response osim.csv")
-selected_dataset <- compare_dataframes(exp200921_expression, exp200921_dose_response)
+
+
+exp200921_global <- readr::read_tsv("data/barcode-counts/exp200921_whole exp.tabular") |> dplyr::rename(barcode_id="key")
+
+# able to map all samples from global to either dose response or standard
+setdiff(colnames(exp200921_global), 
+        union(colnames(exp200921_dose_response), colnames(exp200921_standard)))
+
+# all dose response variables can be found in whole experiment
+setdiff(colnames(exp200921_dose_response), colnames(exp200921_global))
+readr::write_csv(exp200921_global |> 
+                   dplyr::select(dplyr::all_of(colnames(exp200921_dose_response))), 
+                 "data/barcode-counts/exp200921_dose response osim.csv")
+
+# 5 compounds (so 5*4=20) replicates are not avalaible in whole experiment
+# waiting for confirmation before removing them
+intersect(colnames(exp200921_standard), colnames(exp200921_global))
+print("\n\n")
+setdiff(colnames(exp200921_standard), colnames(exp200921_global))
+
+cat(intersect(colnames(exp200921_standard), colnames(exp200921_global)), 
+    file = "./data/logs/replicates_preserved_200921.txt", sep = "\n")
+cat(setdiff(colnames(exp200921_standard), colnames(exp200921_global)), 
+    file = "./data/logs/replicates_discarded_whole_200921.txt", sep = "\n")
+
+# selected_dataset <- compare_dataframes(exp200921_standard, exp200921_dose_response)
 ```
 
 [While the *dose-response* experience `exp200921_dose response osim` exhibits distinct biological objective, it turned out that the 4 control biological replicates are shared with classical drug response comparison `exp200921.csv`. However, **the number of sequenced barcode IDs differ in both experiences!!** In addition, note that `exp200921.csv` has been tagged as discarded, except for the Controls!!]{fg="red"}
-  
   
 Code snippets in @lst-281022 and @lst-281022-time-course aim at replacing unprecise labelling of barcode IDs (no concentration, no time duration, ...) in the 2022 batch experiences.
 
@@ -254,7 +275,7 @@ Things to consider:
 ```{r}
 #| label: tbl-overview-barcode-samples
 #| tbl-cap: "Overview of the Barcoding Batches."
-#| cache: true
+#| cache: false
 #| tbl-subcap:
 #|   - "Kept Batches"
 #|   - "Removed batches"
@@ -887,9 +908,17 @@ heatmaps_global
 
 # Appendix {.appendix}
 
+## Repository organisation and Data tracking
+
+- [Data Fingerprinting with `MDA5` and Environment Snapshots: R and Code tracking](https://www.linkedin.com/posts/sebastian-rauschert-836760a0_datascience-reproducibleanalytics-commandline-activity-7312256950962896896-9JkE)
+
+- [`DataLad` OR `DVC` // `Git LFS` or `Alembic`](https://www.linkedin.com/posts/sebastian-rauschert-836760a0_install-datalad-activity-7307188424682127361-dJ_G), (https://www.linkedin.com/posts/sebastian-rauschert-836760a0_dataversioncontrol-dvc-datascience-activity-7314768876876058626-GVNF), (https://www.linkedin.com/posts/sebastian-rauschert-836760a0_reproducibility-databaseversioning-dataengineering-activity-7315522466259390466-zMun)
+or (https://www.linkedin.com/posts/sebastian-rauschert-836760a0_reproduci
+- [Homogenise Excel colnames](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_115-every-wet-lab-uses-spreadsheets-activity-7319725287603130368-9ILC)
+
 ## Publish cell lines on Web repositories
 
-- [Homogenise Excel colnames](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_115-every-wet-lab-uses-spreadsheets-activity-7319725287603130368-9ILC)
+
 - [`cellosaurus` General Comments](https://www.expasy.org/resources/cellosaurus) and [`cellosaurus` Official Website](https://www.cellosaurus.org/), from[@bairoch2018jbt; @robin2020ijc]. Specifically, the `CLASTR` algorithm relies on *short-tandem repeat* patterns to map user-provided cell lines with the ones available in `Cellosaurus` database.
 - [`Bgee`](https://www.bgee.org/), from [@bastian2021nar; @bastian2025nar].
 
