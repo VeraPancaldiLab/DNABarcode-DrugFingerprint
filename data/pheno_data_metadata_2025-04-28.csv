@@ -1,0 +1,533 @@
+Batch_ID,Pathway,MoA,Compound,Samples_ID,Replicates,Replicates_ID,Concentrations,Concentrations_ID,Date,Run date,Duration,Duration_ID
+exp010821,NA,Control,Control,Contro,4,Contro1_000u_exp010821_run180821_03,0,000u,2021-08-01,2021-08-18,9,9d
+exp010821,NA,Control,Control,Contro,4,Contro2_000u_exp010821_run180821_04,0,000u,2021-08-01,2021-08-18,9,9d
+exp010821,NA,Control,Control,Contro,4,Contro3_000u_exp010821_run180821_05,0,000u,2021-08-01,2021-08-18,9,9d
+exp010821,NA,Control,Control,Contro,4,Contro4_000u_exp010821_run180821_06,0,000u,2021-08-01,2021-08-18,9,9d
+exp040821,NA,Control,Control,Contro,4,Contro1_000u_exp040821_run180821_25,0,000u,2021-08-04,2021-08-18,9,9d
+exp040821,NA,Control,Control,Contro,4,Contro2_000u_exp040821_run180821_26,0,000u,2021-08-04,2021-08-18,9,9d
+exp040821,NA,Control,Control,Contro,4,Contro3_000u_exp040821_run180821_27,0,000u,2021-08-04,2021-08-18,9,9d
+exp040821,NA,Control,Control,Contro,4,Contro4_000u_exp040821_run180821_28,0,000u,2021-08-04,2021-08-18,9,9d
+exp181021,NA,Control,Control,Contro,4,Contro1_000u_exp181021_run101121_38,0,000u,2021-10-18,2021-11-10,9,9d
+exp181021,NA,Control,Control,Contro,4,Contro2_000u_exp181021_run101121_39,0,000u,2021-10-18,2021-11-10,9,9d
+exp181021,NA,Control,Control,Contro,4,Contro3_000u_exp181021_run101121_40,0,000u,2021-10-18,2021-11-10,9,9d
+exp181021,NA,Control,Control,Contro,4,Contro4_000u_exp181021_run101121_41,0,000u,2021-10-18,2021-11-10,9,9d
+exp300821,NA,Control,Control,Contro,4,Contro1_000u_exp300821_run290921_01,0,000u,2021-08-30,2021-09-29,9,9d
+exp300821,NA,Control,Control,Contro,4,Contro2_000u_exp300821_run290921_02,0,000u,2021-08-30,2021-09-29,9,9d
+exp300821,NA,Control,Control,Contro,4,Contro3_000u_exp300821_run290921_03,0,000u,2021-08-30,2021-09-29,9,9d
+exp300821,NA,Control,Control,Contro,4,Contro4_000u_exp300821_run290921_04,0,000u,2021-08-30,2021-09-29,9,9d
+exp130921,NA,Control,Control,Contro,4,Contro1_000u_exp130921_run290921_32,0,000u,2021-09-13,2021-09-29,9,9d
+exp130921,NA,Control,Control,Contro,4,Contro2_000u_exp130921_run290921_33,0,000u,2021-09-13,2021-09-29,9,9d
+exp130921,NA,Control,Control,Contro,4,Contro3_000u_exp130921_run290921_34,0,000u,2021-09-13,2021-09-29,9,9d
+exp130921,NA,Control,Control,Contro,4,Contro4_000u_exp130921_run290921_35,0,000u,2021-09-13,2021-09-29,9,9d
+exp200921,NA,Control,Control,Contro,4,Contro1_000u_exp200921_run111021_09,0,000u,2021-09-20,2021-10-11,9,9d
+exp200921,NA,Control,Control,Contro,4,Contro2_000u_exp200921_run111021_10,0,000u,2021-09-20,2021-10-11,9,9d
+exp200921,NA,Control,Control,Contro,4,Contro3_000u_exp200921_run111021_11,0,000u,2021-09-20,2021-10-11,9,9d
+exp200921,NA,Control,Control,Contro,4,Contro4_000u_exp200921_run111021_12,0,000u,2021-09-20,2021-10-11,9,9d
+exp200921_dose response osim,NA,Control,Control,Contro,4,Contro1_000u_exp200921_run111021_09,0,000u,2021-09-20,2021-10-11,9,9d
+exp200921_dose response osim,NA,Control,Control,Contro,4,Contro2_000u_exp200921_run111021_10,0,000u,2021-09-20,2021-10-11,9,9d
+exp200921_dose response osim,NA,Control,Control,Contro,4,Contro3_000u_exp200921_run111021_11,0,000u,2021-09-20,2021-10-11,9,9d
+exp200921_dose response osim,NA,Control,Control,Contro,4,Contro4_000u_exp200921_run111021_12,0,000u,2021-09-20,2021-10-11,9,9d
+exp151121,NA,Control,Control,Contro,4,Contro1_000u_exp151121_run071221_01,0,000u,2021-11-15,2021-12-07,9,9d
+exp151121,NA,Control,Control,Contro,4,Contro2_000u_exp151121_run071221_02,0,000u,2021-11-15,2021-12-07,9,9d
+exp151121,NA,Control,Control,Contro,4,Contro3_000u_exp151121_run071221_03,0,000u,2021-11-15,2021-12-07,9,9d
+exp151121,NA,Control,Control,Contro,4,Contro4_000u_exp151121_run071221_04,0,000u,2021-11-15,2021-12-07,9,9d
+exp271221,NA,Control,Control,Contro,4,Contro1_000u_exp271221_run180122_17,0,000u,2021-12-27,2022-01-18,9,9d
+exp271221,NA,Control,Control,Contro,4,Contro2_000u_exp271221_run180122_18,0,000u,2021-12-27,2022-01-18,9,9d
+exp271221,NA,Control,Control,Contro,4,Contro3_000u_exp271221_run180122_19,0,000u,2021-12-27,2022-01-18,9,9d
+exp271221,NA,Control,Control,Contro,4,Contro4_000u_exp271221_run180122_20,0,000u,2021-12-27,2022-01-18,9,9d
+exp070222,NA,Control,Control,Contro,4,Contro1_000u_exp070222_run010322_01,0,000u,2022-02-07,2022-03-01,9,9d
+exp070222,NA,Control,Control,Contro,4,Contro2_000u_exp070222_run010322_02,0,000u,2022-02-07,2022-03-01,9,9d
+exp070222,NA,Control,Control,Contro,4,Contro3_000u_exp070222_run010322_03,0,000u,2022-02-07,2022-03-01,9,9d
+exp070222,NA,Control,Control,Contro,4,Contro4_000u_exp070222_run010322_04,0,000u,2022-02-07,2022-03-01,9,9d
+exp220322,NA,Control,Control,Contro,4,Contro1_000u_exp220322_run060522_25,0,000u,2022-03-22,2022-05-06,9,9d
+exp220322,NA,Control,Control,Contro,4,Contro2_000u_exp220322_run060522_26,0,000u,2022-03-22,2022-05-06,9,9d
+exp220322,NA,Control,Control,Contro,4,Contro3_000u_exp220322_run060522_27,0,000u,2022-03-22,2022-05-06,9,9d
+exp220322,NA,Control,Control,Contro,4,Contro4_000u_exp220322_run060522_28,0,000u,2022-03-22,2022-05-06,9,9d
+exp281022,NA,Control,Control,Contro,4,Contro1_000u_exp281022_run141222_01,0,000u,2022-10-28,2022-12-14,9,9d
+exp281022,NA,Control,Control,Contro,4,Contro2_000u_exp281022_run141222_02,0,000u,2022-10-28,2022-12-14,9,9d
+exp281022,NA,Control,Control,Contro,4,Contro3_000u_exp281022_run141222_03,0,000u,2022-10-28,2022-12-14,9,9d
+exp281022,NA,Control,Control,Contro,4,Contro4_000u_exp281022_run141222_04,0,000u,2022-10-28,2022-12-14,9,9d
+exp281022_time course,NA,Control,Control,Contro,4,9d_Contro1_000u_exp281022_run110723_01,0,000u,2022-10-28,2023-07-11,9,9d
+exp281022_time course,NA,Control,Control,Contro,4,9d_Contro2_000u_exp281022_run110723_02,0,000u,2022-10-28,2023-07-11,9,9d
+exp281022_time course,NA,Control,Control,Contro,4,9d_Contro3_000u_exp281022_run110723_03,0,000u,2022-10-28,2023-07-11,9,9d
+exp281022_time course,NA,Control,Control,Contro,4,9d_Contro4_000u_exp281022_run110723_04,0,000u,2022-10-28,2023-07-11,9,9d
+exp010821,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer1_100n_exp010821_run180821_07,1.0000000000000001e-7,100n,2021-08-01,2021-08-18,9,9d
+exp010821,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer2_100n_exp010821_run180821_08,1.0000000000000001e-7,100n,2021-08-01,2021-08-18,9,9d
+exp010821,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer3_100n_exp010821_run180821_09,1.0000000000000001e-7,100n,2021-08-01,2021-08-18,9,9d
+exp010821,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer4_100n_exp010821_run180821_10,1.0000000000000001e-7,100n,2021-08-01,2021-08-18,9,9d
+exp040821,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer1_100n_exp040821_run180821_29,1.0000000000000001e-7,100n,2021-08-04,2021-08-18,9,9d
+exp040821,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer2_100n_exp040821_run180821_30,1.0000000000000001e-7,100n,2021-08-04,2021-08-18,9,9d
+exp040821,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer3_100n_exp040821_run180821_31,1.0000000000000001e-7,100n,2021-08-04,2021-08-18,9,9d
+exp040821,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer4_100n_exp040821_run180821_32,1.0000000000000001e-7,100n,2021-08-04,2021-08-18,9,9d
+exp300821,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer1_100n_exp300821_run290921_05,1.0000000000000001e-7,100n,2021-08-30,2021-09-29,9,9d
+exp300821,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer2_100n_exp300821_run290921_06,1.0000000000000001e-7,100n,2021-08-30,2021-09-29,9,9d
+exp300821,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer3_100n_exp300821_run290921_07,1.0000000000000001e-7,100n,2021-08-30,2021-09-29,9,9d
+exp300821,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer4_100n_exp300821_run290921_08,1.0000000000000001e-7,100n,2021-08-30,2021-09-29,9,9d
+exp200921_dose response osim,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer1_020n_exp200921_run101121_03,2e-8,020n,2021-09-20,2021-11-10,9,9d
+exp200921_dose response osim,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer2_020n_exp200921_run101121_04,2e-8,020n,2021-09-20,2021-11-10,9,9d
+exp200921_dose response osim,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer3_020n_exp200921_run101121_05,2e-8,020n,2021-09-20,2021-11-10,9,9d
+exp200921_dose response osim,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer4_020n_exp200921_run101121_06,2e-8,020n,2021-09-20,2021-11-10,9,9d
+exp200921_dose response osim,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer1_100n_exp200921_run101121_07,1.0000000000000001e-7,100n,2021-09-20,2021-11-10,9,9d
+exp200921_dose response osim,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer2_100n_exp200921_run101121_08,1.0000000000000001e-7,100n,2021-09-20,2021-11-10,9,9d
+exp200921_dose response osim,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer3_100n_exp200921_run101121_09,1.0000000000000001e-7,100n,2021-09-20,2021-11-10,9,9d
+exp200921_dose response osim,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer4_100n_exp200921_run101121_10,1.0000000000000001e-7,100n,2021-09-20,2021-11-10,9,9d
+exp200921_dose response osim,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer1_001u_exp200921_run101121_11,1e-6,001u,2021-09-20,2021-11-10,9,9d
+exp200921_dose response osim,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer2_001u_exp200921_run101121_12,1e-6,001u,2021-09-20,2021-11-10,9,9d
+exp200921_dose response osim,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer3_001u_exp200921_run101121_13,1e-6,001u,2021-09-20,2021-11-10,9,9d
+exp200921_dose response osim,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer4_001u_exp200921_run101121_14,1e-6,001u,2021-09-20,2021-11-10,9,9d
+exp200921_dose response osim,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer1_005u_exp200921_run101121_15,4.9999999999999996e-6,005u,2021-09-20,2021-11-10,9,9d
+exp200921_dose response osim,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer2_005u_exp200921_run101121_16,4.9999999999999996e-6,005u,2021-09-20,2021-11-10,9,9d
+exp200921_dose response osim,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer3_005u_exp200921_run101121_17,4.9999999999999996e-6,005u,2021-09-20,2021-11-10,9,9d
+exp200921_dose response osim,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer4_005u_exp200921_run101121_18,4.9999999999999996e-6,005u,2021-09-20,2021-11-10,9,9d
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,9d_osim1_100n_exp281022_run110723_01,1.0000000000000001e-7,100n,2022-10-28,2023-07-11,9,9d
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,9d_osim2_100n_exp281022_run110723_02,1.0000000000000001e-7,100n,2022-10-28,2023-07-11,9,9d
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,9d_osim3_100n_exp281022_run110723_03,1.0000000000000001e-7,100n,2022-10-28,2023-07-11,9,9d
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,9d_osim4_100n_exp281022_run110723_04,1.0000000000000001e-7,100n,2022-10-28,2023-07-11,9,9d
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,19d_osim1_100n_exp071122_run110723_09,1.0000000000000001e-7,100n,2022-11-07,2023-07-11,19,19d
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,19d_osim2_100n_exp071122_run110723_10,1.0000000000000001e-7,100n,2022-11-07,2023-07-11,19,19d
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,19d_osim3_100n_exp071122_run110723_11,1.0000000000000001e-7,100n,2022-11-07,2023-07-11,19,19d
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,19d_osim4_100n_exp071122_run110723_12,1.0000000000000001e-7,100n,2022-11-07,2023-07-11,19,19d
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,30d_osim1_100n_exp181122_run110723_17,1.0000000000000001e-7,100n,2022-11-18,2023-07-11,30,30d
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,30d_osim2_100n_exp181122_run110723_18,1.0000000000000001e-7,100n,2022-11-18,2023-07-11,30,30d
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,30d_osim3_100n_exp181122_run110723_19,1.0000000000000001e-7,100n,2022-11-18,2023-07-11,30,30d
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,30d_osim4_100n_exp181122_run110723_20,1.0000000000000001e-7,100n,2022-11-18,2023-07-11,30,30d
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,1.5m_osim1_100n_exp021222_run110723_25,1.0000000000000001e-7,100n,2022-12-02,2023-07-11,45,1.5m
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,1.5m_osim2_100n_exp021222_run110723_26,1.0000000000000001e-7,100n,2022-12-02,2023-07-11,45,1.5m
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,1.5m_osim3_100n_exp021222_run110723_27,1.0000000000000001e-7,100n,2022-12-02,2023-07-11,45,1.5m
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,1.5m_osim4_100n_exp021222_run110723_28,1.0000000000000001e-7,100n,2022-12-02,2023-07-11,45,1.5m
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,2m_osim1_100n_exp161222_run110723_33,1.0000000000000001e-7,100n,2022-12-16,2023-07-11,60,2m
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,2m_osim2_100n_exp161222_run110723_34,1.0000000000000001e-7,100n,2022-12-16,2023-07-11,60,2m
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,2m_osim3_100n_exp161222_run110723_35,1.0000000000000001e-7,100n,2022-12-16,2023-07-11,60,2m
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,4,2m_osim4_100n_exp161222_run110723_36,1.0000000000000001e-7,100n,2022-12-16,2023-07-11,60,2m
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,3,3m_osim1_100n_exp180123_run110723_41,1.0000000000000001e-7,100n,2023-01-18,2023-07-11,90,3m
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,3,3m_osim2_100n_exp180123_run110723_42,1.0000000000000001e-7,100n,2023-01-18,2023-07-11,90,3m
+exp281022_time course,EGFR,3rd generation EGFR-TKIs,Osimertinb,osim,3,3m_osim3_100n_exp180123_run110723_43,1.0000000000000001e-7,100n,2023-01-18,2023-07-11,90,3m
+exp271221,EGFR,3rd generation EGFR-TKIs,WZ4002,WZ4002,4,WZ40021_001u_exp271221_run140122_01,1e-6,001u,2021-12-27,2022-01-14,9,9d
+exp271221,EGFR,3rd generation EGFR-TKIs,WZ4002,WZ4002,4,WZ40022_001u_exp271221_run140122_02,1e-6,001u,2021-12-27,2022-01-14,9,9d
+exp271221,EGFR,3rd generation EGFR-TKIs,WZ4002,WZ4002,4,WZ40023_001u_exp271221_run140122_03,1e-6,001u,2021-12-27,2022-01-14,9,9d
+exp271221,EGFR,3rd generation EGFR-TKIs,WZ4002,WZ4002,4,WZ40024_001u_exp271221_run140122_04,1e-6,001u,2021-12-27,2022-01-14,9,9d
+exp070222,EGFR,3rd generation EGFR-TKIs,Lazertinib,Lazert,4,Lazert1_001u_exp070222_run010322_33,1e-6,001u,2022-02-07,2022-03-01,9,9d
+exp070222,EGFR,3rd generation EGFR-TKIs,Lazertinib,Lazert,4,Lazert2_001u_exp070222_run010322_34,1e-6,001u,2022-02-07,2022-03-01,9,9d
+exp070222,EGFR,3rd generation EGFR-TKIs,Lazertinib,Lazert,4,Lazert3_001u_exp070222_run010322_35,1e-6,001u,2022-02-07,2022-03-01,9,9d
+exp070222,EGFR,3rd generation EGFR-TKIs,Lazertinib,Lazert,4,Lazert4_001u_exp070222_run010322_36,1e-6,001u,2022-02-07,2022-03-01,9,9d
+exp070222,EGFR,3rd generation EGFR-TKIs,Rociletinib,Rocile,4,Rocile1_001u_exp070222_run010322_37,1e-6,001u,2022-02-07,2022-03-01,9,9d
+exp070222,EGFR,3rd generation EGFR-TKIs,Rociletinib,Rocile,4,Rocile2_001u_exp070222_run010322_38,1e-6,001u,2022-02-07,2022-03-01,9,9d
+exp070222,EGFR,3rd generation EGFR-TKIs,Rociletinib,Rocile,4,Rocile3_001u_exp070222_run010322_39,1e-6,001u,2022-02-07,2022-03-01,9,9d
+exp070222,EGFR,3rd generation EGFR-TKIs,Rociletinib,Rocile,4,Rocile4_001u_exp070222_run010322_40,1e-6,001u,2022-02-07,2022-03-01,9,9d
+exp070222,EGFR,3rd generation EGFR-TKIs,Mavelertinib,Mavele,4,Mavele1_001u_exp070222_run010322_41,1e-6,001u,2022-02-07,2022-03-01,9,9d
+exp070222,EGFR,3rd generation EGFR-TKIs,Mavelertinib,Mavele,4,Mavele2_001u_exp070222_run010322_42,1e-6,001u,2022-02-07,2022-03-01,9,9d
+exp070222,EGFR,3rd generation EGFR-TKIs,Mavelertinib,Mavele,4,Mavele3_001u_exp070222_run010322_43,1e-6,001u,2022-02-07,2022-03-01,9,9d
+exp070222,EGFR,3rd generation EGFR-TKIs,Mavelertinib,Mavele,4,Mavele4_001u_exp070222_run010322_44,1e-6,001u,2022-02-07,2022-03-01,9,9d
+exp300821,EGFR,1st generation EGFR-TKIs,Gefitinib,Gefiti,4,Gefiti1_002u_exp300821_run290921_13,2e-6,002u,2021-08-30,2021-09-29,9,9d
+exp300821,EGFR,1st generation EGFR-TKIs,Gefitinib,Gefiti,4,Gefiti2_002u_exp300821_run290921_14,2e-6,002u,2021-08-30,2021-09-29,9,9d
+exp300821,EGFR,1st generation EGFR-TKIs,Gefitinib,Gefiti,4,Gefiti3_002u_exp300821_run290921_15,2e-6,002u,2021-08-30,2021-09-29,9,9d
+exp300821,EGFR,1st generation EGFR-TKIs,Gefitinib,Gefiti,4,Gefiti4_002u_exp300821_run290921_16,2e-6,002u,2021-08-30,2021-09-29,9,9d
+exp151121,EGFR,1st generation EGFR-TKIs,Gefitinib,Gefiti,4,Gefiti1_002u_exp151121_run071221_13,2e-6,002u,2021-11-15,2021-12-07,9,9d
+exp151121,EGFR,1st generation EGFR-TKIs,Gefitinib,Gefiti,4,Gefiti2_002u_exp151121_run071221_14,2e-6,002u,2021-11-15,2021-12-07,9,9d
+exp151121,EGFR,1st generation EGFR-TKIs,Gefitinib,Gefiti,4,Gefiti3_002u_exp151121_run071221_15,2e-6,002u,2021-11-15,2021-12-07,9,9d
+exp151121,EGFR,1st generation EGFR-TKIs,Gefitinib,Gefiti,4,Gefiti4_002u_exp151121_run071221_16,2e-6,002u,2021-11-15,2021-12-07,9,9d
+exp151121,EGFR,PROTAC conjugated,Gefitinib-PROTAC-1,PROTAC,4,PROTAC1_010u_exp151121_run071221_17,9.999999999999999e-6,010u,2021-11-15,2021-12-07,9,9d
+exp151121,EGFR,PROTAC conjugated,Gefitinib-PROTAC-1,PROTAC,4,PROTAC2_010u_exp151121_run071221_18,9.999999999999999e-6,010u,2021-11-15,2021-12-07,9,9d
+exp151121,EGFR,PROTAC conjugated,Gefitinib-PROTAC-1,PROTAC,4,PROTAC3_010u_exp151121_run071221_19,9.999999999999999e-6,010u,2021-11-15,2021-12-07,9,9d
+exp151121,EGFR,PROTAC conjugated,Gefitinib-PROTAC-1,PROTAC,4,PROTAC4_010u_exp151121_run071221_20,9.999999999999999e-6,010u,2021-11-15,2021-12-07,9,9d
+exp271221,KRAS,PROTAC conjugated,Sotorasib (AMG-510),Sotora,4,Sotora1_035u_exp271221_run140122_05,3.5e-5,035u,2021-12-27,2022-01-14,9,9d
+exp271221,KRAS,PROTAC conjugated,Sotorasib (AMG-510),Sotora,4,Sotora2_035u_exp271221_run140122_06,3.5e-5,035u,2021-12-27,2022-01-14,9,9d
+exp271221,KRAS,PROTAC conjugated,Sotorasib (AMG-510),Sotora,4,Sotora3_035u_exp271221_run140122_07,3.5e-5,035u,2021-12-27,2022-01-14,9,9d
+exp271221,KRAS,PROTAC conjugated,Sotorasib (AMG-510),Sotora,4,Sotora4_035u_exp271221_run140122_08,3.5e-5,035u,2021-12-27,2022-01-14,9,9d
+exp300821,RAF,PROTAC conjugated,CCT196969,CCT196,4,CCT1961_001u_exp300821_run290921_25,1e-6,001u,2021-08-30,2021-09-29,9,9d
+exp300821,RAF,PROTAC conjugated,CCT196969,CCT196,4,CCT1962_001u_exp300821_run290921_26,1e-6,001u,2021-08-30,2021-09-29,9,9d
+exp300821,RAF,PROTAC conjugated,CCT196969,CCT196,4,CCT1963_001u_exp300821_run290921_27,1e-6,001u,2021-08-30,2021-09-29,9,9d
+exp300821,RAF,PROTAC conjugated,CCT196969,CCT196,4,CCT1964_001u_exp300821_run290921_28,1e-6,001u,2021-08-30,2021-09-29,9,9d
+exp151121,RAF,PROTAC conjugated,CCT196969,CCT196,4,CCT1961_001u_exp151121_run071221_25,1e-6,001u,2021-11-15,2021-12-07,9,9d
+exp151121,RAF,PROTAC conjugated,CCT196969,CCT196,4,CCT1962_001u_exp151121_run071221_26,1e-6,001u,2021-11-15,2021-12-07,9,9d
+exp151121,RAF,PROTAC conjugated,CCT196969,CCT196,4,CCT1963_001u_exp151121_run071221_27,1e-6,001u,2021-11-15,2021-12-07,9,9d
+exp151121,RAF,PROTAC conjugated,CCT196969,CCT196,4,CCT1964_001u_exp151121_run071221_28,1e-6,001u,2021-11-15,2021-12-07,9,9d
+exp130921,RAF,PROTAC conjugated,LY3009120,LY3009,4,LY30091_003u_exp130921_run290921_36,3e-6,003u,2021-09-13,2021-09-29,9,9d
+exp130921,RAF,PROTAC conjugated,LY3009120,LY3009,4,LY30092_003u_exp130921_run290921_37,3e-6,003u,2021-09-13,2021-09-29,9,9d
+exp130921,RAF,PROTAC conjugated,LY3009120,LY3009,4,LY30093_003u_exp130921_run290921_38,3e-6,003u,2021-09-13,2021-09-29,9,9d
+exp130921,RAF,PROTAC conjugated,LY3009120,LY3009,4,LY30094_003u_exp130921_run290921_39,3e-6,003u,2021-09-13,2021-09-29,9,9d
+exp151121,RAF,PROTAC conjugated,LY3009120,LY3009,4,LY30091_003u_exp151121_run071221_29,3e-6,003u,2021-11-15,2021-12-07,9,9d
+exp151121,RAF,PROTAC conjugated,LY3009120,LY3009,4,LY30092_003u_exp151121_run071221_30,3e-6,003u,2021-11-15,2021-12-07,9,9d
+exp151121,RAF,PROTAC conjugated,LY3009120,LY3009,4,LY30093_003u_exp151121_run071221_31,3e-6,003u,2021-11-15,2021-12-07,9,9d
+exp151121,RAF,PROTAC conjugated,LY3009120,LY3009,4,LY30094_003u_exp151121_run071221_32,3e-6,003u,2021-11-15,2021-12-07,9,9d
+exp151121,RAF,PROTAC conjugated,RAF265,RAF265,4,RAF2651_005u_exp151121_run071221_21,4.9999999999999996e-6,005u,2021-11-15,2021-12-07,9,9d
+exp151121,RAF,PROTAC conjugated,RAF265,RAF265,4,RAF2652_005u_exp151121_run071221_22,4.9999999999999996e-6,005u,2021-11-15,2021-12-07,9,9d
+exp151121,RAF,PROTAC conjugated,RAF265,RAF265,4,RAF2653_005u_exp151121_run071221_23,4.9999999999999996e-6,005u,2021-11-15,2021-12-07,9,9d
+exp151121,RAF,PROTAC conjugated,RAF265,RAF265,4,RAF2654_005u_exp151121_run071221_24,4.9999999999999996e-6,005u,2021-11-15,2021-12-07,9,9d
+exp070222,RAF,PROTAC conjugated,Vemurafenib,Vemura,4,Vemura1_007u_exp070222_run060522_01,7e-6,007u,2022-02-07,2022-05-06,9,9d
+exp070222,RAF,PROTAC conjugated,Vemurafenib,Vemura,4,Vemura2_007u_exp070222_run060522_02,7e-6,007u,2022-02-07,2022-05-06,9,9d
+exp070222,RAF,PROTAC conjugated,Vemurafenib,Vemura,4,Vemura3_007u_exp070222_run060522_03,7e-6,007u,2022-02-07,2022-05-06,9,9d
+exp070222,RAF,PROTAC conjugated,Vemurafenib,Vemura,4,Vemura4_007u_exp070222_run060522_04,7e-6,007u,2022-02-07,2022-05-06,9,9d
+exp010821,MEK,PROTAC conjugated,Trametinib,Tramet,4,Tramet1_030n_exp010821_run180821_11,3.0000000000000004e-8,030n,2021-08-01,2021-08-18,9,9d
+exp010821,MEK,PROTAC conjugated,Trametinib,Tramet,4,Tramet2_030n_exp010821_run180821_12,3.0000000000000004e-8,030n,2021-08-01,2021-08-18,9,9d
+exp010821,MEK,PROTAC conjugated,Trametinib,Tramet,4,Tramet3_030n_exp010821_run180821_13,3.0000000000000004e-8,030n,2021-08-01,2021-08-18,9,9d
+exp010821,MEK,PROTAC conjugated,Trametinib,Tramet,4,Tramet4_030n_exp010821_run180821_14,3.0000000000000004e-8,030n,2021-08-01,2021-08-18,9,9d
+exp040821,MEK,PROTAC conjugated,Trametinib,Tramet,4,Tramet1_030n_exp040821_run180821_33,3.0000000000000004e-8,030n,2021-08-04,2021-08-18,9,9d
+exp040821,MEK,PROTAC conjugated,Trametinib,Tramet,4,Tramet2_030n_exp040821_run180821_34,3.0000000000000004e-8,030n,2021-08-04,2021-08-18,9,9d
+exp040821,MEK,PROTAC conjugated,Trametinib,Tramet,4,Tramet3_030n_exp040821_run180821_35,3.0000000000000004e-8,030n,2021-08-04,2021-08-18,9,9d
+exp040821,MEK,PROTAC conjugated,Trametinib,Tramet,4,Tramet4_030n_exp040821_run180821_36,3.0000000000000004e-8,030n,2021-08-04,2021-08-18,9,9d
+exp151121,MEK,PROTAC conjugated,Trametinib,Tramet,4,Tramet1_040n_exp151121_run071221_05,4e-8,040n,2021-11-15,2021-12-07,9,9d
+exp151121,MEK,PROTAC conjugated,Trametinib,Tramet,4,Tramet2_040n_exp151121_run071221_06,4e-8,040n,2021-11-15,2021-12-07,9,9d
+exp151121,MEK,PROTAC conjugated,Trametinib,Tramet,4,Tramet3_040n_exp151121_run071221_07,4e-8,040n,2021-11-15,2021-12-07,9,9d
+exp151121,MEK,PROTAC conjugated,Trametinib,Tramet,4,Tramet4_040n_exp151121_run071221_08,4e-8,040n,2021-11-15,2021-12-07,9,9d
+exp151121,MEK,PROTAC conjugated,U0126-EtOH,U0126E,4,U0126E1_030u_exp151121_run071221_09,2.9999999999999997e-5,030u,2021-11-15,2021-12-07,9,9d
+exp151121,MEK,PROTAC conjugated,U0126-EtOH,U0126E,4,U0126E2_030u_exp151121_run071221_10,2.9999999999999997e-5,030u,2021-11-15,2021-12-07,9,9d
+exp151121,MEK,PROTAC conjugated,U0126-EtOH,U0126E,4,U0126E3_030u_exp151121_run071221_11,2.9999999999999997e-5,030u,2021-11-15,2021-12-07,9,9d
+exp151121,MEK,PROTAC conjugated,U0126-EtOH,U0126E,4,U0126E4_030u_exp151121_run071221_12,2.9999999999999997e-5,030u,2021-11-15,2021-12-07,9,9d
+exp271221,ALK,ALK and c-Met,Crizotinib,Crizot,4,Crizot1_002u_exp271221_run140122_13,2e-6,002u,2021-12-27,2022-01-14,9,9d
+exp271221,ALK,ALK and c-Met,Crizotinib,Crizot,4,Crizot2_002u_exp271221_run140122_14,2e-6,002u,2021-12-27,2022-01-14,9,9d
+exp271221,ALK,ALK and c-Met,Crizotinib,Crizot,4,Crizot3_002u_exp271221_run140122_15,2e-6,002u,2021-12-27,2022-01-14,9,9d
+exp271221,ALK,ALK and c-Met,Crizotinib,Crizot,4,Crizot4_002u_exp271221_run140122_16,2e-6,002u,2021-12-27,2022-01-14,9,9d
+exp271221,ALK,ALK,TAE684 (NVP-TAE684),TAE684,4,TAE6841_001u_exp271221_run140122_17,1e-6,001u,2021-12-27,2022-01-14,9,9d
+exp271221,ALK,ALK,TAE684 (NVP-TAE684),TAE684,4,TAE6842_001u_exp271221_run140122_18,1e-6,001u,2021-12-27,2022-01-14,9,9d
+exp271221,ALK,ALK,TAE684 (NVP-TAE684),TAE684,4,TAE6843_001u_exp271221_run140122_19,1e-6,001u,2021-12-27,2022-01-14,9,9d
+exp271221,ALK,ALK,TAE684 (NVP-TAE684),TAE684,4,TAE6844_001u_exp271221_run140122_20,1e-6,001u,2021-12-27,2022-01-14,9,9d
+exp271221,FGFR,ALK,Infigratinib (BGJ398),BGJ398,4,BGJ3981_007u_exp271221_run140122_09,7e-6,007u,2021-12-27,2022-01-14,9,9d
+exp271221,FGFR,ALK,Infigratinib (BGJ398),BGJ398,4,BGJ3982_007u_exp271221_run140122_10,7e-6,007u,2021-12-27,2022-01-14,9,9d
+exp271221,FGFR,ALK,Infigratinib (BGJ398),BGJ398,4,BGJ3983_007u_exp271221_run140122_11,7e-6,007u,2021-12-27,2022-01-14,9,9d
+exp271221,FGFR,ALK,Infigratinib (BGJ398),BGJ398,4,BGJ3984_007u_exp271221_run140122_12,7e-6,007u,2021-12-27,2022-01-14,9,9d
+exp010821,Chemotherapy,antifolate,Pemetrexed,Pemetr,4,Pemetr1_100n_exp010821_run180821_15,1.0000000000000001e-7,100n,2021-08-01,2021-08-18,9,9d
+exp010821,Chemotherapy,antifolate,Pemetrexed,Pemetr,4,Pemetr2_100n_exp010821_run180821_16,1.0000000000000001e-7,100n,2021-08-01,2021-08-18,9,9d
+exp010821,Chemotherapy,antifolate,Pemetrexed,Pemetr,4,Pemetr3_100n_exp010821_run180821_17,1.0000000000000001e-7,100n,2021-08-01,2021-08-18,9,9d
+exp010821,Chemotherapy,antifolate,Pemetrexed,Pemetr,4,Pemetr4_100n_exp010821_run180821_18,1.0000000000000001e-7,100n,2021-08-01,2021-08-18,9,9d
+exp040821,Chemotherapy,antifolate,Pemetrexed,Pemetr,4,Pemetr1_100n_exp040821_run180821_37,1.0000000000000001e-7,100n,2021-08-04,2021-08-18,9,9d
+exp040821,Chemotherapy,antifolate,Pemetrexed,Pemetr,4,Pemetr2_100n_exp040821_run180821_38,1.0000000000000001e-7,100n,2021-08-04,2021-08-18,9,9d
+exp040821,Chemotherapy,antifolate,Pemetrexed,Pemetr,4,Pemetr3_100n_exp040821_run180821_39,1.0000000000000001e-7,100n,2021-08-04,2021-08-18,9,9d
+exp040821,Chemotherapy,antifolate,Pemetrexed,Pemetr,4,Pemetr4_100n_exp040821_run180821_40,1.0000000000000001e-7,100n,2021-08-04,2021-08-18,9,9d
+exp181021,Chemotherapy,antifolate,Pemetrexed,Pemetr,4,Pemetr1_080n_exp181021_run251121_01,8e-8,080n,2021-10-18,2021-11-25,9,9d
+exp181021,Chemotherapy,antifolate,Pemetrexed,Pemetr,4,Pemetr2_080n_exp181021_run251121_02,8e-8,080n,2021-10-18,2021-11-25,9,9d
+exp181021,Chemotherapy,antifolate,Pemetrexed,Pemetr,4,Pemetr3_080n_exp181021_run251121_03,8e-8,080n,2021-10-18,2021-11-25,9,9d
+exp181021,Chemotherapy,antifolate,Pemetrexed,Pemetr,4,Pemetr4_080n_exp181021_run251121_04,8e-8,080n,2021-10-18,2021-11-25,9,9d
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,9d_PEM1_100n_exp281022_run110723_05,1.0000000000000001e-7,100n,2022-10-28,2023-07-11,9,9d
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,9d_PEM2_100n_exp281022_run110723_06,1.0000000000000001e-7,100n,2022-10-28,2023-07-11,9,9d
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,9d_PEM3_100n_exp281022_run110723_07,1.0000000000000001e-7,100n,2022-10-28,2023-07-11,9,9d
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,9d_PEM4_100n_exp281022_run110723_08,1.0000000000000001e-7,100n,2022-10-28,2023-07-11,9,9d
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,19d_PEM1_100n_exp071122_run110723_13,1.0000000000000001e-7,100n,2022-11-07,2023-07-11,19,19d
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,19d_PEM2_100n_exp071122_run110723_14,1.0000000000000001e-7,100n,2022-11-07,2023-07-11,19,19d
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,19d_PEM3_100n_exp071122_run110723_15,1.0000000000000001e-7,100n,2022-11-07,2023-07-11,19,19d
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,19d_PEM4_100n_exp071122_run110723_16,1.0000000000000001e-7,100n,2022-11-07,2023-07-11,19,19d
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,30d_PEM1_100n_exp181122_run110723_21,1.0000000000000001e-7,100n,2022-11-18,2023-07-11,30,30d
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,30d_PEM2_100n_exp181122_run110723_22,1.0000000000000001e-7,100n,2022-11-18,2023-07-11,30,30d
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,30d_PEM3_100n_exp181122_run110723_23,1.0000000000000001e-7,100n,2022-11-18,2023-07-11,30,30d
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,30d_PEM4_100n_exp181122_run110723_24,1.0000000000000001e-7,100n,2022-11-18,2023-07-11,30,30d
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,1.5m_PEM1_100n_exp021222_run110723_29,1.0000000000000001e-7,100n,2022-12-02,2023-07-11,45,1.5m
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,1.5m_PEM2_100n_exp021222_run110723_30,1.0000000000000001e-7,100n,2022-12-02,2023-07-11,45,1.5m
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,1.5m_PEM3_100n_exp021222_run110723_31,1.0000000000000001e-7,100n,2022-12-02,2023-07-11,45,1.5m
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,1.5m_PEM4_100n_exp021222_run110723_32,1.0000000000000001e-7,100n,2022-12-02,2023-07-11,45,1.5m
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,2m_PEM1_100n_exp161222_run110723_37,1.0000000000000001e-7,100n,2022-12-16,2023-07-11,60,2m
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,2m_PEM2_100n_exp161222_run110723_38,1.0000000000000001e-7,100n,2022-12-16,2023-07-11,60,2m
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,2m_PEM3_100n_exp161222_run110723_39,1.0000000000000001e-7,100n,2022-12-16,2023-07-11,60,2m
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,2m_PEM4_100n_exp161222_run110723_40,1.0000000000000001e-7,100n,2022-12-16,2023-07-11,60,2m
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,3m_PEM1_100n_exp180123_run110723_45,1.0000000000000001e-7,100n,2023-01-18,2023-07-11,90,3m
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,3m_PEM2_100n_exp180123_run110723_46,1.0000000000000001e-7,100n,2023-01-18,2023-07-11,90,3m
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,3m_PEM3_100n_exp180123_run110723_47,1.0000000000000001e-7,100n,2023-01-18,2023-07-11,90,3m
+exp281022_time course,Chemotherapy,antifolate,Pemetrexed,PEM,4,3m_PEM4_100n_exp180123_run110723_48,1.0000000000000001e-7,100n,2023-01-18,2023-07-11,90,3m
+exp220322,Chemotherapy,antifolate,Methotrexate,Methot,4,Methot1_040n_exp220322_run060522_33,4e-8,040n,2022-03-22,2022-05-06,9,9d
+exp220322,Chemotherapy,antifolate,Methotrexate,Methot,4,Methot2_040n_exp220322_run060522_34,4e-8,040n,2022-03-22,2022-05-06,9,9d
+exp220322,Chemotherapy,antifolate,Methotrexate,Methot,4,Methot3_040n_exp220322_run060522_35,4e-8,040n,2022-03-22,2022-05-06,9,9d
+exp220322,Chemotherapy,antifolate,Methotrexate,Methot,4,Methot4_040n_exp220322_run060522_36,4e-8,040n,2022-03-22,2022-05-06,9,9d
+exp220322,Chemotherapy,antifolate,Pralatrexate,Pralat,4,Pralat1_003n_exp220322_run060522_29,3.0000000000000004e-9,003n,2022-03-22,2022-05-06,9,9d
+exp220322,Chemotherapy,antifolate,Pralatrexate,Pralat,4,Pralat2_003n_exp220322_run060522_30,3.0000000000000004e-9,003n,2022-03-22,2022-05-06,9,9d
+exp220322,Chemotherapy,antifolate,Pralatrexate,Pralat,4,Pralat3_003n_exp220322_run060522_31,3.0000000000000004e-9,003n,2022-03-22,2022-05-06,9,9d
+exp220322,Chemotherapy,antifolate,Pralatrexate,Pralat,4,Pralat4_003n_exp220322_run060522_32,3.0000000000000004e-9,003n,2022-03-22,2022-05-06,9,9d
+exp300821,Chemotherapy,platinum,Cisplatin,Cispla,4,Cispla1_250n_exp300821_run290921_17,2.5000000000000004e-7,250n,2021-08-30,2021-09-29,9,9d
+exp300821,Chemotherapy,platinum,Cisplatin,Cispla,4,Cispla2_250n_exp300821_run290921_18,2.5000000000000004e-7,250n,2021-08-30,2021-09-29,9,9d
+exp300821,Chemotherapy,platinum,Cisplatin,Cispla,4,Cispla3_250n_exp300821_run290921_19,2.5000000000000004e-7,250n,2021-08-30,2021-09-29,9,9d
+exp300821,Chemotherapy,platinum,Cisplatin,Cispla,4,Cispla4_250n_exp300821_run290921_20,2.5000000000000004e-7,250n,2021-08-30,2021-09-29,9,9d
+exp181021,Chemotherapy,platinum,Cisplatin,Cispla,4,Cispla1_500n_exp181021_run251121_09,5.000000000000001e-7,500n,2021-10-18,2021-11-25,9,9d
+exp181021,Chemotherapy,platinum,Cisplatin,Cispla,4,Cispla2_500n_exp181021_run251121_10,5.000000000000001e-7,500n,2021-10-18,2021-11-25,9,9d
+exp181021,Chemotherapy,platinum,Cisplatin,Cispla,4,Cispla3_500n_exp181021_run251121_11,5.000000000000001e-7,500n,2021-10-18,2021-11-25,9,9d
+exp181021,Chemotherapy,platinum,Cisplatin,Cispla,4,Cispla4_500n_exp181021_run251121_12,5.000000000000001e-7,500n,2021-10-18,2021-11-25,9,9d
+exp070222,Chemotherapy,platinum,Oxaliplatin,Oxalip,4,Oxalip1_005u_exp070222_run060522_09,4.9999999999999996e-6,005u,2022-02-07,2022-05-06,9,9d
+exp070222,Chemotherapy,platinum,Oxaliplatin,Oxalip,4,Oxalip2_005u_exp070222_run060522_10,4.9999999999999996e-6,005u,2022-02-07,2022-05-06,9,9d
+exp070222,Chemotherapy,platinum,Oxaliplatin,Oxalip,4,Oxalip3_005u_exp070222_run060522_11,4.9999999999999996e-6,005u,2022-02-07,2022-05-06,9,9d
+exp070222,Chemotherapy,platinum,Oxaliplatin,Oxalip,4,Oxalip4_005u_exp070222_run060522_12,4.9999999999999996e-6,005u,2022-02-07,2022-05-06,9,9d
+exp070222,Chemotherapy,platinum,Carboplatin,Carbop,4,Carbop1_007u_exp070222_run060522_13,7e-6,007u,2022-02-07,2022-05-06,9,9d
+exp070222,Chemotherapy,platinum,Carboplatin,Carbop,4,Carbop2_007u_exp070222_run060522_14,7e-6,007u,2022-02-07,2022-05-06,9,9d
+exp070222,Chemotherapy,platinum,Carboplatin,Carbop,4,Carbop3_007u_exp070222_run060522_15,7e-6,007u,2022-02-07,2022-05-06,9,9d
+exp070222,Chemotherapy,platinum,Carboplatin,Carbop,4,Carbop4_007u_exp070222_run060522_16,7e-6,007u,2022-02-07,2022-05-06,9,9d
+exp181021,Chemotherapy,topoisomerase inhibitor,Doxorubicin,Doxoru,4,Doxoru1_080n_exp181021_run251121_05,8e-8,080n,2021-10-18,2021-11-25,9,9d
+exp181021,Chemotherapy,topoisomerase inhibitor,Doxorubicin,Doxoru,4,Doxoru2_080n_exp181021_run251121_06,8e-8,080n,2021-10-18,2021-11-25,9,9d
+exp181021,Chemotherapy,topoisomerase inhibitor,Doxorubicin,Doxoru,4,Doxoru3_080n_exp181021_run251121_07,8e-8,080n,2021-10-18,2021-11-25,9,9d
+exp181021,Chemotherapy,topoisomerase inhibitor,Doxorubicin,Doxoru,4,Doxoru4_080n_exp181021_run251121_08,8e-8,080n,2021-10-18,2021-11-25,9,9d
+exp151121,Chemotherapy,alkylating agent,Mitomycin C,Mitomy,4,Mitomy1_0.02u_exp151121_run071221_37,2e-8,0.02u,2021-11-15,2021-12-07,9,9d
+exp151121,Chemotherapy,alkylating agent,Mitomycin C,Mitomy,4,Mitomy2_0.02u_exp151121_run071221_38,2e-8,0.02u,2021-11-15,2021-12-07,9,9d
+exp151121,Chemotherapy,alkylating agent,Mitomycin C,Mitomy,4,Mitomy3_0.02u_exp151121_run071221_39,2e-8,0.02u,2021-11-15,2021-12-07,9,9d
+exp151121,Chemotherapy,alkylating agent,Mitomycin C,Mitomy,4,Mitomy4_0.02u_exp151121_run071221_40,2e-8,0.02u,2021-11-15,2021-12-07,9,9d
+exp070222,Chemotherapy,Pyrimidine antagonist,5Fluorouracil,5Fluor,4,5Fluor1_006u_exp070222_run060522_05,6e-6,006u,2022-02-07,2022-05-06,9,9d
+exp070222,Chemotherapy,Pyrimidine antagonist,5Fluorouracil,5Fluor,4,5Fluor2_006u_exp070222_run060522_06,6e-6,006u,2022-02-07,2022-05-06,9,9d
+exp070222,Chemotherapy,Pyrimidine antagonist,5Fluorouracil,5Fluor,4,5Fluor3_006u_exp070222_run060522_07,6e-6,006u,2022-02-07,2022-05-06,9,9d
+exp070222,Chemotherapy,Pyrimidine antagonist,5Fluorouracil,5Fluor,4,5Fluor4_006u_exp070222_run060522_08,6e-6,006u,2022-02-07,2022-05-06,9,9d
+exp220322,Chemotherapy,Mitotic inhibitors,Paclitaxel,Paclit,4,Paclit1_005n_exp220322_run060522_37,5e-9,005n,2022-03-22,2022-05-06,9,9d
+exp220322,Chemotherapy,Mitotic inhibitors,Paclitaxel,Paclit,4,Paclit2_005n_exp220322_run060522_38,5e-9,005n,2022-03-22,2022-05-06,9,9d
+exp220322,Chemotherapy,Mitotic inhibitors,Paclitaxel,Paclit,4,Paclit3_005n_exp220322_run060522_39,5e-9,005n,2022-03-22,2022-05-06,9,9d
+exp220322,Chemotherapy,Mitotic inhibitors,Paclitaxel,Paclit,4,Paclit4_005n_exp220322_run060522_40,5e-9,005n,2022-03-22,2022-05-06,9,9d
+exp130921,Epigenetics,DNMT inhibitor,5-Azacytidine,Azacyt,4,Azacyt1_1.50u_exp130921_run290921_40,1.5e-6,1.50u,2021-09-13,2021-09-29,9,9d
+exp130921,Epigenetics,DNMT inhibitor,5-Azacytidine,Azacyt,4,Azacyt2_1.50u_exp130921_run290921_41,1.5e-6,1.50u,2021-09-13,2021-09-29,9,9d
+exp130921,Epigenetics,DNMT inhibitor,5-Azacytidine,Azacyt,4,Azacyt3_1.50u_exp130921_run290921_42,1.5e-6,1.50u,2021-09-13,2021-09-29,9,9d
+exp130921,Epigenetics,DNMT inhibitor,5-Azacytidine,Azacyt,4,Azacyt4_1.50u_exp130921_run290921_43,1.5e-6,1.50u,2021-09-13,2021-09-29,9,9d
+exp130921,Epigenetics,HDAC inhibitors,Vorinostat,Vorino,4,Vorino1_002u_exp130921_run290921_44,2e-6,002u,2021-09-13,2021-09-29,9,9d
+exp130921,Epigenetics,HDAC inhibitors,Vorinostat,Vorino,4,Vorino2_002u_exp130921_run290921_45,2e-6,002u,2021-09-13,2021-09-29,9,9d
+exp130921,Epigenetics,HDAC inhibitors,Vorinostat,Vorino,4,Vorino3_002u_exp130921_run290921_46,2e-6,002u,2021-09-13,2021-09-29,9,9d
+exp130921,Epigenetics,HDAC inhibitors,Vorinostat,Vorino,4,Vorino4_002u_exp130921_run290921_47,2e-6,002u,2021-09-13,2021-09-29,9,9d
+exp181021,Epigenetics,HDAC inhibitors,Sodium phenylbutyrate,phenyl,4,phenyl1_002m_exp181021_run251121_25,0.002,002m,2021-10-18,2021-11-25,9,9d
+exp181021,Epigenetics,HDAC inhibitors,Sodium phenylbutyrate,phenyl,4,phenyl2_002m_exp181021_run251121_26,0.002,002m,2021-10-18,2021-11-25,9,9d
+exp181021,Epigenetics,HDAC inhibitors,Sodium phenylbutyrate,phenyl,4,phenyl3_002m_exp181021_run251121_27,0.002,002m,2021-10-18,2021-11-25,9,9d
+exp181021,Epigenetics,HDAC inhibitors,Sodium phenylbutyrate,phenyl,4,phenyl4_002m_exp181021_run251121_28,0.002,002m,2021-10-18,2021-11-25,9,9d
+exp271221,Epigenetics,HDAC inhibitors,Sodium butyrate,NaButy,4,NaButy1_002m_exp271221_run180122_33,0.002,002m,2021-12-27,2022-01-18,9,9d
+exp271221,Epigenetics,HDAC inhibitors,Sodium butyrate,NaButy,4,NaButy2_002m_exp271221_run180122_34,0.002,002m,2021-12-27,2022-01-18,9,9d
+exp271221,Epigenetics,HDAC inhibitors,Sodium butyrate,NaButy,4,NaButy3_002m_exp271221_run180122_35,0.002,002m,2021-12-27,2022-01-18,9,9d
+exp271221,Epigenetics,HDAC inhibitors,Sodium butyrate,NaButy,4,NaButy4_002m_exp271221_run180122_36,0.002,002m,2021-12-27,2022-01-18,9,9d
+exp271221,Epigenetics,HDAC inhibitors,Trichostatin A,Tricho,4,Tricho1_110n_exp271221_run180122_37,1.1e-7,110n,2021-12-27,2022-01-18,9,9d
+exp271221,Epigenetics,HDAC inhibitors,Trichostatin A,Tricho,4,Tricho2_110n_exp271221_run180122_38,1.1e-7,110n,2021-12-27,2022-01-18,9,9d
+exp271221,Epigenetics,HDAC inhibitors,Trichostatin A,Tricho,4,Tricho3_110n_exp271221_run180122_39,1.1e-7,110n,2021-12-27,2022-01-18,9,9d
+exp271221,Epigenetics,HDAC inhibitors,Trichostatin A,Tricho,4,Tricho4_110n_exp271221_run180122_40,1.1e-7,110n,2021-12-27,2022-01-18,9,9d
+exp181021,Epigenetics,EZH2 inhibitor,Tazemetostat,Tazeme,4,Tazeme1_040u_exp181021_run251121_21,3.9999999999999996e-05,040u,2021-10-18,2021-11-25,9,9d
+exp181021,Epigenetics,EZH2 inhibitor,Tazemetostat,Tazeme,4,Tazeme2_040u_exp181021_run251121_22,3.9999999999999996e-05,040u,2021-10-18,2021-11-25,9,9d
+exp181021,Epigenetics,EZH2 inhibitor,Tazemetostat,Tazeme,4,Tazeme3_040u_exp181021_run251121_23,3.9999999999999996e-05,040u,2021-10-18,2021-11-25,9,9d
+exp181021,Epigenetics,EZH2 inhibitor,Tazemetostat,Tazeme,4,Tazeme4_040u_exp181021_run251121_24,3.9999999999999996e-05,040u,2021-10-18,2021-11-25,9,9d
+exp151121,Epigenetics,"RAF, VEGFR2, VEGFR3, PDGFRβ, FLT3 and c-Kit",Sorafenib,Sorafe,4,Sorafe1_005u_exp151121_run071221_33,4.9999999999999996e-6,005u,2021-11-15,2021-12-07,9,9d
+exp151121,Epigenetics,"RAF, VEGFR2, VEGFR3, PDGFRβ, FLT3 and c-Kit",Sorafenib,Sorafe,4,Sorafe2_005u_exp151121_run071221_34,4.9999999999999996e-6,005u,2021-11-15,2021-12-07,9,9d
+exp151121,Epigenetics,"RAF, VEGFR2, VEGFR3, PDGFRβ, FLT3 and c-Kit",Sorafenib,Sorafe,4,Sorafe3_005u_exp151121_run071221_35,4.9999999999999996e-6,005u,2021-11-15,2021-12-07,9,9d
+exp151121,Epigenetics,"RAF, VEGFR2, VEGFR3, PDGFRβ, FLT3 and c-Kit",Sorafenib,Sorafe,4,Sorafe4_005u_exp151121_run071221_36,4.9999999999999996e-6,005u,2021-11-15,2021-12-07,9,9d
+exp181021,Epigenetics,"VEGFR1-3, FGFR1-4, PDGFR, KIT, and RET",Lenvatinib,Lenvat,4,Lenvat1_040u_exp181021_run251121_29,3.9999999999999996e-05,040u,2021-10-18,2021-11-25,9,9d
+exp181021,Epigenetics,"VEGFR1-3, FGFR1-4, PDGFR, KIT, and RET",Lenvatinib,Lenvat,4,Lenvat2_040u_exp181021_run251121_30,3.9999999999999996e-05,040u,2021-10-18,2021-11-25,9,9d
+exp181021,Epigenetics,"VEGFR1-3, FGFR1-4, PDGFR, KIT, and RET",Lenvatinib,Lenvat,4,Lenvat3_040u_exp181021_run251121_31,3.9999999999999996e-05,040u,2021-10-18,2021-11-25,9,9d
+exp181021,Epigenetics,"VEGFR1-3, FGFR1-4, PDGFR, KIT, and RET",Lenvatinib,Lenvat,4,Lenvat4_040u_exp181021_run251121_32,3.9999999999999996e-05,040u,2021-10-18,2021-11-25,9,9d
+exp181021,Epigenetics,"VEGFR1/2/3, PDGFRβ, Kit, RET and RAF-1",Regorafenib,Regora,4,Regora1_010u_exp181021_run251121_33,9.999999999999999e-6,010u,2021-10-18,2021-11-25,9,9d
+exp181021,Epigenetics,"VEGFR1/2/3, PDGFRβ, Kit, RET and RAF-1",Regorafenib,Regora,4,Regora2_010u_exp181021_run251121_34,9.999999999999999e-6,010u,2021-10-18,2021-11-25,9,9d
+exp181021,Epigenetics,"VEGFR1/2/3, PDGFRβ, Kit, RET and RAF-1",Regorafenib,Regora,4,Regora3_010u_exp181021_run251121_35,9.999999999999999e-6,010u,2021-10-18,2021-11-25,9,9d
+exp181021,Epigenetics,"VEGFR1/2/3, PDGFRβ, Kit, RET and RAF-1",Regorafenib,Regora,4,Regora4_010u_exp181021_run251121_36,9.999999999999999e-6,010u,2021-10-18,2021-11-25,9,9d
+exp181021,Epigenetics,"VEGFR2, c-Met, Kit, Axl and Flt3",Cabozantinib,Caboza,4,Caboza1_010u_exp181021_run251121_37,9.999999999999999e-6,010u,2021-10-18,2021-11-25,9,9d
+exp181021,Epigenetics,"VEGFR2, c-Met, Kit, Axl and Flt3",Cabozantinib,Caboza,4,Caboza2_010u_exp181021_run251121_38,9.999999999999999e-6,010u,2021-10-18,2021-11-25,9,9d
+exp181021,Epigenetics,"VEGFR2, c-Met, Kit, Axl and Flt3",Cabozantinib,Caboza,4,Caboza3_010u_exp181021_run251121_39,9.999999999999999e-6,010u,2021-10-18,2021-11-25,9,9d
+exp181021,Epigenetics,"VEGFR2, c-Met, Kit, Axl and Flt3",Cabozantinib,Caboza,4,Caboza4_010u_exp181021_run251121_40,9.999999999999999e-6,010u,2021-10-18,2021-11-25,9,9d
+exp271221,Epigenetics,VEGFR2 and PDGFRβ,Sunitinib Malate,Suniti,4,Suniti1_015u_exp271221_run140122_21,1.4999999999999999e-5,015u,2021-12-27,2022-01-14,9,9d
+exp271221,Epigenetics,VEGFR2 and PDGFRβ,Sunitinib Malate,Suniti,4,Suniti2_015u_exp271221_run140122_22,1.4999999999999999e-5,015u,2021-12-27,2022-01-14,9,9d
+exp271221,Epigenetics,VEGFR2 and PDGFRβ,Sunitinib Malate,Suniti,4,Suniti3_015u_exp271221_run140122_23,1.4999999999999999e-5,015u,2021-12-27,2022-01-14,9,9d
+exp271221,Epigenetics,VEGFR2 and PDGFRβ,Sunitinib Malate,Suniti,4,Suniti4_015u_exp271221_run140122_24,1.4999999999999999e-5,015u,2021-12-27,2022-01-14,9,9d
+exp300821,Apoptosis,BCL-2 inhibitor,Navitoclax,Navito,4,Navito1_006u_exp300821_run290921_21,6e-6,006u,2021-08-30,2021-09-29,9,9d
+exp300821,Apoptosis,BCL-2 inhibitor,Navitoclax,Navito,4,Navito2_006u_exp300821_run290921_22,6e-6,006u,2021-08-30,2021-09-29,9,9d
+exp300821,Apoptosis,BCL-2 inhibitor,Navitoclax,Navito,4,Navito3_006u_exp300821_run290921_23,6e-6,006u,2021-08-30,2021-09-29,9,9d
+exp300821,Apoptosis,BCL-2 inhibitor,Navitoclax,Navito,4,Navito4_006u_exp300821_run290921_24,6e-6,006u,2021-08-30,2021-09-29,9,9d
+exp271221,Apoptosis,MCL-1 inhibitor,S63845,S63845,4,S638451_010u_exp271221_run140122_29,9.999999999999999e-6,010u,2021-12-27,2022-01-14,9,9d
+exp271221,Apoptosis,MCL-1 inhibitor,S63845,S63845,4,S638452_010u_exp271221_run140122_30,9.999999999999999e-6,010u,2021-12-27,2022-01-14,9,9d
+exp271221,Apoptosis,MCL-1 inhibitor,S63845,S63845,4,S638453_010u_exp271221_run140122_31,9.999999999999999e-6,010u,2021-12-27,2022-01-14,9,9d
+exp271221,Apoptosis,MCL-1 inhibitor,S63845,S63845,4,S638454_010u_exp271221_run140122_32,9.999999999999999e-6,010u,2021-12-27,2022-01-14,9,9d
+exp130921,JAK/STAT,Stat3 inhibitor,Napabucasin,Napabu,4,Napabu1_001u_exp130921_run111021_01,1e-6,001u,2021-09-13,2021-10-11,9,9d
+exp130921,JAK/STAT,Stat3 inhibitor,Napabucasin,Napabu,4,Napabu2_001u_exp130921_run111021_02,1e-6,001u,2021-09-13,2021-10-11,9,9d
+exp130921,JAK/STAT,Stat3 inhibitor,Napabucasin,Napabu,4,Napabu3_001u_exp130921_run111021_03,1e-6,001u,2021-09-13,2021-10-11,9,9d
+exp130921,JAK/STAT,Stat3 inhibitor,Napabucasin,Napabu,4,Napabu4_001u_exp130921_run111021_04,1e-6,001u,2021-09-13,2021-10-11,9,9d
+exp151121,JAK/STAT,Stat3 inhibitor,"Stat3 inhibitor V, stattic",statti,4,statti1_007u_exp151121_run180122_11,7e-6,007u,2021-11-15,2022-01-18,9,9d
+exp151121,JAK/STAT,Stat3 inhibitor,"Stat3 inhibitor V, stattic",statti,4,statti2_007u_exp151121_run180122_12,7e-6,007u,2021-11-15,2022-01-18,9,9d
+exp151121,JAK/STAT,Stat3 inhibitor,"Stat3 inhibitor V, stattic",statti,4,statti3_007u_exp151121_run180122_13,7e-6,007u,2021-11-15,2022-01-18,9,9d
+exp151121,JAK/STAT,Stat3 inhibitor,"Stat3 inhibitor V, stattic",statti,4,statti4_007u_exp151121_run180122_14,7e-6,007u,2021-11-15,2022-01-18,9,9d
+exp130921,JAK/STAT,JAK inhibitor,AZD1480,AZD148,4,AZD1481_005u_exp130921_run111021_05,4.9999999999999996e-6,005u,2021-09-13,2021-10-11,9,9d
+exp130921,JAK/STAT,JAK inhibitor,AZD1480,AZD148,4,AZD1482_005u_exp130921_run111021_06,4.9999999999999996e-6,005u,2021-09-13,2021-10-11,9,9d
+exp130921,JAK/STAT,JAK inhibitor,AZD1480,AZD148,4,AZD1483_005u_exp130921_run111021_07,4.9999999999999996e-6,005u,2021-09-13,2021-10-11,9,9d
+exp130921,JAK/STAT,JAK inhibitor,AZD1480,AZD148,4,AZD1484_005u_exp130921_run111021_08,4.9999999999999996e-6,005u,2021-09-13,2021-10-11,9,9d
+exp200921,Proteasomal inhibitors,JAK inhibitor,Bortezomib,Bortez,4,Bortez1_020n_exp200921_run111021_25,2e-8,020n,2021-09-20,2021-10-11,9,9d
+exp200921,Proteasomal inhibitors,JAK inhibitor,Bortezomib,Bortez,4,Bortez2_020n_exp200921_run111021_26,2e-8,020n,2021-09-20,2021-10-11,9,9d
+exp200921,Proteasomal inhibitors,JAK inhibitor,Bortezomib,Bortez,4,Bortez3_020n_exp200921_run111021_27,2e-8,020n,2021-09-20,2021-10-11,9,9d
+exp200921,Proteasomal inhibitors,JAK inhibitor,Bortezomib,Bortez,4,Bortez4_020n_exp200921_run111021_28,2e-8,020n,2021-09-20,2021-10-11,9,9d
+exp271221,Proteasomal inhibitors,JAK inhibitor,Bortezomib,Bortez,4,Bortez1_020n_exp271221_run180122_41,2e-8,020n,2021-12-27,2022-01-18,9,9d
+exp271221,Proteasomal inhibitors,JAK inhibitor,Bortezomib,Bortez,4,Bortez2_020n_exp271221_run180122_42,2e-8,020n,2021-12-27,2022-01-18,9,9d
+exp271221,Proteasomal inhibitors,JAK inhibitor,Bortezomib,Bortez,4,Bortez3_020n_exp271221_run180122_43,2e-8,020n,2021-12-27,2022-01-18,9,9d
+exp271221,Proteasomal inhibitors,JAK inhibitor,Bortezomib,Bortez,4,Bortez4_020n_exp271221_run180122_44,2e-8,020n,2021-12-27,2022-01-18,9,9d
+exp271221,Proteasomal inhibitors,JAK inhibitor,MG132,MG132z,4,MG132z1_510n_exp271221_run180122_45,5.1e-7,510n,2021-12-27,2022-01-18,9,9d
+exp271221,Proteasomal inhibitors,JAK inhibitor,MG132,MG132z,4,MG132z2_510n_exp271221_run180122_46,5.1e-7,510n,2021-12-27,2022-01-18,9,9d
+exp271221,Proteasomal inhibitors,JAK inhibitor,MG132,MG132z,4,MG132z3_510n_exp271221_run180122_47,5.1e-7,510n,2021-12-27,2022-01-18,9,9d
+exp271221,Proteasomal inhibitors,JAK inhibitor,MG132,MG132z,4,MG132z4_510n_exp271221_run180122_48,5.1e-7,510n,2021-12-27,2022-01-18,9,9d
+exp200921,Autophagy,Autophagy and toll-like receptors (TLRs) inhibitor,Chloroquine,Chloro,4,Chloro1_040u_exp200921_run111021_41,3.9999999999999996e-05,040u,2021-09-20,2021-10-11,9,9d
+exp200921,Autophagy,Autophagy and toll-like receptors (TLRs) inhibitor,Chloroquine,Chloro,4,Chloro2_040u_exp200921_run111021_42,3.9999999999999996e-05,040u,2021-09-20,2021-10-11,9,9d
+exp200921,Autophagy,Autophagy and toll-like receptors (TLRs) inhibitor,Chloroquine,Chloro,4,Chloro3_040u_exp200921_run111021_43,3.9999999999999996e-05,040u,2021-09-20,2021-10-11,9,9d
+exp200921,Autophagy,Autophagy and toll-like receptors (TLRs) inhibitor,Chloroquine,Chloro,4,Chloro4_040u_exp200921_run111021_44,3.9999999999999996e-05,040u,2021-09-20,2021-10-11,9,9d
+exp181021,Autophagy,"Ubiquitin-specific peptidases, USP10 and USP13",Spautin-1,Spauti,4,Spauti1_007u_exp181021_run251121_17,7e-6,007u,2021-10-18,2021-11-25,9,9d
+exp181021,Autophagy,"Ubiquitin-specific peptidases, USP10 and USP13",Spautin-1,Spauti,4,Spauti2_007u_exp181021_run251121_18,7e-6,007u,2021-10-18,2021-11-25,9,9d
+exp181021,Autophagy,"Ubiquitin-specific peptidases, USP10 and USP13",Spautin-1,Spauti,4,Spauti3_007u_exp181021_run251121_19,7e-6,007u,2021-10-18,2021-11-25,9,9d
+exp181021,Autophagy,"Ubiquitin-specific peptidases, USP10 and USP13",Spautin-1,Spauti,4,Spauti4_007u_exp181021_run251121_20,7e-6,007u,2021-10-18,2021-11-25,9,9d
+exp181021,Autophagy,ULK1 inhibitor,SBI-0206965,SBI020,4,SBI0201_005u_exp181021_run251121_13,4.9999999999999996e-6,005u,2021-10-18,2021-11-25,9,9d
+exp181021,Autophagy,ULK1 inhibitor,SBI-0206965,SBI020,4,SBI0202_005u_exp181021_run251121_14,4.9999999999999996e-6,005u,2021-10-18,2021-11-25,9,9d
+exp181021,Autophagy,ULK1 inhibitor,SBI-0206965,SBI020,4,SBI0203_005u_exp181021_run251121_15,4.9999999999999996e-6,005u,2021-10-18,2021-11-25,9,9d
+exp181021,Autophagy,ULK1 inhibitor,SBI-0206965,SBI020,4,SBI0204_005u_exp181021_run251121_16,4.9999999999999996e-6,005u,2021-10-18,2021-11-25,9,9d
+exp200921,Antibiotics,Inhibit vacuolar H +-ATPase,Bafilomycin-A1,Bafilo,4,Bafilo1_1.20n_exp200921_run111021_45,1.2e-9,1.20n,2021-09-20,2021-10-11,9,9d
+exp200921,Antibiotics,Inhibit vacuolar H +-ATPase,Bafilomycin-A1,Bafilo,4,Bafilo2_1.20n_exp200921_run111021_46,1.2e-9,1.20n,2021-09-20,2021-10-11,9,9d
+exp200921,Antibiotics,Inhibit vacuolar H +-ATPase,Bafilomycin-A1,Bafilo,4,Bafilo3_1.20n_exp200921_run111021_47,1.2e-9,1.20n,2021-09-20,2021-10-11,9,9d
+exp200921,Antibiotics,Inhibit vacuolar H +-ATPase,Bafilomycin-A1,Bafilo,4,Bafilo4_1.20n_exp200921_run111021_48,1.2e-9,1.20n,2021-09-20,2021-10-11,9,9d
+exp271221,Antibiotics,Dihydrofolate reductase inhibitor,Trimethoprim,Trimet,4,Trimet1_600u_exp271221_run140122_33,6e-4,600u,2021-12-27,2022-01-14,9,9d
+exp271221,Antibiotics,Dihydrofolate reductase inhibitor,Trimethoprim,Trimet,4,Trimet2_600u_exp271221_run140122_34,6e-4,600u,2021-12-27,2022-01-14,9,9d
+exp271221,Antibiotics,Dihydrofolate reductase inhibitor,Trimethoprim,Trimet,4,Trimet3_600u_exp271221_run140122_35,6e-4,600u,2021-12-27,2022-01-14,9,9d
+exp271221,Antibiotics,Dihydrofolate reductase inhibitor,Trimethoprim,Trimet,4,Trimet4_600u_exp271221_run140122_36,6e-4,600u,2021-12-27,2022-01-14,9,9d
+exp070222,Antibiotics,NLRP3 activator,Nigericin,Nigeri,4,Nigeri1_100n_exp070222_run060522_17,1.0000000000000001e-7,100n,2022-02-07,2022-05-06,9,9d
+exp070222,Antibiotics,NLRP3 activator,Nigericin,Nigeri,4,Nigeri2_100n_exp070222_run060522_18,1.0000000000000001e-7,100n,2022-02-07,2022-05-06,9,9d
+exp070222,Antibiotics,NLRP3 activator,Nigericin,Nigeri,4,Nigeri3_100n_exp070222_run060522_19,1.0000000000000001e-7,100n,2022-02-07,2022-05-06,9,9d
+exp070222,Antibiotics,NLRP3 activator,Nigericin,Nigeri,4,Nigeri4_100n_exp070222_run060522_20,1.0000000000000001e-7,100n,2022-02-07,2022-05-06,9,9d
+exp181021,MNK,MNK1 and MNK2 inhibitor,eFT-508,eFT508,4,eFT5081_025u_exp181021_run251121_45,2.4999999999999998e-5,025u,2021-10-18,2021-11-25,9,9d
+exp181021,MNK,MNK1 and MNK2 inhibitor,eFT-508,eFT508,4,eFT5082_025u_exp181021_run251121_46,2.4999999999999998e-5,025u,2021-10-18,2021-11-25,9,9d
+exp181021,MNK,MNK1 and MNK2 inhibitor,eFT-508,eFT508,4,eFT5083_025u_exp181021_run251121_47,2.4999999999999998e-5,025u,2021-10-18,2021-11-25,9,9d
+exp181021,MNK,MNK1 and MNK2 inhibitor,eFT-508,eFT508,4,eFT5084_025u_exp181021_run251121_48,2.4999999999999998e-5,025u,2021-10-18,2021-11-25,9,9d
+exp181021,MNK,MNK1 inhibitor,CGP57380,CGP573,4,CGP5731_010u_exp181021_run251121_41,9.999999999999999e-6,010u,2021-10-18,2021-11-25,9,9d
+exp181021,MNK,MNK1 inhibitor,CGP57380,CGP573,4,CGP5732_010u_exp181021_run251121_42,9.999999999999999e-6,010u,2021-10-18,2021-11-25,9,9d
+exp181021,MNK,MNK1 inhibitor,CGP57380,CGP573,4,CGP5733_010u_exp181021_run251121_43,9.999999999999999e-6,010u,2021-10-18,2021-11-25,9,9d
+exp181021,MNK,MNK1 inhibitor,CGP57380,CGP573,4,CGP5734_010u_exp181021_run251121_44,9.999999999999999e-6,010u,2021-10-18,2021-11-25,9,9d
+exp200921,AMPK,AMPK inhibitor,Dorsomorphin (Compound C) 2HCl,Compou,4,Compou1_008u_exp200921_run111021_17,8e-6,008u,2021-09-20,2021-10-11,9,9d
+exp200921,AMPK,AMPK inhibitor,Dorsomorphin (Compound C) 2HCl,Compou,4,Compou2_008u_exp200921_run111021_18,8e-6,008u,2021-09-20,2021-10-11,9,9d
+exp200921,AMPK,AMPK inhibitor,Dorsomorphin (Compound C) 2HCl,Compou,4,Compou3_008u_exp200921_run111021_19,8e-6,008u,2021-09-20,2021-10-11,9,9d
+exp200921,AMPK,AMPK inhibitor,Dorsomorphin (Compound C) 2HCl,Compou,4,Compou4_008u_exp200921_run111021_20,8e-6,008u,2021-09-20,2021-10-11,9,9d
+exp271221,AMPK,AMP phosphodiesterase (PDE) inhibitor,Ibudilast,Ibudil,4,Ibudil1_400u_exp271221_run140122_45,3.9999999999999996e-4,400u,2021-12-27,2022-01-14,9,9d
+exp271221,AMPK,AMP phosphodiesterase (PDE) inhibitor,Ibudilast,Ibudil,4,Ibudil2_400u_exp271221_run140122_46,3.9999999999999996e-4,400u,2021-12-27,2022-01-14,9,9d
+exp271221,AMPK,AMP phosphodiesterase (PDE) inhibitor,Ibudilast,Ibudil,4,Ibudil3_400u_exp271221_run140122_47,3.9999999999999996e-4,400u,2021-12-27,2022-01-14,9,9d
+exp271221,AMPK,AMP phosphodiesterase (PDE) inhibitor,Ibudilast,Ibudil,4,Ibudil4_400u_exp271221_run140122_48,3.9999999999999996e-4,400u,2021-12-27,2022-01-14,9,9d
+exp151121,AMPK,AMPK activator,Phenformin HCL,Phenfo,4,Phenfo1_050u_exp151121_run180122_03,4.9999999999999996e-5,050u,2021-11-15,2022-01-18,9,9d
+exp151121,AMPK,AMPK activator,Phenformin HCL,Phenfo,4,Phenfo2_050u_exp151121_run180122_04,4.9999999999999996e-5,050u,2021-11-15,2022-01-18,9,9d
+exp151121,AMPK,AMPK activator,Phenformin HCL,Phenfo,4,Phenfo3_050u_exp151121_run180122_05,4.9999999999999996e-5,050u,2021-11-15,2022-01-18,9,9d
+exp151121,AMPK,AMPK activator,Phenformin HCL,Phenfo,4,Phenfo4_050u_exp151121_run180122_06,4.9999999999999996e-5,050u,2021-11-15,2022-01-18,9,9d
+exp200921,ROCK,LIMK inhibitor,LIM Kinase Inhibitor I,LIMKi3,4,LIMKi31_030u_exp200921_run111021_21,2.9999999999999997e-5,030u,2021-09-20,2021-10-11,9,9d
+exp200921,ROCK,LIMK inhibitor,LIM Kinase Inhibitor I,LIMKi3,4,LIMKi32_030u_exp200921_run111021_22,2.9999999999999997e-5,030u,2021-09-20,2021-10-11,9,9d
+exp200921,ROCK,LIMK inhibitor,LIM Kinase Inhibitor I,LIMKi3,4,LIMKi33_030u_exp200921_run111021_23,2.9999999999999997e-5,030u,2021-09-20,2021-10-11,9,9d
+exp200921,ROCK,LIMK inhibitor,LIM Kinase Inhibitor I,LIMKi3,4,LIMKi34_030u_exp200921_run111021_24,2.9999999999999997e-5,030u,2021-09-20,2021-10-11,9,9d
+exp070222,ROCK,ROCK-I and ROCK-II inhibitor,Y-27632 dihydrochloride,Y27632,4,Y276321_300u_exp070222_run060522_21,3e-4,300u,2022-02-07,2022-05-06,9,9d
+exp070222,ROCK,ROCK-I and ROCK-II inhibitor,Y-27632 dihydrochloride,Y27632,4,Y276322_300u_exp070222_run060522_22,3e-4,300u,2022-02-07,2022-05-06,9,9d
+exp070222,ROCK,ROCK-I and ROCK-II inhibitor,Y-27632 dihydrochloride,Y27632,4,Y276323_300u_exp070222_run060522_23,3e-4,300u,2022-02-07,2022-05-06,9,9d
+exp070222,ROCK,ROCK-I and ROCK-II inhibitor,Y-27632 dihydrochloride,Y27632,4,Y276324_300u_exp070222_run060522_24,3e-4,300u,2022-02-07,2022-05-06,9,9d
+exp200921,CDK,CDK4/CDK6 inhibitor,Palbociclib,Palboc,4,Palboc1_010u_exp200921_run111021_29,9.999999999999999e-6,010u,2021-09-20,2021-10-11,9,9d
+exp200921,CDK,CDK4/CDK6 inhibitor,Palbociclib,Palboc,4,Palboc2_010u_exp200921_run111021_30,9.999999999999999e-6,010u,2021-09-20,2021-10-11,9,9d
+exp200921,CDK,CDK4/CDK6 inhibitor,Palbociclib,Palboc,4,Palboc3_010u_exp200921_run111021_31,9.999999999999999e-6,010u,2021-09-20,2021-10-11,9,9d
+exp200921,CDK,CDK4/CDK6 inhibitor,Palbociclib,Palboc,4,Palboc4_010u_exp200921_run111021_32,9.999999999999999e-6,010u,2021-09-20,2021-10-11,9,9d
+exp220322,CDK,CDK7 inhibitor,THZ1,THZ1,4,THZ11_090n_exp220322_run200522_09,9.000000000000001e-8,090n,2022-03-22,2022-05-20,9,9d
+exp220322,CDK,CDK7 inhibitor,THZ1,THZ1,4,THZ12_090n_exp220322_run200522_10,9.000000000000001e-8,090n,2022-03-22,2022-05-20,9,9d
+exp220322,CDK,CDK7 inhibitor,THZ1,THZ1,4,THZ13_090n_exp220322_run200522_11,9.000000000000001e-8,090n,2022-03-22,2022-05-20,9,9d
+exp220322,CDK,CDK7 inhibitor,THZ1,THZ1,4,THZ14_090n_exp220322_run200522_12,9.000000000000001e-8,090n,2022-03-22,2022-05-20,9,9d
+exp200921,PARP,PARP1/2 inhibitor,Olaparib,Olapar,4,Olapar1_020u_exp200921_run111021_33,1.9999999999999998e-5,020u,2021-09-20,2021-10-11,9,9d
+exp200921,PARP,PARP1/2 inhibitor,Olaparib,Olapar,4,Olapar2_020u_exp200921_run111021_34,1.9999999999999998e-5,020u,2021-09-20,2021-10-11,9,9d
+exp200921,PARP,PARP1/2 inhibitor,Olaparib,Olapar,4,Olapar3_020u_exp200921_run111021_35,1.9999999999999998e-5,020u,2021-09-20,2021-10-11,9,9d
+exp200921,PARP,PARP1/2 inhibitor,Olaparib,Olapar,4,Olapar4_020u_exp200921_run111021_36,1.9999999999999998e-5,020u,2021-09-20,2021-10-11,9,9d
+exp220322,Wnt,Tankyrase inhibitor,XAV-939,XAV939,4,XAV9391_080u_exp220322_run060522_45,7.999999999999999e-5,080u,2022-03-22,2022-05-06,9,9d
+exp220322,Wnt,Tankyrase inhibitor,XAV-939,XAV939,4,XAV9392_080u_exp220322_run060522_46,7.999999999999999e-5,080u,2022-03-22,2022-05-06,9,9d
+exp200921,Wnt,Porcupine inhibitor,LGK974,LGK974,4,LGK9741_005u_exp200921_run111021_37,4.9999999999999996e-6,005u,2021-09-20,2021-10-11,9,9d
+exp200921,Wnt,Porcupine inhibitor,LGK974,LGK974,4,LGK9742_005u_exp200921_run111021_38,4.9999999999999996e-6,005u,2021-09-20,2021-10-11,9,9d
+exp200921,Wnt,Porcupine inhibitor,LGK974,LGK974,4,LGK9743_005u_exp200921_run111021_39,4.9999999999999996e-6,005u,2021-09-20,2021-10-11,9,9d
+exp200921,Wnt,Porcupine inhibitor,LGK974,LGK974,4,LGK9744_005u_exp200921_run111021_40,4.9999999999999996e-6,005u,2021-09-20,2021-10-11,9,9d
+exp151121,CaM-KK,CaM-KK inhibitor,STO-609,STO609,4,STO6091_030u_exp151121_run071221_41,2.9999999999999997e-5,030u,2021-11-15,2021-12-07,9,9d
+exp151121,CaM-KK,CaM-KK inhibitor,STO-609,STO609,4,STO6092_030u_exp151121_run071221_42,2.9999999999999997e-5,030u,2021-11-15,2021-12-07,9,9d
+exp151121,CaM-KK,CaM-KK inhibitor,STO-609,STO609,4,STO6093_030u_exp151121_run071221_43,2.9999999999999997e-5,030u,2021-11-15,2021-12-07,9,9d
+exp151121,CaM-KK,CaM-KK inhibitor,STO-609,STO609,4,STO6094_030u_exp151121_run071221_44,2.9999999999999997e-5,030u,2021-11-15,2021-12-07,9,9d
+exp151121,AKT,AKT inhibitor,Capivasertib (AZD5363),Capiva,4,Capiva1_050u_exp151121_run071221_45,4.9999999999999996e-5,050u,2021-11-15,2021-12-07,9,9d
+exp151121,AKT,AKT inhibitor,Capivasertib (AZD5363),Capiva,4,Capiva2_050u_exp151121_run071221_46,4.9999999999999996e-5,050u,2021-11-15,2021-12-07,9,9d
+exp151121,AKT,AKT inhibitor,Capivasertib (AZD5363),Capiva,4,Capiva3_050u_exp151121_run071221_47,4.9999999999999996e-5,050u,2021-11-15,2021-12-07,9,9d
+exp151121,AKT,AKT inhibitor,Capivasertib (AZD5363),Capiva,4,Capiva4_050u_exp151121_run071221_48,4.9999999999999996e-5,050u,2021-11-15,2021-12-07,9,9d
+exp271221,ERK1/RasGAP,ERK1 and RasGAP inhibitor,Pluripotin (SC-1),Plurip,4,Plurip1_010u_exp271221_run140122_25,9.999999999999999e-6,010u,2021-12-27,2022-01-14,9,9d
+exp271221,ERK1/RasGAP,ERK1 and RasGAP inhibitor,Pluripotin (SC-1),Plurip,4,Plurip2_010u_exp271221_run140122_26,9.999999999999999e-6,010u,2021-12-27,2022-01-14,9,9d
+exp271221,ERK1/RasGAP,ERK1 and RasGAP inhibitor,Pluripotin (SC-1),Plurip,4,Plurip3_010u_exp271221_run140122_27,9.999999999999999e-6,010u,2021-12-27,2022-01-14,9,9d
+exp271221,ERK1/RasGAP,ERK1 and RasGAP inhibitor,Pluripotin (SC-1),Plurip,4,Plurip4_010u_exp271221_run140122_28,9.999999999999999e-6,010u,2021-12-27,2022-01-14,9,9d
+exp271221,Antioxidant,ROS inhibitor,N-Acetyl-L-cysteine (NAC),NAcety,4,NAcety1_015m_exp271221_run140122_37,0.015,015m,2021-12-27,2022-01-14,9,9d
+exp271221,Antioxidant,ROS inhibitor,N-Acetyl-L-cysteine (NAC),NAcety,4,NAcety2_015m_exp271221_run140122_38,0.015,015m,2021-12-27,2022-01-14,9,9d
+exp271221,Antioxidant,ROS inhibitor,N-Acetyl-L-cysteine (NAC),NAcety,4,NAcety3_015m_exp271221_run140122_39,0.015,015m,2021-12-27,2022-01-14,9,9d
+exp271221,Antioxidant,ROS inhibitor,N-Acetyl-L-cysteine (NAC),NAcety,4,NAcety4_015m_exp271221_run140122_40,0.015,015m,2021-12-27,2022-01-14,9,9d
+exp271221,p53,Inhibition of MDM2-mediated degradation of p53,Nutlin3,Nutlin,4,Nutlin1_025u_exp271221_run140122_41,2.4999999999999998e-5,025u,2021-12-27,2022-01-14,9,9d
+exp271221,p53,Inhibition of MDM2-mediated degradation of p53,Nutlin3,Nutlin,4,Nutlin2_025u_exp271221_run140122_42,2.4999999999999998e-5,025u,2021-12-27,2022-01-14,9,9d
+exp271221,p53,Inhibition of MDM2-mediated degradation of p53,Nutlin3,Nutlin,4,Nutlin3_025u_exp271221_run140122_43,2.4999999999999998e-5,025u,2021-12-27,2022-01-14,9,9d
+exp271221,p53,Inhibition of MDM2-mediated degradation of p53,Nutlin3,Nutlin,4,Nutlin4_025u_exp271221_run140122_44,2.4999999999999998e-5,025u,2021-12-27,2022-01-14,9,9d
+exp151121,SHP2,SHP2 inhibitor,SHP099 HCL,SHP099,4,SHP0991_050u_exp151121_run180122_07,4.9999999999999996e-5,050u,2021-11-15,2022-01-18,9,9d
+exp151121,SHP2,SHP2 inhibitor,SHP099 HCL,SHP099,4,SHP0992_050u_exp151121_run180122_08,4.9999999999999996e-5,050u,2021-11-15,2022-01-18,9,9d
+exp151121,SHP2,SHP2 inhibitor,SHP099 HCL,SHP099,4,SHP0993_050u_exp151121_run180122_09,4.9999999999999996e-5,050u,2021-11-15,2022-01-18,9,9d
+exp151121,SHP2,SHP2 inhibitor,SHP099 HCL,SHP099,4,SHP0994_050u_exp151121_run180122_10,4.9999999999999996e-5,050u,2021-11-15,2022-01-18,9,9d
+exp300821,Drug combinations,EGFR-TKI + multikinase inhibitor,Osimertinb+sorafenib,OsiSor,4,OsiSor1_015u_exp300821_run290921_09,1.4999999999999999e-5,015u,2021-08-30,2021-09-29,9,9d
+exp300821,Drug combinations,EGFR-TKI + multikinase inhibitor,Osimertinb+sorafenib,OsiSor,4,OsiSor2_015u_exp300821_run290921_10,1.4999999999999999e-5,015u,2021-08-30,2021-09-29,9,9d
+exp300821,Drug combinations,EGFR-TKI + multikinase inhibitor,Osimertinb+sorafenib,OsiSor,4,OsiSor3_015u_exp300821_run290921_11,1.4999999999999999e-5,015u,2021-08-30,2021-09-29,9,9d
+exp300821,Drug combinations,EGFR-TKI + multikinase inhibitor,Osimertinb+sorafenib,OsiSor,4,OsiSor4_015u_exp300821_run290921_12,1.4999999999999999e-5,015u,2021-08-30,2021-09-29,9,9d
+exp200921,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X13271,X13271,4,X132711_008u_exp200921_run111021_13,8e-6,008u,2021-09-20,2021-10-11,9,9d
+exp200921,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X13271,X13271,4,X132712_008u_exp200921_run111021_14,8e-6,008u,2021-09-20,2021-10-11,9,9d
+exp200921,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X13271,X13271,4,X132713_008u_exp200921_run111021_15,8e-6,008u,2021-09-20,2021-10-11,9,9d
+exp200921,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X13271,X13271,4,X132714_008u_exp200921_run111021_16,8e-6,008u,2021-09-20,2021-10-11,9,9d
+exp181021,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X13271,X13271,4,X132711_008u_exp181021_run101121_42,8e-6,008u,2021-10-18,2021-11-10,9,9d
+exp181021,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X13271,X13271,4,X132712_008u_exp181021_run101121_43,8e-6,008u,2021-10-18,2021-11-10,9,9d
+exp181021,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X13271,X13271,4,X132713_008u_exp181021_run101121_44,8e-6,008u,2021-10-18,2021-11-10,9,9d
+exp181021,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X13271,X13271,4,X132714_008u_exp181021_run101121_45,8e-6,008u,2021-10-18,2021-11-10,9,9d
+exp271221,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X13271,X13271,4,X132711_009u_exp271221_run180122_21,9e-6,009u,2021-12-27,2022-01-18,9,9d
+exp271221,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X13271,X13271,4,X132712_009u_exp271221_run180122_22,9e-6,009u,2021-12-27,2022-01-18,9,9d
+exp271221,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X13271,X13271,4,X132713_009u_exp271221_run180122_23,9e-6,009u,2021-12-27,2022-01-18,9,9d
+exp271221,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X13271,X13271,4,X132714_009u_exp271221_run180122_24,9e-6,009u,2021-12-27,2022-01-18,9,9d
+exp181021,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X17129,X17129,3,X171291_008u_exp181021_run101121_46,8e-6,008u,2021-10-18,2021-11-10,9,9d
+exp181021,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X17129,X17129,3,X171292_008u_exp181021_run101121_47,8e-6,008u,2021-10-18,2021-11-10,9,9d
+exp181021,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X17129,X17129,3,X171293_008u_exp181021_run101121_48,8e-6,008u,2021-10-18,2021-11-10,9,9d
+exp271221,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X17129,X17129,4,X171291_008u_exp271221_run180122_25,8e-6,008u,2021-12-27,2022-01-18,9,9d
+exp271221,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X17129,X17129,4,X171292_008u_exp271221_run180122_26,8e-6,008u,2021-12-27,2022-01-18,9,9d
+exp271221,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X17129,X17129,4,X171293_008u_exp271221_run180122_27,8e-6,008u,2021-12-27,2022-01-18,9,9d
+exp271221,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X17129,X17129,4,X171294_008u_exp271221_run180122_28,8e-6,008u,2021-12-27,2022-01-18,9,9d
+exp271221,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X15681,X15681,4,X156811_050u_exp271221_run180122_29,4.9999999999999996e-5,050u,2021-12-27,2022-01-18,9,9d
+exp271221,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X15681,X15681,4,X156812_050u_exp271221_run180122_30,4.9999999999999996e-5,050u,2021-12-27,2022-01-18,9,9d
+exp271221,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X15681,X15681,4,X156813_050u_exp271221_run180122_31,4.9999999999999996e-5,050u,2021-12-27,2022-01-18,9,9d
+exp271221,New compounds from KIT,EGFR-TKI + multikinase inhibitor,X15681,X15681,4,X156814_050u_exp271221_run180122_32,4.9999999999999996e-5,050u,2021-12-27,2022-01-18,9,9d
+exp070222,ER stress,EGFR-TKI + multikinase inhibitor,Tunicamycin,Tunica,4,Tunica1_0.50u_exp070222_run010322_05,5e-7,0.50u,2022-02-07,2022-03-01,9,9d
+exp070222,ER stress,EGFR-TKI + multikinase inhibitor,Tunicamycin,Tunica,4,Tunica2_0.50u_exp070222_run010322_06,5e-7,0.50u,2022-02-07,2022-03-01,9,9d
+exp070222,ER stress,EGFR-TKI + multikinase inhibitor,Tunicamycin,Tunica,4,Tunica3_0.50u_exp070222_run010322_07,5e-7,0.50u,2022-02-07,2022-03-01,9,9d
+exp070222,ER stress,EGFR-TKI + multikinase inhibitor,Tunicamycin,Tunica,4,Tunica4_0.50u_exp070222_run010322_08,5e-7,0.50u,2022-02-07,2022-03-01,9,9d
+exp070222,ER stress,EGFR-TKI + multikinase inhibitor,Thapsigargin,Thapsi,4,Thapsi1_008n_exp070222_run010322_09,8e-9,008n,2022-02-07,2022-03-01,9,9d
+exp070222,ER stress,EGFR-TKI + multikinase inhibitor,Thapsigargin,Thapsi,4,Thapsi2_008n_exp070222_run010322_10,8e-9,008n,2022-02-07,2022-03-01,9,9d
+exp070222,ER stress,EGFR-TKI + multikinase inhibitor,Thapsigargin,Thapsi,4,Thapsi3_008n_exp070222_run010322_11,8e-9,008n,2022-02-07,2022-03-01,9,9d
+exp070222,ER stress,EGFR-TKI + multikinase inhibitor,Thapsigargin,Thapsi,4,Thapsi4_008n_exp070222_run010322_12,8e-9,008n,2022-02-07,2022-03-01,9,9d
+exp220322,ER stress,EGFR-TKI + multikinase inhibitor,CCT020312,CCT020,4,CCT0201_003u_exp220322_run200522_29,3e-6,003u,2022-03-22,2022-05-20,9,9d
+exp220322,ER stress,EGFR-TKI + multikinase inhibitor,CCT020312,CCT020,4,CCT0202_003u_exp220322_run200522_30,3e-6,003u,2022-03-22,2022-05-20,9,9d
+exp220322,ER stress,EGFR-TKI + multikinase inhibitor,CCT020312,CCT020,4,CCT0203_003u_exp220322_run200522_31,3e-6,003u,2022-03-22,2022-05-20,9,9d
+exp220322,ER stress,EGFR-TKI + multikinase inhibitor,CCT020312,CCT020,4,CCT0204_003u_exp220322_run200522_32,3e-6,003u,2022-03-22,2022-05-20,9,9d
+exp070222,Ferroptosis,EGFR-TKI + multikinase inhibitor,Erastin,Erasti,4,Erasti1_015u_exp070222_run010322_13,1.4999999999999999e-5,015u,2022-02-07,2022-03-01,9,9d
+exp070222,Ferroptosis,EGFR-TKI + multikinase inhibitor,Erastin,Erasti,4,Erasti2_015u_exp070222_run010322_14,1.4999999999999999e-5,015u,2022-02-07,2022-03-01,9,9d
+exp070222,Ferroptosis,EGFR-TKI + multikinase inhibitor,Erastin,Erasti,4,Erasti3_015u_exp070222_run010322_15,1.4999999999999999e-5,015u,2022-02-07,2022-03-01,9,9d
+exp070222,Ferroptosis,EGFR-TKI + multikinase inhibitor,Erastin,Erasti,4,Erasti4_015u_exp070222_run010322_16,1.4999999999999999e-5,015u,2022-02-07,2022-03-01,9,9d
+exp070222,Ferroptosis,EGFR-TKI + multikinase inhibitor,Ferrostatin1,Ferros,4,Ferros1_060u_exp070222_run010322_17,5.9999999999999995e-5,060u,2022-02-07,2022-03-01,9,9d
+exp070222,Ferroptosis,EGFR-TKI + multikinase inhibitor,Ferrostatin1,Ferros,4,Ferros2_060u_exp070222_run010322_18,5.9999999999999995e-5,060u,2022-02-07,2022-03-01,9,9d
+exp070222,Ferroptosis,EGFR-TKI + multikinase inhibitor,Ferrostatin1,Ferros,4,Ferros3_060u_exp070222_run010322_19,5.9999999999999995e-5,060u,2022-02-07,2022-03-01,9,9d
+exp070222,Ferroptosis,EGFR-TKI + multikinase inhibitor,Ferrostatin1,Ferros,4,Ferros4_060u_exp070222_run010322_20,5.9999999999999995e-5,060u,2022-02-07,2022-03-01,9,9d
+exp070222,Ferroptosis,EGFR-TKI + multikinase inhibitor,Deferoxamine mesylate,Defero,4,Defero1_007u_exp070222_run010322_21,7e-6,007u,2022-02-07,2022-03-01,9,9d
+exp070222,Ferroptosis,EGFR-TKI + multikinase inhibitor,Deferoxamine mesylate,Defero,4,Defero2_007u_exp070222_run010322_22,7e-6,007u,2022-02-07,2022-03-01,9,9d
+exp070222,Ferroptosis,EGFR-TKI + multikinase inhibitor,Deferoxamine mesylate,Defero,4,Defero3_007u_exp070222_run010322_23,7e-6,007u,2022-02-07,2022-03-01,9,9d
+exp070222,Ferroptosis,EGFR-TKI + multikinase inhibitor,Deferoxamine mesylate,Defero,4,Defero4_007u_exp070222_run010322_24,7e-6,007u,2022-02-07,2022-03-01,9,9d
+exp070222,GPX4,EGFR-TKI + multikinase inhibitor,ML-210,ML210-,4,ML210-1_030u_exp070222_run010322_25,2.9999999999999997e-5,030u,2022-02-07,2022-03-01,9,9d
+exp070222,GPX4,EGFR-TKI + multikinase inhibitor,ML-210,ML210-,4,ML210-2_030u_exp070222_run010322_26,2.9999999999999997e-5,030u,2022-02-07,2022-03-01,9,9d
+exp070222,GPX4,EGFR-TKI + multikinase inhibitor,ML-210,ML210-,4,ML210-3_030u_exp070222_run010322_27,2.9999999999999997e-5,030u,2022-02-07,2022-03-01,9,9d
+exp070222,GPX4,EGFR-TKI + multikinase inhibitor,ML-210,ML210-,4,ML210-4_030u_exp070222_run010322_28,2.9999999999999997e-5,030u,2022-02-07,2022-03-01,9,9d
+exp070222,Notch,EGFR-TKI + multikinase inhibitor,IMR-1,IMR1-,4,IMR1-1_080u_exp070222_run010322_29,7.999999999999999e-5,080u,2022-02-07,2022-03-01,9,9d
+exp070222,Notch,EGFR-TKI + multikinase inhibitor,IMR-1,IMR1-,4,IMR1-2_080u_exp070222_run010322_30,7.999999999999999e-5,080u,2022-02-07,2022-03-01,9,9d
+exp070222,Notch,EGFR-TKI + multikinase inhibitor,IMR-1,IMR1-,4,IMR1-3_080u_exp070222_run010322_31,7.999999999999999e-5,080u,2022-02-07,2022-03-01,9,9d
+exp070222,Notch,EGFR-TKI + multikinase inhibitor,IMR-1,IMR1-,4,IMR1-4_080u_exp070222_run010322_32,7.999999999999999e-5,080u,2022-02-07,2022-03-01,9,9d
+exp220322,β3-adrenergic receptor partial agonist,EGFR-TKI + multikinase inhibitor,"L-755,507",L75550,4,L755501_025u_exp220322_run060522_41,2.4999999999999998e-5,025u,2022-03-22,2022-05-06,9,9d
+exp220322,β3-adrenergic receptor partial agonist,EGFR-TKI + multikinase inhibitor,"L-755,507",L75550,4,L755502_025u_exp220322_run060522_42,2.4999999999999998e-5,025u,2022-03-22,2022-05-06,9,9d
+exp220322,β3-adrenergic receptor partial agonist,EGFR-TKI + multikinase inhibitor,"L-755,507",L75550,4,L755503_025u_exp220322_run060522_43,2.4999999999999998e-5,025u,2022-03-22,2022-05-06,9,9d
+exp220322,β3-adrenergic receptor partial agonist,EGFR-TKI + multikinase inhibitor,"L-755,507",L75550,4,L755504_025u_exp220322_run060522_44,2.4999999999999998e-5,025u,2022-03-22,2022-05-06,9,9d
+exp220322,Gap junction,Pannexin 1 inhibitor,Probenecid,Proben,4,Proben1_500u_exp220322_run200522_37,5e-4,500u,2022-03-22,2022-05-20,9,9d
+exp220322,Gap junction,Pannexin 1 inhibitor,Probenecid,Proben,4,Proben2_500u_exp220322_run200522_38,5e-4,500u,2022-03-22,2022-05-20,9,9d
+exp220322,Gap junction,Pannexin 1 inhibitor,Probenecid,Proben,4,Proben3_500u_exp220322_run200522_39,5e-4,500u,2022-03-22,2022-05-20,9,9d
+exp220322,Gap junction,Pannexin 1 inhibitor,Probenecid,Proben,4,Proben4_500u_exp220322_run200522_40,5e-4,500u,2022-03-22,2022-05-20,9,9d
+exp220322,Gap junction,Connexin inhibitor,Mefloquine hydrochloride,Mefloq,4,Mefloq1_010u_exp220322_run200522_41,9.999999999999999e-6,010u,2022-03-22,2022-05-20,9,9d
+exp220322,Gap junction,Connexin inhibitor,Mefloquine hydrochloride,Mefloq,4,Mefloq2_010u_exp220322_run200522_42,9.999999999999999e-6,010u,2022-03-22,2022-05-20,9,9d
+exp220322,Gap junction,Connexin inhibitor,Mefloquine hydrochloride,Mefloq,4,Mefloq3_010u_exp220322_run200522_43,9.999999999999999e-6,010u,2022-03-22,2022-05-20,9,9d
+exp220322,Gap junction,Connexin inhibitor,Mefloquine hydrochloride,Mefloq,4,Mefloq4_010u_exp220322_run200522_44,9.999999999999999e-6,010u,2022-03-22,2022-05-20,9,9d
+exp220322,Src inhibitor,Connexin inhibitor,Saracatinib,Saraca,4,Saraca1_500n_exp220322_run200522_05,5.000000000000001e-7,500n,2022-03-22,2022-05-20,9,9d
+exp220322,Src inhibitor,Connexin inhibitor,Saracatinib,Saraca,4,Saraca2_500n_exp220322_run200522_06,5.000000000000001e-7,500n,2022-03-22,2022-05-20,9,9d
+exp220322,Src inhibitor,Connexin inhibitor,Saracatinib,Saraca,4,Saraca3_500n_exp220322_run200522_07,5.000000000000001e-7,500n,2022-03-22,2022-05-20,9,9d
+exp220322,Src inhibitor,Connexin inhibitor,Saracatinib,Saraca,4,Saraca4_500n_exp220322_run200522_08,5.000000000000001e-7,500n,2022-03-22,2022-05-20,9,9d
+exp220322,Aurora A kinase,Connexin inhibitor,Alisertib,Aliser,4,Aliser1_050n_exp220322_run200522_01,5.0000000000000004e-8,050n,2022-03-22,2022-05-20,9,9d
+exp220322,Aurora A kinase,Connexin inhibitor,Alisertib,Aliser,4,Aliser2_050n_exp220322_run200522_02,5.0000000000000004e-8,050n,2022-03-22,2022-05-20,9,9d
+exp220322,Aurora A kinase,Connexin inhibitor,Alisertib,Aliser,4,Aliser3_050n_exp220322_run200522_03,5.0000000000000004e-8,050n,2022-03-22,2022-05-20,9,9d
+exp220322,Aurora A kinase,Connexin inhibitor,Alisertib,Aliser,4,Aliser4_050n_exp220322_run200522_04,5.0000000000000004e-8,050n,2022-03-22,2022-05-20,9,9d
+exp220322,IGF-1R,Connexin inhibitor,BMS-536924,BMS536,4,BMS5361_002u_exp220322_run200522_13,2e-6,002u,2022-03-22,2022-05-20,9,9d
+exp220322,IGF-1R,Connexin inhibitor,BMS-536924,BMS536,4,BMS5362_002u_exp220322_run200522_14,2e-6,002u,2022-03-22,2022-05-20,9,9d
+exp220322,IGF-1R,Connexin inhibitor,BMS-536924,BMS536,4,BMS5363_002u_exp220322_run200522_15,2e-6,002u,2022-03-22,2022-05-20,9,9d
+exp220322,IGF-1R,Connexin inhibitor,BMS-536924,BMS536,4,BMS5364_002u_exp220322_run200522_16,2e-6,002u,2022-03-22,2022-05-20,9,9d
+exp220322,NF-κB,Connexin inhibitor,JSH-23,JSH23,4,JSH231_060u_exp220322_run200522_17,5.9999999999999995e-5,060u,2022-03-22,2022-05-20,9,9d
+exp220322,NF-κB,Connexin inhibitor,JSH-23,JSH23,4,JSH232_060u_exp220322_run200522_18,5.9999999999999995e-5,060u,2022-03-22,2022-05-20,9,9d
+exp220322,NF-κB,Connexin inhibitor,JSH-23,JSH23,4,JSH233_060u_exp220322_run200522_19,5.9999999999999995e-5,060u,2022-03-22,2022-05-20,9,9d
+exp220322,NF-κB,Connexin inhibitor,JSH-23,JSH23,4,JSH234_060u_exp220322_run200522_20,5.9999999999999995e-5,060u,2022-03-22,2022-05-20,9,9d
+exp220322,mTOR,Connexin inhibitor,Temsirolimus,Temsir,4,Temsir1_006u_exp220322_run200522_25,6e-6,006u,2022-03-22,2022-05-20,9,9d
+exp220322,mTOR,Connexin inhibitor,Temsirolimus,Temsir,4,Temsir2_006u_exp220322_run200522_26,6e-6,006u,2022-03-22,2022-05-20,9,9d
+exp220322,mTOR,Connexin inhibitor,Temsirolimus,Temsir,4,Temsir3_006u_exp220322_run200522_27,6e-6,006u,2022-03-22,2022-05-20,9,9d
+exp220322,mTOR,Connexin inhibitor,Temsirolimus,Temsir,4,Temsir4_006u_exp220322_run200522_28,6e-6,006u,2022-03-22,2022-05-20,9,9d
+exp220322,PI3K,Connexin inhibitor,AZD8186,AZD818,4,AZD8181_050u_exp220322_run200522_21,4.9999999999999996e-5,050u,2022-03-22,2022-05-20,9,9d
+exp220322,PI3K,Connexin inhibitor,AZD8186,AZD818,4,AZD8182_050u_exp220322_run200522_22,4.9999999999999996e-5,050u,2022-03-22,2022-05-20,9,9d
+exp220322,PI3K,Connexin inhibitor,AZD8186,AZD818,4,AZD8183_050u_exp220322_run200522_23,4.9999999999999996e-5,050u,2022-03-22,2022-05-20,9,9d
+exp220322,PI3K,Connexin inhibitor,AZD8186,AZD818,4,AZD8184_050u_exp220322_run200522_24,4.9999999999999996e-5,050u,2022-03-22,2022-05-20,9,9d
+exp220322,Mitochondrial biogenesis,Connexin inhibitor,Levofloxacin,Levofl,4,Levofl1_250u_exp220322_run200522_33,2.5e-4,250u,2022-03-22,2022-05-20,9,9d
+exp220322,Mitochondrial biogenesis,Connexin inhibitor,Levofloxacin,Levofl,4,Levofl2_250u_exp220322_run200522_34,2.5e-4,250u,2022-03-22,2022-05-20,9,9d
+exp220322,Mitochondrial biogenesis,Connexin inhibitor,Levofloxacin,Levofl,4,Levofl3_250u_exp220322_run200522_35,2.5e-4,250u,2022-03-22,2022-05-20,9,9d
+exp220322,Mitochondrial biogenesis,Connexin inhibitor,Levofloxacin,Levofl,4,Levofl4_250u_exp220322_run200522_36,2.5e-4,250u,2022-03-22,2022-05-20,9,9d
