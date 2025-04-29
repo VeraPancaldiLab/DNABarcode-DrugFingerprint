@@ -677,7 +677,7 @@ flextable::flextable(head(pheno_data_formatted)) |>
 
 **Conclusion**: on a total of `{r} nrow(ID_mapping)`, `{r} nrow(pheno_data_formatted)` replicates are kept, and `{r} nrow(replicates_discarded)` replicates were filtered out, based on Luca's guidelines.
 
-# Analyses
+# Methods
 
 ## Preprocessing barcode counts{#sec-batch-processing}
 
@@ -900,7 +900,7 @@ heatmaps_global
 
 - [`TRADE`: Transcriptome-wide analysis of differential expression in perturbation atlases](https://www.nature.com/articles/s41588-025-02169-3), from @nadig2025ng. The paper notably reports how to model a drug-dose response curve with a **Hill equation**. Avalaible as an open-source GH repository [`TRADEtools`](https://github.com/ajaynadig/TRADEtools). [R `TRADE` Tutorial](https://www.rna-seqblog.com/trade-ranscriptome-wide-analysis-of-differential-expression/)
 
-## Barcode differential Analysis
+## Barcode Differential Analysis
 
 ### `bartools` and `BARtab`
 
@@ -916,25 +916,22 @@ heatmaps_global
   - Complex protocol for discarding lowly differentially expressed barcodes.
   - No available BioConductor/CRAN Repository, while latest [`DEBRA` GitHub update](https://github.com/YevhenAkimov/DEBRA_1.01) dates back more than 4 years.
 
-### Drug clustering and mapping
+## Drug clustering and mapping
 
 - Use of graph clustering approaches? Like Louvain? + multiple case studies, how to combine them (2 vials of cell lines)?
 - Compare with ATC prediction and clustering: [`PDATC-NCPMKL-updated` GH Repo](https://github.com/Lywhere/PDATC-NCPMKL-updated).
-
-
-# TODO
-
-- Computational resources (create a dedicated project on the IFB core cluster?)
 
 # Appendix {.appendix}
 
 ## Repository organisation and Data tracking
 
+- [Project Code Organisation](https://www.linkedin.com/posts/danleedata_become-10-better-at-machine-learning-by-activity-7320797963549564928-Au1_)
+
 - [Data Fingerprinting with `MDA5` and Environment Snapshots: R and Code tracking](https://www.linkedin.com/posts/sebastian-rauschert-836760a0_datascience-reproducibleanalytics-commandline-activity-7312256950962896896-9JkE)
 
 - [`DataLad` OR `DVC` // `Git LFS` or `Alembic`](https://www.linkedin.com/posts/sebastian-rauschert-836760a0_install-datalad-activity-7307188424682127361-dJ_G), (https://www.linkedin.com/posts/sebastian-rauschert-836760a0_dataversioncontrol-dvc-datascience-activity-7314768876876058626-GVNF), (https://www.linkedin.com/posts/sebastian-rauschert-836760a0_reproducibility-databaseversioning-dataengineering-activity-7315522466259390466-zMun)
-or (https://www.linkedin.com/posts/sebastian-rauschert-836760a0_reproduci
-- [Homogenise Excel colnames](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_115-every-wet-lab-uses-spreadsheets-activity-7319725287603130368-9ILC)
+
+- [Homogenise `Excel` colnames](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_115-every-wet-lab-uses-spreadsheets-activity-7319725287603130368-9ILC)
 
 ## Publish cell lines on Web repositories
 
@@ -946,79 +943,3 @@ or (https://www.linkedin.com/posts/sebastian-rauschert-836760a0_reproduci
 
 <!-- - [`fuzzyjoin`: Join data frames on inexact matching](https://github.com/dgrtwo/fuzzyjoin) uses Levenshtein/cosine/Jaccard distance for mapping closely related IDs (may account for spurious discrepancies) -->
 
-<!-- In @lst-process-pheno3-appendix, we provide a semi-supervised approach to map short drug IDs in barcode expression colnames to their respective full drug IDs counterparts in `Table of Compounds`. -->
-
-<!-- ```{r} -->
-<!-- ID <- "281022" -->
-<!-- expression_path <- file.path("data", "data-raw", -->
-<!--                              "barcode-counts", paste0("exp", ID, ".csv")) -->
-
-<!-- replicates_ID <- strsplit(readLines(expression_path, n = 1), split = ";")[[1]] |> -->
-<!--   str_subset("\\S") |> # remove empty colnames, notably the identifier -->
-<!--   str_subset("key", negate = TRUE) # remove any value exactly equal to key -->
-
-<!-- dataset_ID <- tibble::tibble( -->
-<!--   Date = ID, -->
-<!--   Replicates_FullID = replicates_ID, -->
-<!--   Replicates_ID = stringr::str_extract(replicates_ID, "^[[[:alnum:]]\\-]+(?=[1-4]_)")) -->
-<!-- ``` -->
-
-
-<!-- ```{r} -->
-<!-- #| label: process-pheno3-appendix -->
-<!-- #| lst-label: lst-process-pheno3-appendix -->
-<!-- #| lst-cap: Semi-automated approach to map short drug or control ID to full Drug ID, stored in column `Samples`. To fully automate this approach, pair `agrep` with explicit computation of the **generalized Levenshtein edit distance**, as there's no unambiguous 1-1 mapping between short sample IDs and full sample IDs. -->
-<!-- #| eval: false -->
-
-<!-- ID_mapping <- lapply(barcode_ID, function(ID) { -->
-<!--   # build path -->
-
-<!--   expression_path <- file.path("data", "data-raw", "barcode-counts", paste0("exp", ID, ".csv")) -->
-
-<!--   replicates_ID <- strsplit(readLines(expression_path, n = 1), split = ";")[[1]] |> -->
-<!--     str_subset("\\S") |> # remove empty colnames, notably the identifier -->
-<!--     str_subset("key", negate = TRUE) # remove any value exactly equal to key -->
-
-<!--   # build dataset ID, ID seems to be any combination of letters, numbers and -, followed by [1-4]_ -->
-
-<!--   dataset_ID <- tibble::tibble( -->
-<!--     Date = ID, -->
-<!--     Replicates_FullID = replicates_ID, -->
-<!--     Replicates_ID = stringr::str_extract(replicates_ID, "^[[[:alnum:]]\\-]+(?=[1-4]_)") -->
-<!--   ) -->
-
-<!--   # unfortunatly, it turned out it was even more complex, so add an extra-step for matching the closest ID matching column `Samples` -->
-
-<!--   Replicates_ID2 <- sapply(dataset_ID$Replicates_ID, function(ID_mapping) { -->
-<!--     ID_pheno <- grep(paste0("^", ID_mapping), unique(pheno_data$Samples), -->
-<!--       ignore.case = TRUE, value = TRUE -->
-<!--     ) # alternative: agrep -->
-
-<!--     #  deal with three potential scenarios -->
-
-<!--     if (length(ID_pheno) == 0L) { -->
-<!--       message(paste("Find no correspondance for", ID_mapping, ".\n")) -->
-
-<!--       return(NA) -->
-<!--     } else if (length(ID_pheno) > 1L) { -->
-<!--       message(paste0( -->
-<!--         "Find more than one correspondance for ", ID_mapping, -->
-<!--         ", namely ", paste(ID_pheno, collapse = ", "), " . Select the first one.\n" -->
-<!--       )) -->
-<!--     } -->
-
-<!--     return(ID_pheno[1]) -->
-<!--   }) -->
-
-<!--   dataset_ID <- dataset_ID |> -->
-<!--     mutate(Replicates_ID2 = Replicates_ID2) -->
-
-<!--   return(dataset_ID) -->
-<!-- }) |> -->
-<!--   dplyr::bind_rows() -->
-
-<!-- ID_mapping |> -->
-<!--   filter(!is.na(Replicates_ID2)) |> -->
-<!--   distinct(Replicates_ID, Replicates_ID2) |> -->
-<!--   openxlsx::write.xlsx("mapping_species.xlsx") -->
-<!-- ``` -->
