@@ -794,8 +794,8 @@ pheno_data_replicates <- pheno_data |>
   tibble::column_to_rownames("Replicates_ID") 
 
 # Feature metadata
-barcode_metadata <- tibble::tibble(barcode_ID <- barcode_counts_normalised$barcode_id)
-row.names(barcode_metadata) <- barcode_counts_normalised$barcode_id
+barcode_metadata <- tibble::tibble(barcode_id = barcode_counts_normalised$barcode_id)
+row.names(barcode_metadata) <- barcode_metadata$barcode_id
 
 # 3) Buid and Save SummarizedExperiment
 se_replicates <- SummarizedExperiment::SummarizedExperiment(
@@ -825,7 +825,7 @@ barcode_counts_wider_compound_by_batch <- barcode_counts_long |>
                      values_from = Barcode_Counts, 
                      values_fn=mean)
 
-barcode_df_compound_by_batch <- tibble::tibble(original =setdiff(colnames(barcode_counts_wider_compound_by_batch),"barcode_id")) |>
+pheno_compound_by_batch <- tibble::tibble(original =setdiff(colnames(barcode_counts_wider_compound_by_batch),"barcode_id")) |>
   mutate(Batch_ID = stringr::str_split_i(original, ":", 1),
          Compound = stringr::str_split_i(original, ":", 2), 
          Concentrations_ID = stringr::str_split_i(original, ":", 3), 
@@ -842,7 +842,7 @@ se_compound_by_batch <- SummarizedExperiment::SummarizedExperiment(
                   tibble::column_to_rownames("barcode_id") |> 
                   as.matrix()),
   rowData = barcode_metadata,
-  colData = barcode_df_compound_by_batch)
+  colData = pheno_compound_by_batch)
 
 ```
 
@@ -859,7 +859,7 @@ barcode_counts_wider_by_compound <- barcode_counts_long |>
                      values_from = Barcode_Counts, 
                      values_fn=mean)
 
-barcode_df_compound <- tibble::tibble(Compound = setdiff(colnames(barcode_counts_wider_by_compound), "barcode_id")) |>
+pheno_compound <- tibble::tibble(Compound = setdiff(colnames(barcode_counts_wider_by_compound), "barcode_id")) |>
   inner_join(pheno_data |> select(Pathway, MoA, Compound), 
              by = c("Compound")) |> 
   dplyr::distinct() |> 
@@ -870,7 +870,7 @@ se_compound <- SummarizedExperiment::SummarizedExperiment(
                   tibble::column_to_rownames("barcode_id") |> 
                   as.matrix()),
   rowData = barcode_metadata,
-  colData = barcode_df_compound)
+  colData = pheno_compound)
 
 ```
 
@@ -903,18 +903,37 @@ control_means <- barcode_counts_long |>
   summarise(Control_Mean = mean(Barcode_Counts), .groups = "drop")
 
 # Step 2: Join control mean to full dataset ----
-barcode_counts_discretised <- barcode_counts_long |>
+barcode_discretised_replicates <- barcode_counts_long |>
   left_join(control_means, 
             by = c("Batch_ID","barcode_id"))
 
 # Step 3: Compute Fold Change and discretise ----
-barcode_counts_discretised <- barcode_counts_discretised |>
+barcode_discretised_replicates <- barcode_discretised_replicates |>
   filter(Compound != "Control") |>
   mutate(Diff = Barcode_Counts - Control_Mean,
     Barcode_Counts = if_else(Diff > threshold_FC, 1, 0)) |>
   # Final cleanup 
   select(-Diff, -Control_Mean)  |> 
   dplyr::mutate(Barcode_Counts = as.logical(Barcode_Counts))
+
+# Step 4: Save as a SummarizedExperiment ----
+barcode_discretised_replicates_mat <- barcode_discretised_replicates |> 
+  tidyr::pivot_wider(id_cols = barcode_id, names_from = Replicates_ID, values_from = Barcode_Counts)
+
+pheno_replicates_discretised <- pheno_data |> 
+  dplyr::filter(Replicates_ID %in% barcode_discretised_replicates$Replicates_ID) |> 
+  tibble::column_to_rownames("Replicates_ID") 
+
+se_discretised_replicates <- SummarizedExperiment::SummarizedExperiment(
+  assays = list(binarised = barcode_discretised_replicates_mat |> 
+                  tibble::column_to_rownames("barcode_id") |> 
+                  as.matrix()),
+  rowData = barcode_metadata,
+  colData = pheno_replicates_discretised)
+
+saveRDS(se_discretised_replicates,
+        file = paste0("./results/compounds/se_discretised_per_replicate_",
+                      today_date, ".rds"))
 ```
 
 [Batch effect correction for integrating across batches? // As Vera emphasised it out, why keeping only positive values? Negative are also interesting. Why not pairing $p$-values and fold-change (considering indeed really small sample sizes)? // All these operations can be performed with one run, using `lm`, and a model as such, $\text{Expr} \sim 0 + \text{Gene} + \text{Batch} + \text{Drug}$, with a `contr.treatment` design matrix // Perform **sensitivity analyses** to evaluate the impact of threshold criteriaon for binarisation on downstream analyses. [^1]]{fg="red"}.
@@ -923,33 +942,62 @@ barcode_counts_discretised <- barcode_counts_discretised |>
 
 ### **Derivation of compound fingerprints**:
 
-- [Aggregate by compound and experience.]{fg="blue"} 
+- [Average over replicates.]{fg="blue"} 
 
 ```{r}
-#| label: compound-fingerprint-estimation
-#| lst-label: lst-compound-fingerprint-estimation
-#| lst-cap: "Aggregate at the compound level, assigning a 1 if, and only if, barcode cell lines were found significant in a given compound."
+#| label: compound-by-batch-discretised
+#| lst-label: lst-compound-by-batch-discretised
+#| lst-cap: "Average the replicates, using a `all` operator."
 
-# 1) discretised correlation at the replicate level
-barcode_discretised_replicates <- barcode_counts_discretised |> 
-  # select(-Concentrations, -Duration, -Date, -`Run date`, -Batch_ID, -Compound) |> 
-  tidyr::pivot_wider(id_cols = barcode_id, names_from = Replicates_ID, values_from = Barcode_Counts)
-saveRDS(barcode_discretised_replicates, 
-        file="results/fingerprints_replicates_level_", today_date, ".rds")
+# 2) discretised correlation at the compound by batch level (averaging over replicates), with an all function
+barcode_discretised_compound_by_batch <- barcode_discretised_replicates |> 
+   tidyr::pivot_wider(id_cols = c(barcode_id), 
+                     names_from = c(Batch_ID, Compound, Concentrations_ID, Duration_ID),
+                     names_sep = ":",
+                     values_from = Barcode_Counts, 
+                     values_fn=all)
 
-# 2) discretised correlation at the compound by batch level (averaging over replicates)
-barcode_counts_discretised_compound_by_batch <- barcode_counts_discretised |> 
-  group_by(Batch_ID, Concentrations, Duration, Date, `Run date`, barcode_id, Compound) |> 
-  summarise(Barcode_Counts = all(Barcode_Counts == 1), .groups = "drop")
-barcode_counts_discretised_compound_by_batch <- barcode_counts_discretised_compound_by_batch |> 
-  dplyr::mutate(Compound=paste0("Drug: ", Compound, " with Batch: ", Batch_ID,
-                                ", Conc: ", Concentrations, " and Days: ", Duration)) |> 
-  # select(-Concentrations, -Duration, -Date, -`Run date`, -Batch_ID) |> 
-  tidyr::pivot_wider(id_cols = barcode_id, names_from = Compound, values_from = Barcode_Counts)
-saveRDS(barcode_counts_discretised_compound_by_batch, 
-        file=paste0("results/fingerprints_compounds_by_batch_level_", today_date, ".rds"))
+pheno_discretised_compound_by_batch <- pheno_compound_by_batch[setdiff(colnames(barcode_discretised_compound_by_batch), "barcode_id"), ]
 
-# 3) discretised correlation at the compound level (averaging over all batches, concentrations and time courses)
+se_compound_by_batch_discretised <- SummarizedExperiment::SummarizedExperiment(
+  assays = list(discretised = barcode_discretised_compound_by_batch |> 
+                  tibble::column_to_rownames("barcode_id") |> 
+                  as.matrix()),
+  rowData = barcode_metadata,
+  colData = pheno_discretised_compound_by_batch)
+
+saveRDS(se_compound_by_batch_discretised,
+        file = paste0("./results/compounds/se_discretised_per_compound_by_batch",
+                      today_date, ".rds"))
+
+```
+
+- [Average over compounds.]{fg="blue"} 
+
+```{r}
+#| label: compound-discretised
+#| lst-label: lst-compound-discretised
+#| lst-cap: "Aggregate at the compound level, assigning a 1 if barcode cell lines were found positiveliy enriched in all compounds."
+# 2) discretised correlation at the compound by batch level (averaging over replicates), with an all function
+barcode_discretised_compound <- barcode_discretised_replicates |> 
+   tidyr::pivot_wider(id_cols = c(barcode_id), 
+                     names_from = c(Compound),
+                     names_sep = ":",
+                     values_from = Barcode_Counts, 
+                     values_fn=all)
+
+pheno_discretised_compound<- pheno_compound[setdiff(colnames(barcode_discretised_compound), "barcode_id"), ]
+
+se_compound_discretised <- SummarizedExperiment::SummarizedExperiment(
+  assays = list(discretised = barcode_discretised_compound |> 
+                  tibble::column_to_rownames("barcode_id") |> 
+                  as.matrix()),
+  rowData = barcode_metadata,
+  colData = pheno_discretised_compound)
+
+saveRDS(se_compound_discretised,
+        file = paste0("./results/compounds/se_discretised_per_compound_",
+                      today_date, ".rds"))
 
 ```
 
@@ -960,13 +1008,13 @@ saveRDS(barcode_counts_discretised_compound_by_batch,
 
 ```{r}
 #| label: compute-correlation-matrix
-barcode_discretised_replicates_mat <- barcode_counts_discretised_replicates |> 
+barcode_discretised_replicates_mat <- barcode_discretised_replicates_replicates |> 
   tibble::column_to_rownames(var="barcode_id") |> 
   as.matrix()
 cor_replicates <- cor(barcode_discretised_replicates_mat)
 
 
-barcode_discretised_compounds_mat <- barcode_counts_discretised_compound |> 
+barcode_discretised_compounds_mat <- barcode_discretised_replicates_compound |> 
   tibble::column_to_rownames(var="barcode_id") |> 
   as.matrix()
 cor_compounds <- cor(barcode_discretised_compounds_mat)
