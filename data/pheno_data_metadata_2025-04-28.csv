@@ -1,56 +1,56 @@
 Batch_ID,Pathway,MoA,Compound,Samples_ID,Replicates,Replicates_ID,Concentrations,Concentrations_ID,Date,Run date,Duration,Duration_ID
-exp010821,NA,Control,Control,Contro,4,Contro1_000u_exp010821_run180821_03,0,000u,2021-08-01,2021-08-18,9,9d
-exp010821,NA,Control,Control,Contro,4,Contro2_000u_exp010821_run180821_04,0,000u,2021-08-01,2021-08-18,9,9d
-exp010821,NA,Control,Control,Contro,4,Contro3_000u_exp010821_run180821_05,0,000u,2021-08-01,2021-08-18,9,9d
-exp010821,NA,Control,Control,Contro,4,Contro4_000u_exp010821_run180821_06,0,000u,2021-08-01,2021-08-18,9,9d
-exp040821,NA,Control,Control,Contro,4,Contro1_000u_exp040821_run180821_25,0,000u,2021-08-04,2021-08-18,9,9d
-exp040821,NA,Control,Control,Contro,4,Contro2_000u_exp040821_run180821_26,0,000u,2021-08-04,2021-08-18,9,9d
-exp040821,NA,Control,Control,Contro,4,Contro3_000u_exp040821_run180821_27,0,000u,2021-08-04,2021-08-18,9,9d
-exp040821,NA,Control,Control,Contro,4,Contro4_000u_exp040821_run180821_28,0,000u,2021-08-04,2021-08-18,9,9d
-exp181021,NA,Control,Control,Contro,4,Contro1_000u_exp181021_run101121_38,0,000u,2021-10-18,2021-11-10,9,9d
-exp181021,NA,Control,Control,Contro,4,Contro2_000u_exp181021_run101121_39,0,000u,2021-10-18,2021-11-10,9,9d
-exp181021,NA,Control,Control,Contro,4,Contro3_000u_exp181021_run101121_40,0,000u,2021-10-18,2021-11-10,9,9d
-exp181021,NA,Control,Control,Contro,4,Contro4_000u_exp181021_run101121_41,0,000u,2021-10-18,2021-11-10,9,9d
-exp300821,NA,Control,Control,Contro,4,Contro1_000u_exp300821_run290921_01,0,000u,2021-08-30,2021-09-29,9,9d
-exp300821,NA,Control,Control,Contro,4,Contro2_000u_exp300821_run290921_02,0,000u,2021-08-30,2021-09-29,9,9d
-exp300821,NA,Control,Control,Contro,4,Contro3_000u_exp300821_run290921_03,0,000u,2021-08-30,2021-09-29,9,9d
-exp300821,NA,Control,Control,Contro,4,Contro4_000u_exp300821_run290921_04,0,000u,2021-08-30,2021-09-29,9,9d
-exp130921,NA,Control,Control,Contro,4,Contro1_000u_exp130921_run290921_32,0,000u,2021-09-13,2021-09-29,9,9d
-exp130921,NA,Control,Control,Contro,4,Contro2_000u_exp130921_run290921_33,0,000u,2021-09-13,2021-09-29,9,9d
-exp130921,NA,Control,Control,Contro,4,Contro3_000u_exp130921_run290921_34,0,000u,2021-09-13,2021-09-29,9,9d
-exp130921,NA,Control,Control,Contro,4,Contro4_000u_exp130921_run290921_35,0,000u,2021-09-13,2021-09-29,9,9d
-exp200921,NA,Control,Control,Contro,4,Contro1_000u_exp200921_run111021_09,0,000u,2021-09-20,2021-10-11,9,9d
-exp200921,NA,Control,Control,Contro,4,Contro2_000u_exp200921_run111021_10,0,000u,2021-09-20,2021-10-11,9,9d
-exp200921,NA,Control,Control,Contro,4,Contro3_000u_exp200921_run111021_11,0,000u,2021-09-20,2021-10-11,9,9d
-exp200921,NA,Control,Control,Contro,4,Contro4_000u_exp200921_run111021_12,0,000u,2021-09-20,2021-10-11,9,9d
-exp200921_dose response osim,NA,Control,Control,Contro,4,Contro1_000u_exp200921_run111021_09,0,000u,2021-09-20,2021-10-11,9,9d
-exp200921_dose response osim,NA,Control,Control,Contro,4,Contro2_000u_exp200921_run111021_10,0,000u,2021-09-20,2021-10-11,9,9d
-exp200921_dose response osim,NA,Control,Control,Contro,4,Contro3_000u_exp200921_run111021_11,0,000u,2021-09-20,2021-10-11,9,9d
-exp200921_dose response osim,NA,Control,Control,Contro,4,Contro4_000u_exp200921_run111021_12,0,000u,2021-09-20,2021-10-11,9,9d
-exp151121,NA,Control,Control,Contro,4,Contro1_000u_exp151121_run071221_01,0,000u,2021-11-15,2021-12-07,9,9d
-exp151121,NA,Control,Control,Contro,4,Contro2_000u_exp151121_run071221_02,0,000u,2021-11-15,2021-12-07,9,9d
-exp151121,NA,Control,Control,Contro,4,Contro3_000u_exp151121_run071221_03,0,000u,2021-11-15,2021-12-07,9,9d
-exp151121,NA,Control,Control,Contro,4,Contro4_000u_exp151121_run071221_04,0,000u,2021-11-15,2021-12-07,9,9d
-exp271221,NA,Control,Control,Contro,4,Contro1_000u_exp271221_run180122_17,0,000u,2021-12-27,2022-01-18,9,9d
-exp271221,NA,Control,Control,Contro,4,Contro2_000u_exp271221_run180122_18,0,000u,2021-12-27,2022-01-18,9,9d
-exp271221,NA,Control,Control,Contro,4,Contro3_000u_exp271221_run180122_19,0,000u,2021-12-27,2022-01-18,9,9d
-exp271221,NA,Control,Control,Contro,4,Contro4_000u_exp271221_run180122_20,0,000u,2021-12-27,2022-01-18,9,9d
-exp070222,NA,Control,Control,Contro,4,Contro1_000u_exp070222_run010322_01,0,000u,2022-02-07,2022-03-01,9,9d
-exp070222,NA,Control,Control,Contro,4,Contro2_000u_exp070222_run010322_02,0,000u,2022-02-07,2022-03-01,9,9d
-exp070222,NA,Control,Control,Contro,4,Contro3_000u_exp070222_run010322_03,0,000u,2022-02-07,2022-03-01,9,9d
-exp070222,NA,Control,Control,Contro,4,Contro4_000u_exp070222_run010322_04,0,000u,2022-02-07,2022-03-01,9,9d
-exp220322,NA,Control,Control,Contro,4,Contro1_000u_exp220322_run060522_25,0,000u,2022-03-22,2022-05-06,9,9d
-exp220322,NA,Control,Control,Contro,4,Contro2_000u_exp220322_run060522_26,0,000u,2022-03-22,2022-05-06,9,9d
-exp220322,NA,Control,Control,Contro,4,Contro3_000u_exp220322_run060522_27,0,000u,2022-03-22,2022-05-06,9,9d
-exp220322,NA,Control,Control,Contro,4,Contro4_000u_exp220322_run060522_28,0,000u,2022-03-22,2022-05-06,9,9d
-exp281022,NA,Control,Control,Contro,4,Contro1_000u_exp281022_run141222_01,0,000u,2022-10-28,2022-12-14,9,9d
-exp281022,NA,Control,Control,Contro,4,Contro2_000u_exp281022_run141222_02,0,000u,2022-10-28,2022-12-14,9,9d
-exp281022,NA,Control,Control,Contro,4,Contro3_000u_exp281022_run141222_03,0,000u,2022-10-28,2022-12-14,9,9d
-exp281022,NA,Control,Control,Contro,4,Contro4_000u_exp281022_run141222_04,0,000u,2022-10-28,2022-12-14,9,9d
-exp281022_time course,NA,Control,Control,Contro,4,9d_Contro1_000u_exp281022_run110723_01,0,000u,2022-10-28,2023-07-11,9,9d
-exp281022_time course,NA,Control,Control,Contro,4,9d_Contro2_000u_exp281022_run110723_02,0,000u,2022-10-28,2023-07-11,9,9d
-exp281022_time course,NA,Control,Control,Contro,4,9d_Contro3_000u_exp281022_run110723_03,0,000u,2022-10-28,2023-07-11,9,9d
-exp281022_time course,NA,Control,Control,Contro,4,9d_Contro4_000u_exp281022_run110723_04,0,000u,2022-10-28,2023-07-11,9,9d
+exp010821,Control,Control,Control,Contro,4,Contro1_000u_exp010821_run180821_03,0,000u,2021-08-01,2021-08-18,9,9d
+exp010821,Control,Control,Control,Contro,4,Contro2_000u_exp010821_run180821_04,0,000u,2021-08-01,2021-08-18,9,9d
+exp010821,Control,Control,Control,Contro,4,Contro3_000u_exp010821_run180821_05,0,000u,2021-08-01,2021-08-18,9,9d
+exp010821,Control,Control,Control,Contro,4,Contro4_000u_exp010821_run180821_06,0,000u,2021-08-01,2021-08-18,9,9d
+exp040821,Control,Control,Control,Contro,4,Contro1_000u_exp040821_run180821_25,0,000u,2021-08-04,2021-08-18,9,9d
+exp040821,Control,Control,Control,Contro,4,Contro2_000u_exp040821_run180821_26,0,000u,2021-08-04,2021-08-18,9,9d
+exp040821,Control,Control,Control,Contro,4,Contro3_000u_exp040821_run180821_27,0,000u,2021-08-04,2021-08-18,9,9d
+exp040821,Control,Control,Control,Contro,4,Contro4_000u_exp040821_run180821_28,0,000u,2021-08-04,2021-08-18,9,9d
+exp181021,Control,Control,Control,Contro,4,Contro1_000u_exp181021_run101121_38,0,000u,2021-10-18,2021-11-10,9,9d
+exp181021,Control,Control,Control,Contro,4,Contro2_000u_exp181021_run101121_39,0,000u,2021-10-18,2021-11-10,9,9d
+exp181021,Control,Control,Control,Contro,4,Contro3_000u_exp181021_run101121_40,0,000u,2021-10-18,2021-11-10,9,9d
+exp181021,Control,Control,Control,Contro,4,Contro4_000u_exp181021_run101121_41,0,000u,2021-10-18,2021-11-10,9,9d
+exp300821,Control,Control,Control,Contro,4,Contro1_000u_exp300821_run290921_01,0,000u,2021-08-30,2021-09-29,9,9d
+exp300821,Control,Control,Control,Contro,4,Contro2_000u_exp300821_run290921_02,0,000u,2021-08-30,2021-09-29,9,9d
+exp300821,Control,Control,Control,Contro,4,Contro3_000u_exp300821_run290921_03,0,000u,2021-08-30,2021-09-29,9,9d
+exp300821,Control,Control,Control,Contro,4,Contro4_000u_exp300821_run290921_04,0,000u,2021-08-30,2021-09-29,9,9d
+exp130921,Control,Control,Control,Contro,4,Contro1_000u_exp130921_run290921_32,0,000u,2021-09-13,2021-09-29,9,9d
+exp130921,Control,Control,Control,Contro,4,Contro2_000u_exp130921_run290921_33,0,000u,2021-09-13,2021-09-29,9,9d
+exp130921,Control,Control,Control,Contro,4,Contro3_000u_exp130921_run290921_34,0,000u,2021-09-13,2021-09-29,9,9d
+exp130921,Control,Control,Control,Contro,4,Contro4_000u_exp130921_run290921_35,0,000u,2021-09-13,2021-09-29,9,9d
+exp200921,Control,Control,Control,Contro,4,Contro1_000u_exp200921_run111021_09,0,000u,2021-09-20,2021-10-11,9,9d
+exp200921,Control,Control,Control,Contro,4,Contro2_000u_exp200921_run111021_10,0,000u,2021-09-20,2021-10-11,9,9d
+exp200921,Control,Control,Control,Contro,4,Contro3_000u_exp200921_run111021_11,0,000u,2021-09-20,2021-10-11,9,9d
+exp200921,Control,Control,Control,Contro,4,Contro4_000u_exp200921_run111021_12,0,000u,2021-09-20,2021-10-11,9,9d
+exp200921_dose response osim,Control,Control,Control,Contro,4,Contro1_000u_exp200921_dose_response_run111021_09,0,000u,2021-09-20,2021-10-11,9,9d
+exp200921_dose response osim,Control,Control,Control,Contro,4,Contro2_000u_exp200921_dose_response_run111021_10,0,000u,2021-09-20,2021-10-11,9,9d
+exp200921_dose response osim,Control,Control,Control,Contro,4,Contro3_000u_exp200921_dose_response_run111021_11,0,000u,2021-09-20,2021-10-11,9,9d
+exp200921_dose response osim,Control,Control,Control,Contro,4,Contro4_000u_exp200921_dose_response_run111021_12,0,000u,2021-09-20,2021-10-11,9,9d
+exp151121,Control,Control,Control,Contro,4,Contro1_000u_exp151121_run071221_01,0,000u,2021-11-15,2021-12-07,9,9d
+exp151121,Control,Control,Control,Contro,4,Contro2_000u_exp151121_run071221_02,0,000u,2021-11-15,2021-12-07,9,9d
+exp151121,Control,Control,Control,Contro,4,Contro3_000u_exp151121_run071221_03,0,000u,2021-11-15,2021-12-07,9,9d
+exp151121,Control,Control,Control,Contro,4,Contro4_000u_exp151121_run071221_04,0,000u,2021-11-15,2021-12-07,9,9d
+exp271221,Control,Control,Control,Contro,4,Contro1_000u_exp271221_run180122_17,0,000u,2021-12-27,2022-01-18,9,9d
+exp271221,Control,Control,Control,Contro,4,Contro2_000u_exp271221_run180122_18,0,000u,2021-12-27,2022-01-18,9,9d
+exp271221,Control,Control,Control,Contro,4,Contro3_000u_exp271221_run180122_19,0,000u,2021-12-27,2022-01-18,9,9d
+exp271221,Control,Control,Control,Contro,4,Contro4_000u_exp271221_run180122_20,0,000u,2021-12-27,2022-01-18,9,9d
+exp070222,Control,Control,Control,Contro,4,Contro1_000u_exp070222_run010322_01,0,000u,2022-02-07,2022-03-01,9,9d
+exp070222,Control,Control,Control,Contro,4,Contro2_000u_exp070222_run010322_02,0,000u,2022-02-07,2022-03-01,9,9d
+exp070222,Control,Control,Control,Contro,4,Contro3_000u_exp070222_run010322_03,0,000u,2022-02-07,2022-03-01,9,9d
+exp070222,Control,Control,Control,Contro,4,Contro4_000u_exp070222_run010322_04,0,000u,2022-02-07,2022-03-01,9,9d
+exp220322,Control,Control,Control,Contro,4,Contro1_000u_exp220322_run060522_25,0,000u,2022-03-22,2022-05-06,9,9d
+exp220322,Control,Control,Control,Contro,4,Contro2_000u_exp220322_run060522_26,0,000u,2022-03-22,2022-05-06,9,9d
+exp220322,Control,Control,Control,Contro,4,Contro3_000u_exp220322_run060522_27,0,000u,2022-03-22,2022-05-06,9,9d
+exp220322,Control,Control,Control,Contro,4,Contro4_000u_exp220322_run060522_28,0,000u,2022-03-22,2022-05-06,9,9d
+exp281022,Control,Control,Control,Contro,4,Contro1_000u_exp281022_run141222_01,0,000u,2022-10-28,2022-12-14,9,9d
+exp281022,Control,Control,Control,Contro,4,Contro2_000u_exp281022_run141222_02,0,000u,2022-10-28,2022-12-14,9,9d
+exp281022,Control,Control,Control,Contro,4,Contro3_000u_exp281022_run141222_03,0,000u,2022-10-28,2022-12-14,9,9d
+exp281022,Control,Control,Control,Contro,4,Contro4_000u_exp281022_run141222_04,0,000u,2022-10-28,2022-12-14,9,9d
+exp281022_time course,Control,Control,Control,Contro,4,9d_Contro1_000u_exp281022_run110723_01,0,000u,2022-10-28,2023-07-11,9,9d
+exp281022_time course,Control,Control,Control,Contro,4,9d_Contro2_000u_exp281022_run110723_02,0,000u,2022-10-28,2023-07-11,9,9d
+exp281022_time course,Control,Control,Control,Contro,4,9d_Contro3_000u_exp281022_run110723_03,0,000u,2022-10-28,2023-07-11,9,9d
+exp281022_time course,Control,Control,Control,Contro,4,9d_Contro4_000u_exp281022_run110723_04,0,000u,2022-10-28,2023-07-11,9,9d
 exp010821,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer1_100n_exp010821_run180821_07,1.0000000000000001e-7,100n,2021-08-01,2021-08-18,9,9d
 exp010821,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer2_100n_exp010821_run180821_08,1.0000000000000001e-7,100n,2021-08-01,2021-08-18,9,9d
 exp010821,EGFR,3rd generation EGFR-TKIs,Osimertinb,Osimer,4,Osimer3_100n_exp010821_run180821_09,1.0000000000000001e-7,100n,2021-08-01,2021-08-18,9,9d
