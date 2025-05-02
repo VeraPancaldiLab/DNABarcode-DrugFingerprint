@@ -1029,6 +1029,7 @@ saveRDS(se_compound_discretised,
     - [Heatmap with genomic expression](https://jokergoo.github.io/ComplexHeatmap-reference/book/more-examples.html)
     - [Genome-level Heatmap](https://jokergoo.github.io/ComplexHeatmap-reference/book/genome-level-heatmap.html)
     - [Plotting large heatmaps in R](https://gdevailly.netlify.app/post/plotting-big-matrices-in-r) and [*Rasterisation*, with thousands of genes to be considered](https://jokergoo.github.io/2020/06/30/rasterization-in-complexheatmap).
+    - [Control size of Heatmaps](https://jokergoo.github.io/2020/05/11/set-cell-width/height-in-the-heatmap/)
     
   - **Real-life examples** with [`ggplot2`](https://github.com/theislab/atlas-feature-selection-benchmark/blob/b89fc0f66747062e6e1b4b35bd392b27ad035295/analysis/R/plotting.R#L8)
   
@@ -1046,11 +1047,14 @@ saveRDS(se_compound_discretised,
 se_normalised <- readRDS("./results/compounds/se_normalised_per_replicate_2025-04-28.rds")
 se_normalised_mat <- SummarizedExperiment::assay(se_normalised)
 se_pheno_data <- SummarizedExperiment::colData(se_normalised)
+se_pheno_data$log10Conc <- if_else(se_pheno_data$Concentrations==0, 
+                                   0, 
+                                   -log10(se_pheno_data$Concentrations))
 # Compute global correlation score
 cor_per_replicate <- cor(se_normalised_mat)
 
 # Define clustering colours
-col_cor_scale <- circlize::colorRamp2(c(min(cor_per_replicate), 0, 1),
+col_heatmap_scale <- circlize::colorRamp2(c(min(cor_per_replicate), 0, 1),
                                       c("blue", "white", "red"))
 
 # Define Heatmap annotation
@@ -1065,25 +1069,31 @@ compound_col <- setNames(colorRampPalette(brewer.pal(11, "Spectral"))(num_compou
 moa_col <- setNames(colorRampPalette(brewer.pal(12, "Set3"))(num_moa), 
                     unique(se_pheno_data$MoA))
 
+
 ## Heatmap annotation
-ha <- ComplexHeatmap::HeatmapAnnotation(df = se_pheno_data |> 
+top_ha <- ComplexHeatmap::HeatmapAnnotation(df = se_pheno_data |> 
                                           as.data.frame() |> 
                                           dplyr::select(Batch_ID, MoA, Compound), 
                                         col = list(Batch_ID = batch_col, 
                                                    MoA = moa_col, 
                                                    Compound = compound_col))
 
+row_ha <- ComplexHeatmap::rowAnnotation(Concentration =
+                                          ComplexHeatmap::anno_barplot(se_pheno_data$log10Conc), 
+                                        Duration = paste0(se_pheno_data$Duration, "d"))
+
 # Define Heatmap
 heatmap_normalised_replicates <- ComplexHeatmap::Heatmap(cor_per_replicate, 
-                                          col=col_cor_scale, 
+                                          col=col_heatmap_scale, 
                                           name = "CC for all Replicates", 
                                           show_row_names = TRUE,
                                           show_column_names = FALSE, 
-                                          row_dend_reorder = FALSE,
-                                          column_dend_reorder = FALSE, 
+                                          row_dend_reorder = TRUE,
+                                          column_dend_reorder = TRUE, 
                                           # font size
                                           row_names_gp = gpar(fontsize = 2), 
-                                          top_annotation = ha) |> 
+                                          top_annotation = top_ha, 
+                                          right_annotation = row_ha) |> 
   ComplexHeatmap::draw() |> 
   grid::grid.grabExpr()
 
@@ -1105,7 +1115,7 @@ se_pheno_data <- SummarizedExperiment::colData(se_normalised)
 cor_per_compound_by_batch <- cor(se_normalised_mat)
 
 # Define clustering colours
-col_cor_scale <- circlize::colorRamp2(c(min(cor_per_compound_by_batch), 0, 1),
+col_heatmap_scale <- circlize::colorRamp2(c(min(cor_per_compound_by_batch), 0, 1),
                                       c("blue", "white", "red"))
 
 ## Heatmap annotation
@@ -1115,13 +1125,12 @@ ha <- ComplexHeatmap::HeatmapAnnotation(df = se_pheno_data |>
 
 # Define Heatmap
 heatmap_normalised_compound_by_batch <- ComplexHeatmap::Heatmap(cor_per_compound_by_batch, 
-                                          col=col_cor_scale, 
+                                          col=col_heatmap_scale, 
                                           name = "CC for all Compounds", 
                                           show_row_names = TRUE,
                                           show_column_names = TRUE, 
-                                          row_dend_reorder = FALSE,
-                                          column_dend_reorder = FALSE, 
-                                          # font size
+                                          row_dend_reorder = TRUE,
+                                          column_dend_reorder = TRUE, 
                                           row_names_gp = gpar(fontsize = 6), 
                                           top_annotation = ha) |> 
   ComplexHeatmap::draw() |> 
@@ -1146,7 +1155,7 @@ se_pheno_data <- SummarizedExperiment::colData(se_normalised)
 cor_per_compound <- cor(se_normalised_mat)
 
 # Define clustering colours
-col_cor_scale <- circlize::colorRamp2(c(min(cor_per_compound), 0, 1),
+col_heatmap_scale <- circlize::colorRamp2(c(min(cor_per_compound), 0, 1),
                                       c("blue", "white", "red"))
 
 ## Heatmap annotation
@@ -1156,12 +1165,12 @@ ha <- ComplexHeatmap::HeatmapAnnotation(df = se_pheno_data |>
 
 # Define Heatmap
 heatmap_normalised_compound <- ComplexHeatmap::Heatmap(cor_per_compound, 
-                                          col=col_cor_scale, 
+                                          col=col_heatmap_scale, 
                                           name = "CC for all Compounds", 
                                           show_row_names = TRUE,
                                           show_column_names = TRUE, 
                                           row_dend_reorder = FALSE,
-                                          column_dend_reorder = FALSE, 
+                                          column_dend_reorder = TRUE, 
                                           # font size
                                           row_names_gp = gpar(fontsize = 8), 
                                           top_annotation = ha) |> 
@@ -1188,7 +1197,7 @@ se_pheno_data <- SummarizedExperiment::colData(se_binarised)
 cor_per_replicates <- cor(se_binarised_mat)
 
 # Define clustering colours
-col_cor_scale <- circlize::colorRamp2(c(min(cor_per_replicates), 0, 1),
+col_heatmap_scale <- circlize::colorRamp2(c(min(cor_per_replicates), 0, 1),
                                       c("blue", "white", "red"))
 
 ## Heatmap annotation
@@ -1198,12 +1207,12 @@ ha <- ComplexHeatmap::HeatmapAnnotation(df = se_pheno_data |>
 
 
 heatmap_binarised_replicates <- ComplexHeatmap::Heatmap(cor_per_replicates, 
-                                            col=col_cor_scale, 
+                                            col=col_heatmap_scale, 
                                             name = "CC at binarised Compound Level",
                                             show_row_names = TRUE,
                                             show_column_names = TRUE, 
                                             row_dend_reorder = FALSE,
-                                            column_dend_reorder = FALSE, 
+                                            column_dend_reorder = TRUE, 
                                             # font size
                                             row_names_gp = gpar(fontsize = 3), 
                                             top_annotation = ha) |> 
@@ -1228,7 +1237,7 @@ se_pheno_data <- SummarizedExperiment::colData(se_binarised)
 cor_per_compound_by_batch <- cor(se_binarised_mat)
 
 # Define clustering colours
-col_cor_scale <- circlize::colorRamp2(c(min(cor_per_compound_by_batch), 0, 1),
+col_heatmap_scale <- circlize::colorRamp2(c(min(cor_per_compound_by_batch), 0, 1),
                                       c("blue", "white", "red"))
 
 ## Heatmap annotation
@@ -1238,12 +1247,12 @@ ha <- ComplexHeatmap::HeatmapAnnotation(df = se_pheno_data |>
 
 
 heatmap_binarised_compound_by_batch <- ComplexHeatmap::Heatmap(cor_per_compound_by_batch, 
-                                            col=col_cor_scale, 
+                                            col=col_heatmap_scale, 
                                             name = "CC at binarised Compound Level",
                                             show_row_names = TRUE,
                                             show_column_names = TRUE, 
                                             row_dend_reorder = FALSE,
-                                            column_dend_reorder = FALSE, 
+                                            column_dend_reorder = TRUE, 
                                             # font size
                                             row_names_gp = gpar(fontsize = 8), 
                                             top_annotation = ha) |> 
@@ -1268,7 +1277,7 @@ se_pheno_data <- SummarizedExperiment::colData(se_binarised)
 cor_per_compound <- cor(se_binarised_mat)
 
 # Define clustering colours
-col_cor_scale <- circlize::colorRamp2(c(min(cor_per_compound), 0, 1),
+col_heatmap_scale <- circlize::colorRamp2(c(min(cor_per_compound), 0, 1),
                                       c("blue", "white", "red"))
 
 ## Heatmap annotation
@@ -1278,12 +1287,12 @@ ha <- ComplexHeatmap::HeatmapAnnotation(df = se_pheno_data |>
 
 
 heatmap_binarised_compound <- ComplexHeatmap::Heatmap(cor_per_compound, 
-                                            col=col_cor_scale, 
+                                            col=col_heatmap_scale, 
                                             name = "CC at binarised Compound Level",
                                             show_row_names = TRUE,
                                             show_column_names = TRUE, 
-                                            row_dend_reorder = FALSE,
-                                            column_dend_reorder = FALSE, 
+                                            row_dend_reorder = TRUE,
+                                            column_dend_reorder = TRUE, 
                                             # font size
                                             row_names_gp = gpar(fontsize = 8), 
                                             top_annotation = ha) |> 
@@ -1354,7 +1363,7 @@ plot(compound_graph, layout = layout_graph, vertex.size = 10,
      vertex.label.cex = 1, curved = 0.2)
 dev.off()
 
-# 4) export PNG and readble graph formats for Neo4J
+# 4) export PNG and readable graph formats for Neo4J
 igraph::write_graph(graph = compound_graph, 
                     file = paste0("./results/compounds/compound_network_", today_date, ".graphml"),
                     format = "graphml")
@@ -1364,6 +1373,87 @@ igraph::write_graph(graph = compound_graph,
 
 
 ## Compute Cell Lines Similarities
+
+### Cell Line by Samples
+
+```{r}
+#| label: fig-heatmap-cell-lines-by-samples
+#| fig-cap: "Heatmap cell lines by samples, averaging over replicates."
+
+# Read SummarizedExperiment object
+se_binarised_compound_by_batch <- readRDS("./results/compounds/se_discretised_per_compound_by_batch_2025-04-28.rds")
+se_binarised_compound_by_batch_mat <- SummarizedExperiment::assay(se_binarised_compound_by_batch) |> 
+  as.matrix() 
+se_binarised_compound_by_batch_fac <- apply(se_binarised_compound_by_batch_mat, 2, as.character)
+se_pheno_data_compound_by_batch <- SummarizedExperiment::colData(se_binarised_compound_by_batch)
+
+## Heatmap annotation
+ha <- ComplexHeatmap::HeatmapAnnotation(df = se_pheno_data_compound_by_batch |> 
+                                          as.data.frame() |> 
+                                          dplyr::select(Batch_ID, Pathway, Compound))
+
+heatmap_cell_lines_by_sample <- ComplexHeatmap::Heatmap(se_binarised_compound_by_batch_fac, 
+                                                        col = c("TRUE" = "red", "FALSE" = "blue"), 
+                                                        name = "Heatmap: cell-line by sample",
+                                                        show_row_names = FALSE,
+                                                        row_dend_reorder = TRUE,
+                                                        # clustering_distance_rows = "pearson",
+                                                        show_row_dend = FALSE,
+                                                        column_dend_reorder = TRUE, 
+                                                        show_column_names = TRUE, 
+                                                        # clustering_distance_columns = "pearson",
+                                                        column_names_gp = gpar(fontsize = 4), 
+                                                        top_annotation = ha, 
+                                                        # compression issues
+                                                        use_raster = TRUE) |> 
+  ComplexHeatmap::draw() |> 
+  grid::grid.grabExpr()
+
+ggsave(paste0("figures/cell_lines/heatmap_cell_lines_by_samples_", today_date,".pdf"), 
+       heatmap_cell_lines_by_sample, dpi = 300, width = 20, height = 20)                                            
+```
+
+### Cell Line Correlation
+
+
+```{r}
+#| label: fig-heatmap-cell-lines-by-cell-lines
+#| fig-cap: "Histogram of the distribution of cell resistance (for a given barcode ID, returns the total number of cell lines identified)."
+
+# 1) evaluation of cell resistance
+present_cells <- rowSums(se_binarised_compound_by_batch_mat)
+hist(present_cells, 
+     breaks = length(unique(present_cells)),
+     main=NULL)
+
+# 2) filtered Heatmaps 
+threshold_cell_prevalence <- 10 # alternatively, remove cells that are not present in all samples
+se_binarised_compact <- se_binarised_compound_by_batch_mat[present_cells >
+                                                             threshold_cell_prevalence, ]
+cor_cell_lines <- cor(t(se_binarised_compact))
+col_heatmap_scale <- circlize::colorRamp2(c(min(cor_cell_lines, na.rm = TRUE),
+                                            0, 
+                                            max(cor_cell_lines, na.rm = TRUE)),
+                                      c("blue", "white", "red"))
+
+# 3) generate Heatmap of correlation cell lines
+heatmap_cell_lines_by_cell_lines <- ComplexHeatmap::Heatmap(cor_cell_lines, 
+                                                        col = col_heatmap_scale, 
+                                                        name = "Heatmap: cell-line by cell line",
+                                                        show_row_names = FALSE,
+                                                        row_dend_reorder = TRUE,
+                                                        show_row_dend = TRUE,
+                                                        column_dend_reorder = TRUE, 
+                                                        show_column_names = FALSE, 
+                                                        na_col = "black", 
+                                                        use_raster = TRUE, 
+                                                        raster_resize_mat = mean) |> 
+  ComplexHeatmap::draw() |> 
+  grid::grid.grabExpr()
+
+ggsave(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".pdf"), 
+       heatmap_cell_lines_by_cell_lines, dpi = 600, width = 20, height = 20)    
+```
 
 
 # Perspectives
