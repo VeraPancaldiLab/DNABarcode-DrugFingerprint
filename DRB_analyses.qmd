@@ -87,6 +87,7 @@ library(ComplexHeatmap)
 library(cowplot)
 library(grid)
 library(RColorBrewer)
+library(igraph)
 
 # auxiliary functions
 source("R/utils.R")
@@ -817,14 +818,14 @@ barcode_counts_long <- barcode_counts_normalised |>
                       values_to = "Barcode_Counts") |> 
   dplyr::inner_join(pheno_data, by="Replicates_ID")
 
-barcode_counts_wider_compound_by_batch <- barcode_counts_long |> 
+barcode_counts_wider_compound_batch <- barcode_counts_long |> 
   tidyr::pivot_wider(id_cols = c(barcode_id), 
                      names_from = c(Batch_ID, Compound, Concentrations_ID, Duration_ID),
                      names_sep = ":",
                      values_from = Barcode_Counts, 
                      values_fn=mean)
 
-pheno_compound_by_batch <- tibble::tibble(original =setdiff(colnames(barcode_counts_wider_compound_by_batch),"barcode_id")) |>
+pheno_compound_batch <- tibble::tibble(original =setdiff(colnames(barcode_counts_wider_compound_batch),"barcode_id")) |>
   mutate(Batch_ID = stringr::str_split_i(original, ":", 1),
          Compound = stringr::str_split_i(original, ":", 2), 
          Concentrations_ID = stringr::str_split_i(original, ":", 3), 
@@ -836,12 +837,12 @@ pheno_compound_by_batch <- tibble::tibble(original =setdiff(colnames(barcode_cou
   dplyr::select(-Concentrations_ID, -Duration_ID) |> 
   tibble::column_to_rownames("original") 
 
-se_compound_by_batch <- SummarizedExperiment::SummarizedExperiment(
-  assays = list(counts = barcode_counts_wider_compound_by_batch |> 
+se_compound_batch <- SummarizedExperiment::SummarizedExperiment(
+  assays = list(counts = barcode_counts_wider_compound_batch |> 
                   tibble::column_to_rownames("barcode_id") |> 
                   as.matrix()),
   rowData = barcode_metadata,
-  colData = pheno_compound_by_batch)
+  colData = pheno_compound_batch)
 
 ```
 
@@ -878,7 +879,7 @@ se_compound <- SummarizedExperiment::SummarizedExperiment(
 
 saveRDS(se_replicates, file = paste0("./results/compounds/se_normalised_per_replicate_",
                           today_date, ".rds"))
-saveRDS(se_compound_by_batch, file = paste0("./results/compounds/se_normalised_per_compound_by_batch_",
+saveRDS(se_compound_batch, file = paste0("./results/compounds/se_normalised_per_compound_by_batch_",
                           today_date, ".rds"))
 saveRDS(se_compound, file = paste0("./results/compounds/se_normalised_per_compound_",
                           today_date, ".rds"))
@@ -956,23 +957,23 @@ saveRDS(se_discretised_replicates,
 #| lst-cap: "Average the replicates, using a `all` operator."
 
 # 2) discretised correlation at the compound by batch level (averaging over replicates), with an all function
-barcode_discretised_compound_by_batch <- barcode_discretised_replicates |> 
+barcode_discretised_compound_batch <- barcode_discretised_replicates |> 
    tidyr::pivot_wider(id_cols = c(barcode_id), 
                      names_from = c(Batch_ID, Compound, Concentrations_ID, Duration_ID),
                      names_sep = ":",
                      values_from = Barcode_Counts, 
                      values_fn=all)
 
-pheno_discretised_compound_by_batch <- pheno_compound_by_batch[setdiff(colnames(barcode_discretised_compound_by_batch), "barcode_id"), ]
+pheno_discretised_compound_batch <- pheno_compound_batch[setdiff(colnames(barcode_discretised_compound_batch), "barcode_id"), ]
 
-se_compound_by_batch_discretised <- SummarizedExperiment::SummarizedExperiment(
-  assays = list(discretised = barcode_discretised_compound_by_batch |> 
+se_compound_batch_discretised <- SummarizedExperiment::SummarizedExperiment(
+  assays = list(discretised = barcode_discretised_compound_batch |> 
                   tibble::column_to_rownames("barcode_id") |> 
                   as.matrix()),
   rowData = barcode_metadata,
-  colData = pheno_discretised_compound_by_batch)
+  colData = pheno_discretised_compound_batch)
 
-saveRDS(se_compound_by_batch_discretised,
+saveRDS(se_compound_batch_discretised,
         file = paste0("./results/compounds/se_discretised_per_compound_by_batch_",
                       today_date, ".rds"))
 
@@ -1037,52 +1038,52 @@ saveRDS(se_compound_discretised,
 
 #### Heatmap with Pearson correlation score
 
-- Heatmap in @fig-heatmap-global-replicate is generated at the replicate level:
+- Heatmap in @fig-heatmap-normalised-replicate is generated at the replicate level:
 
 ```{r}
 #| label: fig-heatmap-normalised-replicate
-#| fig-cap: "Heatmap generated with the simple Pearson Correlation score."
+#| fig-cap: "Heatmap of normalised replication scores, \n generated with the simple Pearson Correlation score."
 
 # Read SummarizedExperiment object
-se_normalised <- readRDS("./results/compounds/se_normalised_per_replicate_2025-04-28.rds")
-se_normalised_mat <- SummarizedExperiment::assay(se_normalised)
-se_pheno_data <- SummarizedExperiment::colData(se_normalised)
-se_pheno_data$log10Conc <- if_else(se_pheno_data$Concentrations==0, 
+se_normalised_replicate <- readRDS("./results/compounds/se_normalised_per_replicate_2025-04-28.rds")
+se_normalised_replicate_mat <- SummarizedExperiment::assay(se_normalised_replicate)
+se_normalised_pheno_data_replicate <- SummarizedExperiment::colData(se_normalised_replicate)
+se_normalised_pheno_data_replicate$log10Conc <- if_else(se_normalised_pheno_data_replicate$Concentrations==0, 
                                    0, 
-                                   -log10(se_pheno_data$Concentrations))
+                                   -log10(se_normalised_pheno_data_replicate$Concentrations))
 # Compute global correlation score
-cor_per_replicate <- cor(se_normalised_mat)
+cor_per_replicate <- cor(se_normalised_replicate_mat)
 
 # Define clustering colours
 col_heatmap_scale <- circlize::colorRamp2(c(min(cor_per_replicate), 0, 1),
                                       c("blue", "white", "red"))
 
-# Define Heatmap annotation
-num_batches <- length(unique(se_pheno_data$Batch_ID))
-num_compounds <- length(unique(se_pheno_data$Compound))
-num_moa <- length(unique(se_pheno_data$MoA))
-
-batch_col <- setNames(colorRampPalette(brewer.pal(8, "Dark2"))(num_batches), 
-                      unique(se_pheno_data$Batch_ID))
-compound_col <- setNames(colorRampPalette(brewer.pal(11, "Spectral"))(num_compounds), 
-                         unique(se_pheno_data$Compound))
-moa_col <- setNames(colorRampPalette(brewer.pal(12, "Set3"))(num_moa), 
-                    unique(se_pheno_data$MoA))
+# Define custom colour Heatmap annotation
+# num_batches <- length(unique(se_normalised_pheno_data_replicate$Batch_ID))
+# num_compounds <- length(unique(se_normalised_pheno_data_replicate$Compound))
+# num_moa <- length(unique(se_normalised_pheno_data_replicate$MoA))
+# 
+# batch_col <- setNames(colorRampPalette(brewer.pal(8, "Dark2"))(num_batches), 
+#                       unique(se_normalised_pheno_data_replicate$Batch_ID))
+# compound_col <- setNames(colorRampPalette(brewer.pal(11, "Spectral"))(num_compounds), 
+#                          unique(se_normalised_pheno_data_replicate$Compound))
+# moa_col <- setNames(colorRampPalette(brewer.pal(12, "Set3"))(num_moa), 
+#                     unique(se_normalised_pheno_data_replicate$MoA))
 
 
 ## Heatmap annotation
-top_ha <- ComplexHeatmap::HeatmapAnnotation(df = se_pheno_data |> 
+top_ha <- ComplexHeatmap::HeatmapAnnotation(df = se_normalised_pheno_data_replicate |> 
                                           as.data.frame() |> 
-                                          dplyr::select(Batch_ID, MoA, Compound), 
-                                        col = list(Batch_ID = batch_col, 
-                                                   MoA = moa_col, 
-                                                   Compound = compound_col))
+                                          dplyr::select(Batch_ID, MoA, Compound)) 
+                                        # col = list(Batch_ID = batch_col, 
+                                        #            MoA = moa_col, 
+                                        #            Compound = compound_col))
 
 row_ha <- ComplexHeatmap::rowAnnotation(Concentration =
-                                          ComplexHeatmap::anno_barplot(se_pheno_data$log10Conc), 
-                                        Duration = paste0(se_pheno_data$Duration, "d"))
+                                          ComplexHeatmap::anno_barplot(se_normalised_pheno_data_replicate$log10Conc), 
+                                        Duration = paste0(se_normalised_pheno_data_replicate$Duration, "d"))
 
-# Define Heatmap
+# Generate Heatmap
 heatmap_normalised_replicates <- ComplexHeatmap::Heatmap(cor_per_replicate, 
                                           col=col_heatmap_scale, 
                                           name = "CC for all Replicates", 
@@ -1090,7 +1091,6 @@ heatmap_normalised_replicates <- ComplexHeatmap::Heatmap(cor_per_replicate,
                                           show_column_names = FALSE, 
                                           row_dend_reorder = TRUE,
                                           column_dend_reorder = TRUE, 
-                                          # font size
                                           row_names_gp = gpar(fontsize = 2), 
                                           top_annotation = top_ha, 
                                           right_annotation = row_ha) |> 
@@ -1101,43 +1101,44 @@ ggsave(paste0("figures/compounds/heatmap_normalised_replicates_", today_date,".p
        heatmap_normalised_replicates, dpi = 600, width = 20, height = 20)
 ```
 
-- 
+- Heatmap in @fig-heatmap-normalised-compound-batch is generated by averaging normalised barcode counts over replicates:
 
 ```{r}
-#| label: fig-heatmap-normalised-replicate
-#| fig-cap: "Heatmap of compounds by batch(aggregated over replicates) with CC."
+#| label: fig-heatmap-normalised-compound-batch
+#| fig-cap: "Heatmap of normalised compounds by batch(aggregated over replicates) with CC."
 
 # Read SummarizedExperiment object
-se_normalised <- readRDS("./results/compounds/se_discretised_per_compound_by_batch_2025-04-28.rds")
-se_normalised_mat <- SummarizedExperiment::assay(se_normalised)
-se_pheno_data <- SummarizedExperiment::colData(se_normalised)
+se_normalised_compound_batch <- readRDS("./results/compounds/se_normalised_per_compound_by_batch_2025-04-28.rds")
+se_normalised_compound_batch_mat <- SummarizedExperiment::assay(se_normalised_compound_batch)
+se_pheno_data_normalised_compound_batch <- SummarizedExperiment::colData(se_normalised_compound_batch)
 # Compute global correlation score
-cor_per_compound_by_batch <- cor(se_normalised_mat)
+cor_per_compound_by_batch <- cor(se_normalised_compound_batch_mat)
 
 # Define clustering colours
 col_heatmap_scale <- circlize::colorRamp2(c(min(cor_per_compound_by_batch), 0, 1),
                                       c("blue", "white", "red"))
 
 ## Heatmap annotation
-ha <- ComplexHeatmap::HeatmapAnnotation(df = se_pheno_data |> 
+ha <- ComplexHeatmap::HeatmapAnnotation(df = se_pheno_data_normalised_compound_batch |> 
                                           as.data.frame() |> 
                                           dplyr::select(Pathway))
 
 # Define Heatmap
-heatmap_normalised_compound_by_batch <- ComplexHeatmap::Heatmap(cor_per_compound_by_batch, 
+heatmap_normalised_compound_batch <- ComplexHeatmap::Heatmap(cor_per_compound_by_batch, 
                                           col=col_heatmap_scale, 
                                           name = "CC for all Compounds", 
                                           show_row_names = TRUE,
                                           show_column_names = TRUE, 
                                           row_dend_reorder = TRUE,
                                           column_dend_reorder = TRUE, 
-                                          row_names_gp = gpar(fontsize = 6), 
+                                          column_names_gp = gpar(fontsize = 8),
+                                          row_names_gp = gpar(fontsize = 8), 
                                           top_annotation = ha) |> 
   ComplexHeatmap::draw() |> 
   grid::grid.grabExpr()
 
 ggsave(paste0("figures/compounds/heatmap_normalised_compound_by_batch_", today_date,".pdf"), 
-       heatmap_normalised_compound_by_batch, dpi = 600, width = 20, height = 20)
+       heatmap_normalised_compound_batch, dpi = 600, width = 20, height = 20)
 ```
 
 
@@ -1148,18 +1149,18 @@ ggsave(paste0("figures/compounds/heatmap_normalised_compound_by_batch_", today_d
 #| fig-cap: "Heatmap generated with the simple Pearson Correlation score."
 
 # Read SummarizedExperiment object
-se_normalised <- readRDS("./results/compounds/se_normalised_per_compound_2025-04-28.rds")
-se_normalised_mat <- SummarizedExperiment::assay(se_normalised)
-se_pheno_data <- SummarizedExperiment::colData(se_normalised)
+se_normalised_compound <- readRDS("./results/compounds/se_normalised_per_compound_2025-04-28.rds")
+se_normalised_compound_mat <- SummarizedExperiment::assay(se_normalised_compound)
+se_normalised_pheno_data_compound <- SummarizedExperiment::colData(se_normalised_compound)
 # Compute global correlation score
-cor_per_compound <- cor(se_normalised_mat)
+cor_per_compound <- cor(se_normalised_compound_mat)
 
 # Define clustering colours
 col_heatmap_scale <- circlize::colorRamp2(c(min(cor_per_compound), 0, 1),
                                       c("blue", "white", "red"))
 
 ## Heatmap annotation
-ha <- ComplexHeatmap::HeatmapAnnotation(df = se_pheno_data |> 
+ha <- ComplexHeatmap::HeatmapAnnotation(df = se_normalised_pheno_data_compound |> 
                                           as.data.frame() |> 
                                           dplyr::select(Pathway))
 
@@ -1183,25 +1184,25 @@ ggsave(paste0("figures/compounds/heatmap_normalised_compound_", today_date,".pdf
 
 #### Heatmap with Pearson correlation and binarised values
 
-- Heatmap at the replicates level 
+- Heatmap at the replicates level in @fig-heatmap-binarised-replicates:
 
 ```{r}
 #| label: fig-heatmap-binarised-replicates
 #| fig-cap: "Heatmaps at the replicates level."
 
 # Read SummarizedExperiment object
-se_binarised <- readRDS("./results/compounds/se_discretised_per_replicate_2025-04-28.rds")
-se_binarised_mat <- SummarizedExperiment::assay(se_binarised)
-se_pheno_data <- SummarizedExperiment::colData(se_binarised)
+se_binarised_replicates <- readRDS("./results/compounds/se_discretised_per_replicate_2025-04-28.rds")
+se_binarised_replicates_mat <- SummarizedExperiment::assay(se_binarised_replicates)
+se_binarised_pheno_data_replicate <- SummarizedExperiment::colData(se_binarised_replicates)
 # Compute global correlation score
-cor_per_replicates <- cor(se_binarised_mat)
+cor_per_replicates <- cor(se_binarised_replicates_mat)
 
 # Define clustering colours
 col_heatmap_scale <- circlize::colorRamp2(c(min(cor_per_replicates), 0, 1),
                                       c("blue", "white", "red"))
 
 ## Heatmap annotation
-ha <- ComplexHeatmap::HeatmapAnnotation(df = se_pheno_data |> 
+ha <- ComplexHeatmap::HeatmapAnnotation(df = se_binarised_pheno_data_replicate |> 
                                           as.data.frame() |> 
                                           dplyr::select(Pathway, Batch_ID, Compound))
 
@@ -1230,23 +1231,23 @@ ggsave(paste0("figures/compounds/heatmap_binarised_replicates_", today_date,".pd
 #| fig-cap: "Heatmaps at the compound by batch level."
 
 # Read SummarizedExperiment object
-se_binarised <- readRDS("./results/compounds/se_discretised_per_compound_by_batch_2025-04-28.rds")
-se_binarised_mat <- SummarizedExperiment::assay(se_binarised)
-se_pheno_data <- SummarizedExperiment::colData(se_binarised)
+se_binarised_compound_batch <- readRDS("./results/compounds/se_discretised_per_compound_by_batch_2025-04-28.rds")
+se_binarised_compound_batch_mat <- SummarizedExperiment::assay(se_binarised_compound_batch)
+se_binarised_pheno_data_compound_batch <- SummarizedExperiment::colData(se_binarised_compound_batch)
 # Compute global correlation score
-cor_per_compound_by_batch <- cor(se_binarised_mat)
+cor_per_compound_by_batch <- cor(se_binarised_compound_batch_mat)
 
 # Define clustering colours
 col_heatmap_scale <- circlize::colorRamp2(c(min(cor_per_compound_by_batch), 0, 1),
                                       c("blue", "white", "red"))
 
 ## Heatmap annotation
-ha <- ComplexHeatmap::HeatmapAnnotation(df = se_pheno_data |> 
+ha <- ComplexHeatmap::HeatmapAnnotation(df = se_binarised_pheno_data_compound_batch |> 
                                           as.data.frame() |> 
                                           dplyr::select(Pathway, MoA))
 
 
-heatmap_binarised_compound_by_batch <- ComplexHeatmap::Heatmap(cor_per_compound_by_batch, 
+heatmap_binarised_compound_batch <- ComplexHeatmap::Heatmap(cor_per_compound_by_batch, 
                                             col=col_heatmap_scale, 
                                             name = "CC at binarised Compound Level",
                                             show_row_names = TRUE,
@@ -1260,7 +1261,7 @@ heatmap_binarised_compound_by_batch <- ComplexHeatmap::Heatmap(cor_per_compound_
   grid::grid.grabExpr()
 
 ggsave(paste0("figures/compounds/heatmap_binarised_compound_by_batch_", today_date,".pdf"), 
-       heatmap_binarised_compound_by_batch, dpi = 600, width = 20, height = 20)                                            
+       heatmap_binarised_compound_batch, dpi = 600, width = 20, height = 20)                                            
 ```
 
 - Heatmap at the compound level in @fig-heatmap-binarised-compound.
@@ -1270,18 +1271,18 @@ ggsave(paste0("figures/compounds/heatmap_binarised_compound_by_batch_", today_da
 #| fig-cap: "Heamaps at the compound level."
 
 # Read SummarizedExperiment object
-se_binarised <- readRDS("./results/compounds/se_discretised_per_compound_2025-04-28.rds")
-se_binarised_mat <- SummarizedExperiment::assay(se_binarised)
-se_pheno_data <- SummarizedExperiment::colData(se_binarised)
+se_binarised_compound <- readRDS("./results/compounds/se_discretised_per_compound_2025-04-28.rds")
+se_binarised_compound_mat <- SummarizedExperiment::assay(se_binarised_compound)
+se_binarised_pheno_data_compound <- SummarizedExperiment::colData(se_binarised_compound)
 # Compute global correlation score
-cor_per_compound <- cor(se_binarised_mat)
+cor_per_compound <- cor(se_binarised_compound_mat)
 
 # Define clustering colours
 col_heatmap_scale <- circlize::colorRamp2(c(min(cor_per_compound), 0, 1),
                                       c("blue", "white", "red"))
 
 ## Heatmap annotation
-ha <- ComplexHeatmap::HeatmapAnnotation(df = se_pheno_data |> 
+ha <- ComplexHeatmap::HeatmapAnnotation(df = se_binarised_pheno_data_compound |> 
                                           as.data.frame() |> 
                                           dplyr::select(Pathway, MoA))
 
@@ -1291,9 +1292,9 @@ heatmap_binarised_compound <- ComplexHeatmap::Heatmap(cor_per_compound,
                                             name = "CC at binarised Compound Level",
                                             show_row_names = TRUE,
                                             show_column_names = TRUE, 
+                                            column_names_gp = gpar(fontsize = 8),
                                             row_dend_reorder = TRUE,
                                             column_dend_reorder = TRUE, 
-                                            # font size
                                             row_names_gp = gpar(fontsize = 8), 
                                             top_annotation = ha) |> 
   ComplexHeatmap::draw() |> 
@@ -1322,10 +1323,10 @@ ggsave(paste0("figures/compounds/heatmap_binarised_compound_", today_date,".pdf"
 
 ```{r}
 #| label: fig-igraph-drug
-#| fig-cap: " at the compound level."
+#| fig-cap: "Drug-drug network interactions, at the compound level."
 
 # 1) Compute correlation matrix and p-values ----
-cor_res <- Hmisc::rcorr(se_binarised_mat, type = "pearson")
+cor_res <- Hmisc::rcorr(se_binarised_compound_mat, type = "pearson")
 cor_binarised_compound <- cor_res$r
 pval_binarised_compound <- cor_res$P
 
@@ -1380,19 +1381,14 @@ igraph::write_graph(graph = compound_graph,
 #| label: fig-heatmap-cell-lines-by-samples
 #| fig-cap: "Heatmap cell lines by samples, averaging over replicates."
 
-# Read SummarizedExperiment object
-se_binarised_compound_by_batch <- readRDS("./results/compounds/se_discretised_per_compound_by_batch_2025-04-28.rds")
-se_binarised_compound_by_batch_mat <- SummarizedExperiment::assay(se_binarised_compound_by_batch) |> 
-  as.matrix() 
-se_binarised_compound_by_batch_fac <- apply(se_binarised_compound_by_batch_mat, 2, as.character)
-se_pheno_data_compound_by_batch <- SummarizedExperiment::colData(se_binarised_compound_by_batch)
+se_binarised_compound_batch_fac <- apply(se_binarised_compound_batch_mat, 2, as.character)
 
 ## Heatmap annotation
-ha <- ComplexHeatmap::HeatmapAnnotation(df = se_pheno_data_compound_by_batch |> 
+ha <- ComplexHeatmap::HeatmapAnnotation(df = se_binarised_pheno_data_compound_batch |> 
                                           as.data.frame() |> 
                                           dplyr::select(Batch_ID, Pathway, Compound))
 
-heatmap_cell_lines_by_sample <- ComplexHeatmap::Heatmap(se_binarised_compound_by_batch_fac, 
+heatmap_cell_lines_by_sample <- ComplexHeatmap::Heatmap(se_binarised_compound_batch_fac, 
                                                         col = c("TRUE" = "red", "FALSE" = "blue"), 
                                                         name = "Heatmap: cell-line by sample",
                                                         show_row_names = FALSE,
@@ -1421,14 +1417,14 @@ ggsave(paste0("figures/cell_lines/heatmap_cell_lines_by_samples_", today_date,".
 #| fig-cap: "Histogram of the distribution of cell resistance (for a given barcode ID, returns the total number of cell lines identified)."
 
 # 1) evaluation of cell resistance
-present_cells <- rowSums(se_binarised_compound_by_batch_mat)
+present_cells <- rowSums(se_binarised_compound_batch_mat)
 hist(present_cells, 
      breaks = length(unique(present_cells)),
      main=NULL)
 
 # 2) filtered Heatmaps 
 threshold_cell_prevalence <- 10 # alternatively, remove cells that are not present in all samples
-se_binarised_compact <- se_binarised_compound_by_batch_mat[present_cells >
+se_binarised_compact <- se_binarised_compound_batch_mat[present_cells >
                                                              threshold_cell_prevalence, ]
 cor_cell_lines <- cor(t(se_binarised_compact))
 col_heatmap_scale <- circlize::colorRamp2(c(min(cor_cell_lines, na.rm = TRUE),
