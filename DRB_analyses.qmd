@@ -80,7 +80,6 @@ library(purrr)
 
 # reporting
 library(flextable)
-library(testthat)
 
 # plotting
 library(ggplot2)
@@ -1310,7 +1309,59 @@ ggsave(paste0("figures/compounds/heatmap_binarised_compound_", today_date,".pdf"
 
 ### Compound Networks
 
-2. Plot weighted undirected graphs with `igraph::graph_from_adjacency_matrix`
+- Plot weighted undirected compound graphs with `igraph::graph_from_adjacency_matrix` in @fig-igraph-drug, filtering out pairwise connections between 2 drugs if the $p$-value is not significant and absolute correlation score is below 0.8:
+
+```{r}
+#| label: fig-igraph-drug
+#| fig-cap: " at the compound level."
+
+# 1) Compute correlation matrix and p-values ----
+cor_res <- Hmisc::rcorr(se_binarised_mat, type = "pearson")
+cor_binarised_compound <- cor_res$r
+pval_binarised_compound <- cor_res$P
+
+adj_mat <- cor_binarised_compound
+adj_mat[pval_binarised_compound > 0.05/ncol(cor_res)] <- 0
+
+# 2) build igraph adjacency matrix ----
+compound_graph <- igraph::graph_from_adjacency_matrix(adjmatrix=adj_mat, 
+                                          weighted = TRUE,
+                                          diag = FALSE, 
+                                          mode = "undirected")
+# 3) igraph customisation ----
+compound_graph$date <- today_date
+E(compound_graph)$color <- if_else(E(compound_graph)$weight >0, "red", "blue")
+E(compound_graph)$weight <- abs(E(compound_graph)$weight)
+
+layout_graph <- igraph::layout_with_fr(compound_graph,
+                                       niter = 500)
+
+vertex_structure <- se_pheno_data |> 
+  as.data.frame() |> 
+  dplyr::mutate(color = if_else(Pathway=="EGFR", "green", "yellow"))
+
+igraph::V(compound_graph)$color <- vertex_structure$color
+
+pdf(paste0("figures/compounds/compound_graph_", today_date, ".pdf"), 
+    width = 16, height = 16, useDingbats = TRUE, compress = FALSE)
+plot(compound_graph, layout = layout_graph, vertex.size = 10,
+     # vertex.label.dist= 2,
+     main = "Compound network interaction.
+     In green, drugs related with the EGFR mechanism,
+     and in yellow other pathways.
+     Edge widths are proportional to the coefficient of correlation.", 
+     edge.width = igraph::E(compound_graph)$weight * 20,
+     vertex.label.cex = 1, curved = 0.2)
+dev.off()
+
+# 4) export PNG and readble graph formats for Neo4J
+igraph::write_graph(graph = compound_graph, 
+                    file = paste0("./results/compounds/compound_network_", today_date, ".graphml"),
+                    format = "graphml")
+
+
+```
+
 
 ## Compute Cell Lines Similarities
 
