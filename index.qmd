@@ -1,0 +1,24 @@
+# Welcome {-}
+
+```{=html}
+<a class="github-button" href="https://github.com/VeraPancaldiLab/DNABarcode-DrugFingerprint" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star this website on Github">Star this website on Github</a><script async defer src="https://buttons.github.io/buttons.js"></script>
+```
+
+This is the online Quarto book project for reproducing: **Inferring the mechanism of action of new drugs through the analysis of the predetermined heterogeneous response to treatment of different subpopulations of cancer cells** poster, presented at `NetBioMed 2022` conference.
+
+## Introduction: Cell lines DNA Barcoding
+
+- DNA barcoding is also used for inferring the species abundancies in environement samples, just replace the notion of species by cell lines. Similar statistical issues, with *zero-inflated* distributions.
+
+- Steps: 
+  1. Transfection by virus.
+  2. Clonal amplification, unique tagging per cell using MOI.
+  3. Clone sizes are assumed to be proportional to the barcode abundances due to this 1-1 mapping of a barcode and a single cell.
+
+- Pros DNA barcoding:
+  - Better capture of cell population sizes
+  - Better tracking of tagged clones.
+
+- Cons DNA barcoding:
+  - Lack of systematic reviews and benchmarks.
+  - Mostly rely on bulk RNASeq analytical tools, not accounting for *drop-outs*. In particular, the assumptions that variance across tags is homogeneous, and abundancies follow a negative binomial distribution are quite controversial.

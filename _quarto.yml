@@ -1,0 +1,72 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "Inferring the MoA of new drugs through the analysis of heterogeneous response to treatment of different subpopulations of cancer cells"
+  reader-mode: true
+  author: "Bastien CHASSAGNOL and Vera PANCALDI and Luca GRUMULATO and Marie-Pier SCOTT KELLY"
+  date: last-modified
+  chapters:
+    - index.qmd
+    - data-management.qmd
+    - methods.qmd
+    - results.qmd
+    - perspectives.qmd
+  appendices:
+    - cell-lines-databases.qmd
+    - references.qmd
+  repo-url: https://github.com/VeraPancaldiLab/DNABarcode-DrugFingerprint/
+  site-url: https://verapancaldilab.github.io/DNABarcode-DrugFingerprint/
+  repo-branch: master
+  repo-actions: [edit, issue, source]
+  open-graph: true
+  downloads: [docx]
+  back-to-top-navigation: true
+  search:
+    location: sidebar
+  page-footer:
+    background: light
+    center:  |
+       Written by Bastien CHASSAGNOL and Marie-Pier SCOTT-KELLY and Vera PANCALDI and Luca GRUMULATO, with <a href="https://quarto.org/">Quarto</a>.
+    right:
+      - icon: github
+        href: https://github.com/VeraPancaldiLab/DNABarcode-DrugFingerprint/
+  sidebar:
+    title: "Cell Barcoding and Drug Fingerprints"
+    style: "docked"
+    background: "light"
+    collapse-level: 4
+  cover-image: assets/cover.png
+  favicon: assets/favicon.png
+
+# Metadata, such as authors information
+metadata-files:
+  - assets/_format.yml
+  - assets/_knitr.yml
+
+# Shared options across output formats
+number-sections: true
+engine: knitr
+toc: true
+toc-depth: 4
+lang: en-GB
+bibliography: "assets/DRB Barcoding and Drug Fingerprints.bib"
+link-citations: true
+highlight-style: github
+filters:
+  - highlight-text
+# code options
+execute:
+  message: false
+  warning: false
+  error: false
+  eval: true
+  echo: true
+  freeze: auto # avoid re-running R script analyses when publishing them on GH
+tbl-cap-location: bottom
+editor: source
+
+
+
+

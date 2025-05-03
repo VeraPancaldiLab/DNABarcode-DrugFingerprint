@@ -1,0 +1,50 @@
+---
+title: "Future perspectives: single-cell integration."
+---
+
+### Alternative metrics
+
+- [Compute correlations with strongly sparse vectors?](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_1-you-have-a-clear-question-is-gene-a-activity-7322971683596734464-5BqV)
+
+### Pair Single Cell with (or without) Drug fingerprints
+
+- [Single cell and compound response largest database](https://www.linkedin.com/posts/independent-data-lab_check-out-the-preprint-activity-7300471798029012993-YRjy)
+
+- [Biologist perspective](https://docs.google.com/document/d/1UHD6IG9Rti2tD77zwHfSyh5XyTbnJ25S/edit)
+  - Single-cell lineage capture across genomic modalities with `CellTag-multi` reveals fate-specific gene regulatory changes -> use of **single-cell lineage-tracing (scLT)**. 
+  - High-resolution, noninvasive single-cell lineage tracing in mice and humans based on DNA methylation epi-mutations.
+  
+- Ming Tommy Tang lists in [Single-cell LinkedIn post](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_pylemur-activity-7320442513671008256-qLJC) trendy papers and tools for multi-sample, single-cell RNAseq differential expression analysis.
+
+#### Correct for Batch Effects
+
+- [`DESeq2-MultiBatch`](https://www.biorxiv.org/content/10.1101/2025.04.20.649392v1): Batch Correction for Multi-Factorial RNA-seq Experiments, avalaible as open-source [GH repository](https://github.com/julienroyulaval/DESeq2-MultiBatch), from @roy2025. 
+
+#### Drug-response
+
+- [`TRADE`: Transcriptome-wide analysis of differential expression in perturbation atlases](https://www.nature.com/articles/s41588-025-02169-3), from @nadig2025ng. The paper notably reports how to model a compound-dose response curve with a **Hill equation**. Avalaible as an open-source GH repository [`TRADEtools`](https://github.com/ajaynadig/TRADEtools). [R `TRADE` Tutorial](https://www.rna-seqblog.com/trade-ranscriptome-wide-analysis-of-differential-expression/)
+
+### Barcode Differential Analysis
+
+#### `bartools` and `BARtab`
+
+- Analysis of synthetic cellular barcodes in the genome and transcriptome with `BARtab` and `bartools`. 
+
+#### `DEBRA`
+
+- Pros `DEBRA`
+  - Better characterisation of the mean-variance deviation -> between `trended` or `shrinkage`, `trended` is favoured.
+
+- Cons `DEBRA`:
+  - `DEBRA` does not account for outliers expression, nor zero-inflated counts -> recommendation of `glmQLFit` and `glmQLFTest` for routine GLM-based DE analyses, from [`EdgeR`: Explaning dispersion types to newbies](https://support.bioconductor.org/p/110273/).
+  - Complex protocol for discarding lowly differentially expressed barcodes.
+  - No available BioConductor/CRAN Repository, while latest [`DEBRA` GitHub update](https://github.com/YevhenAkimov/DEBRA_1.01) dates back more than 4 years.
+  
+#### Combine Fold change and $p$-value
+
+- [Combine statistical discernibility (aka *significance*) with practical significance](https://www.linkedin.com/posts/adrianolszewski_how-to-combine-statistical-discernibility-activity-7310365190959632384-sNHs)
+
+### Drug clustering and mapping
+
+- Use of graph clustering approaches? Like Louvain? + multiple case studies, how to combine them (2 vials of cell lines)?
+- Compare with ATC prediction and clustering: [`PDATC-NCPMKL-updated` GH Repo](https://github.com/Lywhere/PDATC-NCPMKL-updated).

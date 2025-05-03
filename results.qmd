@@ -1,0 +1,36 @@
+---
+title: "Results: Heatmaps and Drug networks, based on barcode fingerprints"
+---
+
+## Reproducibility
+
+I list below the R packages required to reproduce the analyses.
+
+```{r}
+#| label: setup
+
+## data wrangling
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(purrr)
+
+## reporting
+library(flextable)
+
+## plotting
+library(ggplot2)
+library(ComplexHeatmap)
+library(cowplot)
+library(grid)
+library(RColorBrewer)
+library(igraph)
+
+## auxiliary functions
+source("R/utils.R")
+today_date <- "2025-04-28"
+## today_date <- format(Sys.Date(), "%Y-%m-%d")
+
+## set the seed, for fixing generation of ComplexHeatmaps (dendogram clustering)
+set.seed(20)
+```

@@ -1,0 +1,28 @@
+---
+title: "Appendix: publish to standardised cell line repositories."
+---
+
+### Repository organisation and Data tracking
+
+- [Project Code Organisation](https://www.linkedin.com/posts/danleedata_become-10-better-at-machine-learning-by-activity-7320797963549564928-Au1_)
+
+- [Data Fingerprinting with `MDA5` and Environment Snapshots: R and Code tracking](https://www.linkedin.com/posts/sebastian-rauschert-836760a0_datascience-reproducibleanalytics-commandline-activity-7312256950962896896-9JkE)
+
+- Large datasets versioning: 
+
+  - [`DataLad` VS `DVC`](https://www.linkedin.com/posts/sebastian-rauschert-836760a0_install-datalad-activity-7307188424682127361-dJ_G)
+  - [`DataLad` Versus `DVC`](https://www.linkedin.com/posts/sebastian-rauschert-836760a0_dataversioncontrol-dvc-datascience-activity-7314768876876058626-GVNF), and [`DataLad` Versus `DVC` V2](https://handbook.datalad.org/en/latest/beyond_basics/101-168-dvc.html#dvc)
+  - [`Git LFS` VS `Alembic`](https://www.linkedin.com/posts/sebastian-rauschert-836760a0_reproducibility-databaseversioning-dataengineering-activity-7315522466259390466-zMun)
+
+- [Homogenise `Excel` colnames, and other spreadsheet tips](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_115-every-wet-lab-uses-spreadsheets-activity-7319725287603130368-9ILC)
+
+### Publish cell lines on Web repositories
+
+
+- [`cellosaurus` General Comments](https://www.expasy.org/resources/cellosaurus) and [`cellosaurus` Official Website](https://www.cellosaurus.org/), from[@bairoch2018jbt; @robin2020ijc]. Specifically, the `CLASTR` algorithm relies on *short-tandem repeat* patterns to map user-provided cell lines with the ones available in `Cellosaurus` database.
+- [`Bgee`](https://www.bgee.org/), from [@bastian2021nar; @bastian2025nar].
+
+<!-- ### Mapping short and full samples IDs {#sec-ID-mapping} -->
+
+<!-- - [`fuzzyjoin`: Join data frames on inexact matching](https://github.com/dgrtwo/fuzzyjoin) uses Levenshtein/cosine/Jaccard distance for mapping closely related IDs (may account for spurious discrepancies) -->
+

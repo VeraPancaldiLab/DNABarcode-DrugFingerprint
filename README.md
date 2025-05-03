@@ -1,1 +1,1 @@
-Automated quarto reporting for reproducing Luca's pipeline in excel for identifying barcode differential counts. 
+Automated quarto reporting for reproducing Luca's pipeline in Excel for identifying barcode differential counts. 

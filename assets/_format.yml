@@ -1,0 +1,23 @@
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: cosmo
+    toc-expand: 2
+    sidebar: true
+    lightbox: true
+    comments:
+      hypothesis: true
+    # code options
+    code-fold: show
+    code-link: true
+    code-annotations: hover
+    code-overflow: wrap
+    smooth-scroll: true
+    page-layout: full
+    from: markdown+emoji
+  docx:
+    toc-title: Contents
+  # pdf:
+  #   colourlinks: true
+  #   cite-method: biblatex

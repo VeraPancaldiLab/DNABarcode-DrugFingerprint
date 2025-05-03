@@ -10,3 +10,5 @@ data/barcode-counts/**
 data/Summary_experiments and runs_selected_310325.xlsx
 run_analyses.R
 Rplot**
+
+/.quarto/

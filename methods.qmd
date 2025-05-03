@@ -1,0 +1,351 @@
+---
+title: "Methods: normalise, identify DRBs and save as `SummarizedExperiment` objects"
+---
+
+## Reproducibility
+
+I list below the R packages required to reproduce the analyses.
+
+```{r}
+#| label: setup
+
+## data wrangling
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(readr)
+library(readxl)
+library(openxlsx)
+library(purrr)
+
+## reporting
+library(flextable)
+
+## auxiliary functions
+source("R/utils.R")
+today_date <- "2025-04-28"
+## today_date <- format(Sys.Date(), "%Y-%m-%d")
+
+## set the seed, for fixing generation of ComplexHeatmaps (dendogram clustering)
+set.seed(20)
+```
+
+
+### Preprocessing barcode counts{#sec-batch-processing}
+
+**Code colour**: [Luca's protocol]{fg="blue"}, and [Bastien's comments and perspectives]{fg="red"}
+
+#### **Background Noise Removal** and `SummarizedExperiment` stantardised storage
+
+[Eliminate barcodes for which the combined counts of the 4 controls per barcode are below a given threshold, here `5`.]{fg="blue"} 
+
+```{r}
+#| label: background-filtering-and-sample-merging
+#| lst-label: lst-background-filtering
+#| lst-cap: Remove background noise.
+
+barcode_files <- list.files("./data/barcode-counts/",
+                            pattern = "exp.*\\.csv",
+                            full.names = TRUE)
+thresh_background <- 4
+## ./data/pheno_data_metadata_2025-04-18.csv
+pheno_data <- readr::read_csv(paste0("./data/pheno_data_metadata_",
+                                     today_date, ".csv"))
+
+## filename <- grep( "exp200921", barcode_files, value = TRUE)[2]
+barcode_counts_aggregated <- purrr::map(barcode_files, function(filename) {
+  barcode_counts <- readr::read_csv(filename)
+  experience_name <- filename |> basename() |> tools::file_path_sans_ext()
+  
+  ## 1) explicitly change replicates name to enable 1-1 mapping ----
+  if (experience_name=="exp200921_dose response osim") {
+    barcode_counts <- barcode_counts |> 
+      dplyr::rename_with(
+        .fn = ~ gsub("exp200921_", "exp200921_dose_response_", .x),
+        .cols = starts_with("Contro"))
+  }
+  replicates_names <- setdiff(colnames(barcode_counts), "barcode_id")
+  
+  ## 2) Remove lowly expressed barcodes ----
+  control_index <- pheno_data |> 
+    dplyr::filter(Batch_ID==experience_name & 
+                    Compound=="Control" &
+                    Replicates_ID %in% replicates_names) |> 
+    dplyr::pull(Replicates_ID)
+  signicant_barcodes_index <- which(rowSums(barcode_counts[, control_index]) > thresh_background)
+  filtered_barcode_counts <- barcode_counts[signicant_barcodes_index,]
+  
+  message(paste("\n\nWe are considering experiment:", experience_name, "with", nrow(filtered_barcode_counts), "barcode IDs kept.\n\n"))
+  
+  return(filtered_barcode_counts)
+}) |> 
+  purrr::reduce(~ inner_join(.x, .y, by = "barcode_id"))
+
+## Deal with specific duplicated colnames, resulting from control duplicates
+## barcode_counts_aggregated <- barcode_counts_aggregated |>
+##   dplyr::select(!ends_with(".y")) |> 
+##   dplyr::rename_with(.fn = ~ gsub("\\.x$", "", .x),
+##                      .cols = dplyr::ends_with(".x"))
+
+## 3) keep only replicates present in pheno_data
+barcode_counts_aggregated <- barcode_counts_aggregated |> 
+  select(all_of(c("barcode_id", pheno_data$Replicates_ID)))
+```
+
+- After filtering for background noise, and merging all experiences based on shared barcode IDs, `{r} nrow(barcode_counts_aggregated)` unique barcode IDs are kept, for `{r} nrow(pheno_data)` samples, see @lst-background-filtering for details.
+
+- [Density plot of controls + justify why + check absence of outliers, to evaluate the relevance of this threshold, `HTSFilter`, comparison with existing filtering approaches.]{fg="red"}
+
+#### **Normalisation**
+
+-   [Normalize barcodes so that the total number of counts per sample is equal to `100,000`]{fg="blue"}. This operation is performed in @lst-cpm-normalisation.
+
+```{r}
+#| label: cpm-normalisation
+#| lst-label: lst-cpm-normalisation
+#| lst-cap: Normalise by $100000$.
+
+## 1) normalise by total number of counts ----
+barcode_counts_normalised <- barcode_counts_aggregated |> 
+  mutate(across(
+    .cols = where(is.numeric),                     
+    .fns = ~ (.x / sum(.x)) * 1e5))
+
+```
+
+-   [Close to two existing normalisation methods: **Counts Per Million (CPM)** which additionally scales raw counts by total library size and multiplies by $1,000,000$ and **Total Count Scaling (TCS)**: Scales raw counts by the total number of reads (or mapped reads) in each sample, then multiplies by a fixed number (e.g., 100,000). Would compare other normalisation approaches + ignore biological or technical biases + generate MA plots for verifying the mean-variance correction trend + not suitable for DEGs analyses. Apply concatenation phase of all samples before normalising. [Preprocessing and normalisation functions for transcriptomics: a general overview](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_rna-seq-normalization-what-you-need-to-activity-7313919533780516864-6jFm)]{fg="red"}
+
+#### Prepare `SummarizedExperiment` objects for normalised data
+
+- Higher level of granularity in @lst-SummarizedExperiment-replicates:
+
+```{r}
+#| label: SummarizedExperiment-replicates
+#| lst-label: lst-SummarizedExperiment-replicates
+#| lst-cap: Simply compute the Pearson correlation score at the replicate level, and save the output as a `SummarizedExperiment`.
+
+## 2) prepare SummarizedExperiment inputs ----
+## Barcode counts at replicate level
+barcode_normalised_replicates_mat <- barcode_counts_normalised |> 
+                  tibble::column_to_rownames("barcode_id") |> 
+                  as.matrix()
+
+## Sample metadata
+pheno_data_replicates <- pheno_data |> 
+  tibble::column_to_rownames("Replicates_ID") 
+
+## Feature metadata
+barcode_metadata <- tibble::tibble(barcode_id = barcode_counts_normalised$barcode_id)
+row.names(barcode_metadata) <- barcode_metadata$barcode_id
+
+## 3) Buid and Save SummarizedExperiment
+se_replicates <- SummarizedExperiment::SummarizedExperiment(
+  assays = list(counts = barcode_normalised_replicates_mat),
+  rowData = barcode_metadata,
+  colData = pheno_data_replicates)
+
+``` 
+
+- Medium level of granularity in @lst-SummarizedExperiment-compound-per-batch, averaging over replicates:
+
+```{r}
+#| label: SummarizedExperiment-compound-per-batch
+#| lst-label: lst-SummarizedExperiment-compound-per-batch
+#| lst-cap: Simply compute the Pearson correlation score at the Compound per Batch level.
+
+barcode_counts_long <- barcode_counts_normalised |> 
+  tidyr::pivot_longer(-barcode_id, 
+                      names_to = "Replicates_ID",
+                      values_to = "Barcode_Counts") |> 
+  dplyr::inner_join(pheno_data, by="Replicates_ID")
+
+barcode_counts_wider_compound_batch <- barcode_counts_long |> 
+  tidyr::pivot_wider(id_cols = c(barcode_id), 
+                     names_from = c(Batch_ID, Compound, Concentrations_ID, Duration_ID),
+                     names_sep = ":",
+                     values_from = Barcode_Counts, 
+                     values_fn=mean)
+
+pheno_compound_batch <- tibble::tibble(original =setdiff(colnames(barcode_counts_wider_compound_batch),"barcode_id")) |>
+  mutate(Batch_ID = stringr::str_split_i(original, ":", 1),
+         Compound = stringr::str_split_i(original, ":", 2), 
+         Concentrations_ID = stringr::str_split_i(original, ":", 3), 
+         Duration_ID = stringr::str_split_i(original, ":", 4)) |>
+  inner_join(pheno_data |> select(Batch_ID, Pathway, MoA, Compound, 
+                                  Concentrations, Concentrations_ID, Duration, Duration_ID), 
+             by = c("Batch_ID", "Compound", "Concentrations_ID", "Duration_ID")) |> 
+  dplyr::distinct() |> 
+  dplyr::select(-Concentrations_ID, -Duration_ID) |> 
+  tibble::column_to_rownames("original") 
+
+se_compound_batch <- SummarizedExperiment::SummarizedExperiment(
+  assays = list(counts = barcode_counts_wider_compound_batch |> 
+                  tibble::column_to_rownames("barcode_id") |> 
+                  as.matrix()),
+  rowData = barcode_metadata,
+  colData = pheno_compound_batch)
+
+```
+
+- Low level of granularity in @lst-SummarizedExperiment-compound, with one CC per compound:
+
+```{r}
+#| label: SummarizedExperiment-compound
+#| lst-label: lst-SummarizedExperiment-compound
+#| lst-cap: Compute the Pearson correlation score, after averaging the barcode counts per compound.
+
+barcode_counts_wider_by_compound <- barcode_counts_long |> 
+  tidyr::pivot_wider(id_cols = c(barcode_id), 
+                     names_from = c(Compound),
+                     values_from = Barcode_Counts, 
+                     values_fn=mean)
+
+pheno_compound <- tibble::tibble(Compound = setdiff(colnames(barcode_counts_wider_by_compound), "barcode_id")) |>
+  inner_join(pheno_data |> select(Pathway, MoA, Compound), 
+             by = c("Compound")) |> 
+  dplyr::distinct() |> 
+  tibble::column_to_rownames("Compound") 
+
+se_compound <- SummarizedExperiment::SummarizedExperiment(
+  assays = list(counts = barcode_counts_wider_by_compound |> 
+                  tibble::column_to_rownames("barcode_id") |> 
+                  as.matrix()),
+  rowData = barcode_metadata,
+  colData = pheno_compound)
+
+```
+
+```{r}
+#| label: save-SummarizedExperiment-counts
+
+saveRDS(se_replicates, file = paste0("./results/compounds/se_normalised_per_replicate_",
+                          today_date, ".rds"))
+saveRDS(se_compound_batch, file = paste0("./results/compounds/se_normalised_per_compound_by_batch_",
+                          today_date, ".rds"))
+saveRDS(se_compound, file = paste0("./results/compounds/se_normalised_per_compound_",
+                          today_date, ".rds"))
+```
+
+
+### **Differential analyses** and Binarisation
+
+1. [Calculate mean of the 4 controls, followed by **Differential Represented Barcode Analysis**: binarise each replicate, assigning a 1 if Fold change is above 3 with respect to Mean value, and 0 otherwise]{fg="blue"} 
+
+```{r}
+#| label: differential-barcode-analysis
+#| lst-label: lst-differential-barcode-analysis
+#| lst-cap: Compute the averaged value for control replicates, then binarise for each compound. A `1` denoting a significant positive enrichment for a given `barcode_id`.
+
+## Step 1: Compute control means per barcode_id and Batch ----
+threshold_FC <- 3
+control_means <- barcode_counts_long |>
+  filter(Compound == "Control") |>
+  group_by(Batch_ID, barcode_id) |>
+  summarise(Control_Mean = mean(Barcode_Counts), .groups = "drop")
+
+## Step 2: Join control mean to full dataset ----
+barcode_discretised_replicates <- barcode_counts_long |>
+  left_join(control_means, 
+            by = c("Batch_ID","barcode_id"))
+
+## Step 3: Compute Fold Change and discretise ----
+barcode_discretised_replicates <- barcode_discretised_replicates |>
+  filter(Compound != "Control") |>
+  mutate(Diff = Barcode_Counts - Control_Mean,
+    Barcode_Counts = if_else(Diff > threshold_FC, 1, 0)) |>
+  ## Final cleanup 
+  select(-Diff, -Control_Mean)  |> 
+  dplyr::mutate(Barcode_Counts = as.logical(Barcode_Counts))
+
+```
+
+[Batch effect correction for integrating across batches? // As Vera emphasised it out, why keeping only positive values? Negative are also interesting. Why not pairing $p$-values and fold-change (considering indeed really small sample sizes)? // All these operations can be performed with one run, using `lm`, and a model as such, $\text{Expr} \sim 0 + \text{Gene} + \text{Batch} + \text{Drug}$, with a `contr.treatment` design matrix // Perform **sensitivity analyses** to evaluate the impact of threshold criteriaon for binarisation on downstream analyses. [^1]]{fg="red"}.
+
+[^1]: Test the **Helmert contrast** to evaluate *compound dose response*, or *time-course replicates*. Also For repeated measures across time, see [One Way repeated measure ANOVA in R](https://www.r-bloggers.com/2025/02/one-way-repeated-measure-anova-in-r/)
+
+#### `SummarizedExperiment` of binarised markers
+
+- `SummarizedExperiment` at the replicates level (controls being discarded)
+
+```{r}
+#| label: replicates-discretised
+## Step 4: Save as a SummarizedExperiment ----
+barcode_discretised_replicates_mat <- barcode_discretised_replicates |> 
+  tidyr::pivot_wider(id_cols = barcode_id, names_from = Replicates_ID, values_from = Barcode_Counts)
+
+pheno_replicates_discretised <- pheno_data |> 
+  dplyr::filter(Replicates_ID %in% barcode_discretised_replicates$Replicates_ID) |> 
+  tibble::column_to_rownames("Replicates_ID") 
+
+se_discretised_replicates <- SummarizedExperiment::SummarizedExperiment(
+  assays = list(binarised = barcode_discretised_replicates_mat |> 
+                  tibble::column_to_rownames("barcode_id") |> 
+                  as.matrix()),
+  rowData = barcode_metadata,
+  colData = pheno_replicates_discretised)
+
+saveRDS(se_discretised_replicates,
+        file = paste0("./results/compounds/se_discretised_per_replicate_",
+                      today_date, ".rds"))
+```
+
+
+- [Logical `AND` over replicates: drug by batch (and concentration and time).]{fg="blue"} 
+
+```{r}
+#| label: compound-by-batch-discretised
+#| lst-label: lst-compound-by-batch-discretised
+#| lst-cap: "Average the replicates, using a `all` operator."
+
+## 2) discretised correlation at the compound by batch level (averaging over replicates), with an all function
+barcode_discretised_compound_batch <- barcode_discretised_replicates |> 
+   tidyr::pivot_wider(id_cols = c(barcode_id), 
+                     names_from = c(Batch_ID, Compound, Concentrations_ID, Duration_ID),
+                     names_sep = ":",
+                     values_from = Barcode_Counts, 
+                     values_fn=all)
+
+pheno_discretised_compound_batch <- pheno_compound_batch[setdiff(colnames(barcode_discretised_compound_batch), "barcode_id"), ]
+
+se_compound_batch_discretised <- SummarizedExperiment::SummarizedExperiment(
+  assays = list(discretised = barcode_discretised_compound_batch |> 
+                  tibble::column_to_rownames("barcode_id") |> 
+                  as.matrix()),
+  rowData = barcode_metadata,
+  colData = pheno_discretised_compound_batch)
+
+saveRDS(se_compound_batch_discretised,
+        file = paste0("./results/compounds/se_discretised_per_compound_by_batch_",
+                      today_date, ".rds"))
+
+```
+
+- [Average over compounds.]{fg="blue"} 
+
+```{r}
+#| label: compound-discretised
+#| lst-label: lst-compound-discretised
+#| lst-cap: "Aggregate at the compound level, assigning a 1 if barcode cell lines were found positiveliy enriched in all compounds."
+## 2) discretised correlation at the compound by batch level (averaging over replicates), with an all function
+barcode_discretised_compound <- barcode_discretised_replicates |> 
+   tidyr::pivot_wider(id_cols = c(barcode_id), 
+                     names_from = c(Compound),
+                     names_sep = ":",
+                     values_from = Barcode_Counts, 
+                     values_fn=all)
+
+pheno_discretised_compound<- pheno_compound[setdiff(colnames(barcode_discretised_compound), "barcode_id"), ]
+
+se_compound_discretised <- SummarizedExperiment::SummarizedExperiment(
+  assays = list(discretised = barcode_discretised_compound |> 
+                  tibble::column_to_rownames("barcode_id") |> 
+                  as.matrix()),
+  rowData = barcode_metadata,
+  colData = pheno_discretised_compound)
+
+saveRDS(se_compound_discretised,
+        file = paste0("./results/compounds/se_discretised_per_compound_",
+                      today_date, ".rds"))
+
+```
+
