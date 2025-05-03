@@ -56,6 +56,11 @@ format_concentrations <- function(x) {
     }
   })
   return(x_formatted)
-
 }
+
+
+enc_to_ascii <- function(text, replace_with = ".") {
+  iconv(text, from = "UTF-8", to = "ASCII", sub = replace_with)
+}
+
 

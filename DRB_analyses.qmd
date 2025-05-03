@@ -1,15 +1,12 @@
 ---
-title: "Inferring the MOA of new drugs through the analysis of heterogeneous response to treatment of different subpopulations of cancer cells"
-author: "Bastien CHASSAGNOL and Vera PANCALDI and Luca GRUMULATO"
+title: "Inferring the MoA of new drugs through the analysis of heterogeneous response to treatment of different subpopulations of cancer cells"
+author: "Bastien CHASSAGNOL and Vera PANCALDI and Luca GRUMULATO and Marie-Pier SCOTT KELLY"
 date: last-modified	
 number-sections: true
 toc: true
 toc-depth: 3
 lang: en-GB
-# subject: "Cell-cell benchmark"
-# keywords: ["cell-cell communication", "benchmark", "spatial transcriptomics", "single-cell"]
-# bibliographic options
-bibliography: DRB_fingerprints.bib
+bibliography: "DRB Barcoding and Drug Fingerprints.bib"
 link-citations: true
 highlight-style: github
 filters:
@@ -93,6 +90,9 @@ library(igraph)
 source("R/utils.R")
 today_date <- "2025-04-28"
 # today_date <- format(Sys.Date(), "%Y-%m-%d")
+
+# set the seed, for fixing generation of ComplexHeatmaps (dendogram clustering)
+set.seed(20)
 ```
 
 # Data management
@@ -124,22 +124,40 @@ barcode_matrices <- lapply(barcode_files, function(old_filename) {
     
 ## Experiment selection and formatting {#sec-select-exp}
 
-We early discarded the following expression files:
+We early discarded `exp130921_in vivo.csv` from the experiences
 
-- ['Experiment Date': `130921` and 'Run Date': `101121` `exp130921_in vivo.csv`]{fg="red"}
+<!-- - ['Experiment Date': `130921` and 'Run Date': `101121` ]{fg="red"} -->
+
+<!-- ```{r} -->
+<!-- #| label: select-expression-130921 -->
+<!-- #| eval: false -->
+<!-- #| echo: false -->
+
+<!-- exp130921_expression <- readr::read_csv("data/barcode-counts/exp130921.csv")  -->
+<!-- exp130921_1_expression <- readr::read_csv("data/barcode-counts/exp130921_1.csv")  -->
+<!-- selected_dataset <- compare_dataframes(exp130921_expression, exp130921_1_expression) -->
+<!-- ``` -->
+
+<!-- [Conclusion: Keep `exp130921.csv`, and discard expression file `exp130921_1.csv`. The latter indeed exhibited fewer barcode IDs, while on the shared overlap, both datasets are identical.]{fg="red"} -->
 
 ```{r}
-#| label: select-expression-130921
+#| label: select-expression-300821
 #| eval: false
-#| echo: true
+#| echo: false
 
-exp130921_expression <- readr::read_csv("data/barcode-counts/exp130921.csv") 
-exp130921_1_expression <- readr::read_csv("data/barcode-counts/exp130921_1.csv") 
-selected_dataset <- compare_dataframes(exp130921_expression, exp130921_1_expression)
+
+exp300821 <- readr::read_csv("data/barcode-counts/exp300821.csv") 
+
+# fake additional colnames, containing only missing colnames
+exp300821_whole <- readr::read_csv2("old-data-backup/data-raw/barcode-counts/exp300821.csv") |> 
+  rename(barcode_id = 1)
+selected_dataset <- compare_dataframes(exp300821, exp300821_whole)
+
+setdiff(exp300821$barcode_id, exp300821_whole$barcode_id)
+cor(exp300821$Osimer4_100n_exp300821_run290921_08, exp300821_whole$Osimer4_100n_exp300821_run290921_08)
+
+readr::write_csv(exp300821, "data/barcode-counts/exp300821.csv")
 ```
-
-[Conclusion: Keep `exp130921.csv`, and discard expression file `exp130921_1.csv`. The latter indeed exhibited fewer barcode IDs, while on the shared overlap, both datasets are identical.]{fg="red"}
-
 
 ```{r}
 #| label: rename-erroneous-date-271221
@@ -160,8 +178,8 @@ file.rename("data/barcode-counts/exp211221.csv", "data/barcode-counts/exp271221.
 
 ```{r}
 #| label: discriminate-200921-dose-response-standard
-#| eval: true
-#| message: true
+#| eval: false
+#| echo: false
 
 exp200921_standard <- readr::read_csv("data/barcode-counts/exp200921.csv") 
 exp200921_dose_response <- readr::read_csv("data/barcode-counts/exp200921_dose response osim.csv")
@@ -258,24 +276,7 @@ cor(controls_exp281022$ctl2, controls_exp281022$Ctrl2) # they strongly correlate
 
 ```
 
-```{r}
-#| label: select-expression-300821
-#| eval: false
-#| echo: false
 
-
-exp300821 <- readr::read_csv("data/barcode-counts/exp300821.csv") 
-
-# fake additional colnames, containing only missing colnames
-exp300821_whole <- readr::read_csv2("old-data-backup/data-raw/barcode-counts/exp300821.csv") |> 
-  rename(barcode_id = 1)
-selected_dataset <- compare_dataframes(exp300821, exp300821_whole)
-
-setdiff(exp300821$barcode_id, exp300821_whole$barcode_id)
-cor(exp300821$Osimer4_100n_exp300821_run290921_08, exp300821_whole$Osimer4_100n_exp300821_run290921_08)
-
-readr::write_csv(exp300821, "data/barcode-counts/exp300821.csv")
-```
 
 
 <!-- ### Additional comments -->
@@ -284,22 +285,21 @@ readr::write_csv(exp300821, "data/barcode-counts/exp300821.csv")
 <!-- - `exp281022`: control, protac, cetuximab and gefitinib ($n=4$ replicates each time) were sampled in T25 flasks. P42 and P43 correspond to cells grown without treatment for 42 or 43 passages, and were used for evaluating *barcode drift* technical artefact. -->
 <!-- - `exp281022_time course`: time course experiment. -->
 
-### TODO and TOKEEPINMIND: barcode counts
+### TODO: barcode counts inconsistencies
 
 Things to consider:
 
 - [Format used is **French csv**, instead of international CSV. CSV means for 'comma-separated value', maybe consider switching [Excel settings](https://support.microsoft.com/en-us/office/import-or-export-text-txt-or-csv-files-5250ac4c-663c-47ce-937b-339e391393ba).]{fg="red"}
 - [I rename the first colname of each expression file as `barcode_id`, storing unequivocal tag.]{fg="red"}
-- [Some barcode counts exhibit final line `index`, for which reason?]{fg="red"}
-<!-- - Some barcode counts matrices, such as `exp220322.csv` and `exp070222.csv` showcase a final line paired with `index` value, or even a full empty line, such as in `exp200921.csv`. Not really an issue after merging all barcode files. -->
+- Some barcode counts exhibit final line `index`, for which reason?
 
-### Overview of barcode samples
+### Overview of barcode counts
 
+We report in @tbl-overview-barcode-counts a summary of the barcode counts (File location, `batch_id`, and dimensions of the counts matrix) considered for the generation of the Heatmaps, and the construction of a drug-drug network.
 
 ```{r}
-#| label: tbl-overview-barcode-samples
+#| label: tbl-overview-barcode-counts
 #| tbl-cap: "Overview of the Barcoding Batches."
-#| cache: false
 #| tbl-subcap:
 #|   - "Kept Batches"
 #|   - "Removed batches"
@@ -309,7 +309,8 @@ Things to consider:
 barcode_files <- list.files("./data/barcode-counts/",
                             pattern = "exp.*\\.csv",
                             full.names = TRUE)
-barcode_summaries <- purrr::map(barcode_files, function(filename) {
+
+kept_barcode_summaries <- purrr::map(barcode_files, function(filename) {
   barcode_counts <- readr::read_csv(filename, show_col_types = FALSE)
   experience_name <- filename |> basename() |> tools::file_path_sans_ext()
   experience_summary <- tibble::tibble(`Experience Name`= experience_name,
@@ -320,14 +321,10 @@ barcode_summaries <- purrr::map(barcode_files, function(filename) {
   return(experience_summary)
 }) |>
   purrr::list_rbind()
-flextable::flextable(barcode_summaries) |> 
+flextable::flextable(kept_barcode_summaries) |> 
   bold(part="header")
 
-openxlsx::write.xlsx(barcode_summaries, 
-                     file = "./data/kept_experiences_overview.xlsx")
-
 # 2) summarise discarded batches ----
-
 discarded_files <- list.files("./data/barcode-counts/temp discarded/",
                             pattern = "exp.*\\.csv",
                             full.names = TRUE)
@@ -345,13 +342,12 @@ barcode_discarded_summaries <- purrr::map(discarded_files, function(filename) {
 }) |>
   purrr::list_rbind()
 
-openxlsx::write.xlsx(barcode_discarded_summaries, 
-                     file = "./data/discarded_experiences_overview.xlsx")
-
 flextable::flextable(barcode_discarded_summaries) |> 
   bold(part="header")
+
 ```
-In @tbl-overview-barcode-samples, we list the final selection of `{r} ncol(barcode_summaries)` barcode experiences considered so far in the analysis, while `{r} ncol(discarded_files)` were not considered for inclusion at all.
+
+In @tbl-overview-barcode-samples, `{r} nrow(kept_barcode_summaries)` barcode experiences were included in the analysis, whereas `{r} nrow(barcode_discarded_summaries)` batches/experiences were not included.
 
 
 ## Phenotypes {#sec-metadata-phenotypes}
@@ -360,11 +356,11 @@ In @tbl-overview-barcode-samples, we list the final selection of `{r} ncol(barco
 
 Most of the R instructions reported in this section aim at rendering the `Table of compounds` file compliant with the `tidy` format, see @tip-tidyformat. These data-wrangling operations are split in 4 steps:
 
-1. In @lst-process-pheno1, we remove columns that are not useful for pairing counts and phenotype information, nor for the statistical design, correct for wrongly reported concentrations, and deal with merged Excel cells that generate spurious missing values.
+1. In @lst-process-pheno1, we homogenise `Concentrations`, `Date` and `Duration` to ISO standards, while dealing with erroneous missing values generated by fused Excel cells. [Besides, we removed special, non-ascii characters that could not be processed by visualisation plots, such as $NF-\kappa B$.]{fg="red"}
 
 2. In @lst-process-pheno2, we retrieve from each individual barcode counts profile, the individual replicates ID identifying unequivocally each replicate. We set apart replicates that could be mapped back to original `Table of compounds` file.
 
-3. In @lst-process-pheno3, we merge together in a comprehensive phenotype table the short `Samples_ID` (short term referring to drugs listed in `Samples` column), the full `Samples` (complete name of drugs) and map each of them to its complete list of replicates (from 2 to 8). We save the output in `data-derived`.
+3. In @lst-process-pheno3, we merge together in a comprehensive phenotype table the short `Samples_ID` (short term referring to drugs listed in `Compound` column), the full `Compound` (complete name of drugs) and map each of them to its complete list of replicates (from 2 to 8). We save the output in `data-derived`.
 
 4. Finally, in @lst-check-pheno-data-1 and @lst-check-pheno-data-2, we perform several posterior *data integrity checks* to verify if i) we were able to map each individual replicate ID to its original ID in `Table of compounds`, and ii) if the number of replicates reported in [`Table of compounds`](data/Table of compounds_whole_2025-04-28.xlsx) was consistent with the number of barcode profiles.
 
@@ -373,8 +369,8 @@ Most of the R instructions reported in this section aim at rendering the `Table 
 #| lst-label: lst-process-pheno1
 #| lst-cap: Coerce original Excel file reporting experimental design to tidy format.
 
-pheno_colnames <- c(Level1 = "Pathways", Level2 = "...2", 
-                    Samples = "Samples", Replicates = "Replicates",
+pheno_colnames <- c(Pathway = "Pathways", MoA = "...2", 
+                    Compound = "Samples", Replicates = "Replicates",
                     Concentrations = "Concentrations", Date = "Experiment date",
                     `Run date` = "Run date", Duration="Duration", 
                     Kept="Kept", Comments = "Comments")
@@ -385,40 +381,35 @@ pheno_data <- readxl::read_xlsx("data/Table of compounds_whole_2025-04-28.xlsx",
                                 sheet = "Experimental Design",
                                 col_types = c(rep("text", 3), "numeric", 
                                               rep("text", 4), "logical", "text")) |>
-  rename(all_of(pheno_colnames)) |>
-  # tidyr::drop_na(Replicates, Date) |> # 3 cells seem erroenously merged
-  # missing_rows <- which(is.na(pheno_data$Replicates) & is.na(pheno_data$Date))
-  tidyr::fill(Level1, Level2, .direction = "down")
+  dplyr::rename(dplyr::all_of(pheno_colnames)) |>
+  tidyr::fill(Pathway, MoA, .direction = "down")
 
 pheno_data_discarded <- pheno_data |> 
   dplyr::filter(!Kept)
-openxlsx::write.xlsx(pheno_data_discarded, 
-                     file = paste0("data/logs/Removed_compounds_", today_date,".xlsx"), 
-                     asTable = TRUE)
 
 # Add batches and correct for fused Excel cells ----
 
 pheno_data <- pheno_data |> 
   # extract last 6 numbers
-  dplyr::mutate(Samples = if_else(grepl("Control", Level2, ignore.case = TRUE),
-                                  Level2, Samples),
+  dplyr::mutate(Compound = if_else(grepl("Control", MoA, ignore.case = TRUE),
+                                  MoA, Compound),
                 `Run date` = stringr::str_sub(`Run date`, -6, -1),
                 Batch_ID= paste0("exp", Date)) |> 
-  tidyr::fill(Samples, .direction = "down") |>
+  tidyr::fill(Compound, .direction = "down") |>
   # remove unwanted replicates
   dplyr::filter(Kept) |> 
   dplyr::mutate(Batch_ID = dplyr::if_else(Comments %in% c("Dose Response"), 
                                           "exp200921_dose response osim", Batch_ID)) |> 
   dplyr::mutate(Batch_ID = dplyr::if_else(Comments %in% c("Time Course"), 
                                           "exp281022_time course", Batch_ID), 
-                Level1 = if_else(is.na(Level1), Level2, Level1)) |> 
+                Pathway = if_else(is.na(Pathway), MoA, enc_to_ascii(Pathway))) |> 
   dplyr::select(- Comments, -Kept) |> 
   dplyr::distinct(.keep_all = TRUE) # remove duplicates
 
 # format concentrations, creating both 'Concentrations_ID' and 'Concentrations' in Moles ----
 pheno_data <- pheno_data |> 
-  dplyr::mutate(Concentrations=if_else(Samples=="Control", "000 uM", Concentrations)) |> 
-  dplyr::mutate(Concentrations=if_else(Samples=="Osimertinb+sorafenib", "015 uM", Concentrations)) |>
+  dplyr::mutate(Concentrations=if_else(Compound=="Control", "000 uM", Concentrations)) |> 
+  dplyr::mutate(Concentrations=if_else(Compound=="Osimertinb+sorafenib", "015 uM", Concentrations)) |>
   tidyr::separate_wider_delim(Concentrations, delim = " ", names = c("Concentrations Value", "Unit"), cols_remove = FALSE) |> 
   dplyr::rename(OLD_Concentrations=Concentrations) |> 
   dplyr::mutate(Unit = case_when(
@@ -450,7 +441,7 @@ pheno_data <- pheno_data |>
 
 ::: {.callout-important title="Metadata inconsistencies and Conversion to UIC Units" collapse="true"}
 
-<!-- - [For compound `SBI-0206965`, both `Date` and `Run date` were wrongly reported (either not stored in the proper barcode counts profile, or mistyped in `Table of Compounds`).]{fg="red"} -->
+<!-- - [For compound `SBI-0206965`, both `Date` and `Run date` were wrongly reported (either not stored in the proper barcode counts profile, or mistyped in `Table of Compound`).]{fg="red"} -->
 
 - [In `Run date`, when there was a range instead of a fixed Date, I kept only the end of the interval, as used for labelling colnames in barcode counts.]{fg="red"}
 
@@ -481,7 +472,7 @@ barcodes_IDs <- readxl::read_xlsx("data/Table of compounds_whole_2025-04-28.xlsx
 ```
 
 
-<!-- ::: {.callout-important title="Missing information on Table of Compounds and missing Experiences"} -->
+<!-- ::: {.callout-important title="Missing information on Table of Compound and missing Experiences"} -->
 
 <!-- We note the following inconsistencies: -->
 
@@ -489,11 +480,11 @@ barcodes_IDs <- readxl::read_xlsx("data/Table of compounds_whole_2025-04-28.xlsx
 
 <!-- 2. Using ``{r} setdiff(barcodes_IDs$Filename, barcodes_filenames)``, we certified that all remaining filenames in the folder were properly mapped. -->
 
-<!-- 3. Using ``{r} setdiff(pheno_data$Batch_ID, barcodes_IDs$Batch_ID)``, all experiments `{r} paste(setdiff(pheno_data$Batch_ID, barcodes_IDs$Batch_ID), collapse = ", ")` reported in original `Table of Compounds` could have been mapped back to an existing experiment, once `Control - time zero` have been discarded.  -->
+<!-- 3. Using ``{r} setdiff(pheno_data$Batch_ID, barcodes_IDs$Batch_ID)``, all experiments `{r} paste(setdiff(pheno_data$Batch_ID, barcodes_IDs$Batch_ID), collapse = ", ")` reported in original `Table of Compound` could have been mapped back to an existing experiment, once `Control - time zero` have been discarded.  -->
 
 <!-- ::: -->
 
-To generate the final phenotype dataset, we only keep experiences that were reported both in `Table of Compounds` and folder `barcode-counts` in @lst-process-pheno3. [**Please ensure that `Drugs Mapping` sheet in [`Table of compounds`](data/Table of compounds_whole_2025-04-28.xlsx) is correct.**]{fg="red"}
+To generate the final phenotype dataset, we only keep experiences that were reported both in `Table of Compound` and folder `barcode-counts` in @lst-process-pheno3. [**Please ensure that `Drugs Mapping` sheet in [`Table of compounds`](data/Table of compounds_whole_2025-04-28.xlsx) is correct.**]{fg="red"}
 
 ```{r}
 #| label: process-pheno3
@@ -576,33 +567,29 @@ ID_mapping <- ID_mapping |>
 # test2 <- mapping_compounds |> anti_join(ID_mapping, by = "Samples_ID")
 ```
 
-<!-- - `Alisertib` experiment from `Date: 220322` is assigned with a `050u` concentration in *counts*, against `050n` in *phenotype data*. -->
-<!-- - `Sorafenib` experiment from `Date: 151121` is assigned with a `005u` concentration in *counts*, against `004u` in *phenotype data*. On the other hand, `Sorafenib` experiment from `Date: 300821` with a `005u` concentration in *phenotype data* has been removed in *counts*. -->
 <!-- - `X13271` with concentration `005u`, both run on `Run Date: 180821`, have been discarded in *counts*. -->
 
-Finally, in @lst-check-pheno-data-1, we map all replicates (one column in a given barcode count matrix) to its comprehensive metadata descripion (stored in `Tables of compounds`), using as **primary and foreign keys** the following 6 variables: `Batch_ID`,  `Samples`, `Duration_ID`, `Run date`, `Date`, and `Concentrations_ID`.
+Finally, in @lst-check-pheno-data-1, we map all replicates (one column in a given barcode count matrix) to its comprehensive metadata descripion (stored in `Tables of compounds`), using as **primary and foreign keys** the following 6 variables: `Batch_ID`,  `Compound`, `Duration_ID`, `Run date`, `Date`, and `Concentrations_ID`.
 
 ```{r}
 #| label: tbl-check-pheno-data
 #| lst-label: lst-check-pheno-data-1 
 #| lst-cap: "Extract discarded replicates"
-#| tbl-cap: Identify set of experiences reported in `Table of compounds` that could not be mapped against their corresponding Barcode counts replicates. We check this information with an `anti_join` between original *phenotype* and *counts*, returning samples from `Table of Compounds` that could not have been mapped back.
+#| tbl-cap: Identify set of experiences reported in `Table of compounds` that could not be mapped against their corresponding Barcode counts replicates. We check this information with an `anti_join` between original *phenotype* and *counts*, returning samples from `Table of Compound` that could not have been mapped back.
+
+replicates_discarded <- dplyr::anti_join(ID_mapping, pheno_data,
+                                     by = c("Batch_ID",  "Compound", "Duration_ID",
+                                            "Run date", "Date", "Concentrations_ID"))
 
 pheno_data_unmapped <- dplyr::anti_join(pheno_data,
                                      ID_mapping,
-                                     by = c("Batch_ID",  "Samples", "Duration_ID",
+                                     by = c("Batch_ID",  "Compound", "Duration_ID",
                                             "Run date", "Date", "Concentrations_ID"))
 
 pheno_data_unmapped |> 
-  arrange(Samples, Date, Concentrations_ID) |> 
+  arrange(Compound, Date, Concentrations_ID) |> 
   flextable() |> 
   bold(part = "header")
-
-replicates_discarded <- dplyr::anti_join(ID_mapping, pheno_data,
-                                     by = c("Batch_ID",  "Samples", "Duration_ID",
-                                            "Run date", "Date", "Concentrations_ID"))
-readr::write_csv(replicates_discarded, 
-                 file = paste0("data/logs/discarded_replicates_", today_date,".csv"))
 ```
 
 In @tbl-check-pheno-data-2, we check discrepancies between the number of barcode replicates reported in `Table of compounds` with the number of replicates avalaible in barcode counts matrices. [And it turned out that `compound`: XAV-939, `Date`: 220322, is reported with 4 replicates, while only 2 could be found in [`exp220322` barcode count matrix](./data/barcode-counts/exp220322.csv)]{fg="red"}
@@ -616,9 +603,9 @@ In @tbl-check-pheno-data-2, we check discrepancies between the number of barcode
 replicate_inconsistencies <- pheno_data |> 
   dplyr::inner_join(ID_mapping,
                     by = c("Batch_ID", "Date", 
-                           "Samples", "Run date",
+                           "Compound", "Run date",
                            "Concentrations_ID", "Duration_ID")) |>
-  group_by(Batch_ID, Samples, Date, Replicates, Concentrations_ID,Duration_ID) |>
+  group_by(Batch_ID, Compound, Date, Replicates, Concentrations_ID,Duration_ID) |>
   summarise(n=n()) |>
   filter(n!=Replicates)
 
@@ -630,7 +617,7 @@ flextable(replicate_inconsistencies) |>
 
 ### Save phenotype Metadata
 
-By applying all the formatting analyses reported in @sec-metadata-phenotypes, we generate in @tbl-phenotype-metadata-saving a global metadata phenotypic table, adhering to tidy principles [@tip-tidyformat]. [Note that I renamed some colnames, better fitting usual naming conventions:        `Level1` by `Pathway`, `Level2` by `MoA` (for mechanism of action ), and `Samples` by `Compound`.]
+By applying all the formatting analyses reported in @sec-metadata-phenotypes, we generate in @tbl-phenotype-metadata-saving a global metadata phenotypic table, adhering to tidy principles [@tip-tidyformat]. 
 
 ::: {#tip-tidyformat .callout-tip title="Tidy Data Format (Key Principles)" collapse="true"}
 
@@ -651,14 +638,11 @@ This format streamlines data wrangling, and generally speaking, data analysis an
 pheno_data_formatted <- pheno_data |> 
   dplyr::inner_join(ID_mapping,
                     by = c("Batch_ID", "Date", 
-                           "Samples", "Run date",
+                           "Compound", "Run date",
                            "Concentrations_ID", "Duration_ID")) |> 
-  dplyr::select(Batch_ID,
-                # samples names
-                Pathway=Level1, MoA=Level2,
-                Compound=Samples, Samples_ID,
+  dplyr::select(Batch_ID, Pathway, MoA,
+                Compound, Samples_ID, 
                 Replicates, Replicates_ID,
-                # replicate features
                 Concentrations, Concentrations_ID, 
                 Date, `Run date`, Duration, Duration_ID) |> 
   # convert to ISO 1860 Date format
@@ -670,12 +654,28 @@ pheno_data_formatted <- pheno_data |>
                                  gsub("exp200921_", "exp200921_dose_response_", Replicates_ID),
                                  Replicates_ID))
 
-# certify unique replicates ID
+# 2) QC: guarantee uniqueness of the replicates
 pheno_data_deduplicated <- pheno_data_formatted |> 
   dplyr::distinct(Replicates_ID, .keep_all = TRUE)
 all.equal(pheno_data_deduplicated, pheno_data_formatted)
 
-# step 5) save the tidy phenotype metatada table ----
+# 3) save as .xlsx file discarded and preserved replicates
+
+barcode_counts_summaries <- list("kept counts" = kept_barcode_summaries,
+                                 "kept compounds" = pheno_data,
+                                 "kept replicates" = pheno_data_formatted |> 
+                                   select(Compound, Replicates_ID),
+                                 "discarded counts" = barcode_discarded_summaries, 
+                                 "discarded compounds"=pheno_data_discarded, 
+                                 "discarded replicates" = replicates_discarded)
+
+openxlsx::write.xlsx(x = barcode_counts_summaries,
+                     file = paste0("./data/logs/barcode_metadata_overview_",
+                                   today_date,".xlsx"),
+                     overwrite = TRUE, asTable = TRUE)
+
+
+# 4) save the tidy phenotype metatada table ----
 readr::write_csv(pheno_data_formatted,
                  file = paste0("data/pheno_data_metadata_", today_date,".csv"))
 
@@ -685,7 +685,7 @@ flextable::flextable(head(pheno_data_formatted)) |>
 ```
 
 
-**Conclusion**: on a total of `{r} nrow(ID_mapping)`, `{r} nrow(pheno_data_formatted)` replicates are kept, and `{r} nrow(replicates_discarded)` replicates were removed^[**Side note**: there are `{r} length(unique(pheno_data_formatted$Replicates_ID))` replicates, less than the total number of rows, due to the 4 Controls shared between `exp200921` and `exp200921_dose response osim`.].
+**Conclusion**: on a total of `{r} nrow(ID_mapping)`, `{r} nrow(pheno_data_formatted)` replicates are kept, and `{r} nrow(replicates_discarded)` replicates were removed.
 
 # Methods
 
@@ -696,8 +696,6 @@ flextable::flextable(head(pheno_data_formatted)) |>
 ### **Background Noise Removal** and `SummarizedExperiment` stantardised storage
 
 [Eliminate barcodes for which the combined counts of the 4 controls per barcode are below a given threshold, here `5`.]{fg="blue"} 
-
-- After filtering for background noise, and merging all experiences based on shared barcode IDs, `{r} nrow(barcode_counts_aggregated)` unique barcode IDs are kept, for `{r} rnow(pheno_data)` samples, see @lst-background-filtering for details.
 
 ```{r}
 #| label: background-filtering-and-sample-merging
@@ -752,8 +750,9 @@ barcode_counts_aggregated <- barcode_counts_aggregated |>
   select(all_of(c("barcode_id", pheno_data$Replicates_ID)))
 ```
 
+- After filtering for background noise, and merging all experiences based on shared barcode IDs, `{r} nrow(barcode_counts_aggregated)` unique barcode IDs are kept, for `{r} nrow(pheno_data)` samples, see @lst-background-filtering for details.
 
--   [Density plots to evaluate the relevance of this threshold, `HTSFilter`, comparison with existing filtering approaches, ... But removing noise is indeed a great point!!, especially with the original high number of barcodes. However, why only performing this operation on control cases?]{fg="red"}
+- [Density plot of controls + justify why + check absence of outliers, to evaluate the relevance of this threshold, `HTSFilter`, comparison with existing filtering approaches.]{fg="red"}
 
 ### **Normalisation**
 
@@ -888,12 +887,12 @@ saveRDS(se_compound, file = paste0("./results/compounds/se_normalised_per_compou
 
 ## **Differential analyses** and Binarisation
 
-1. [Calculate mean of the 4 controls, followed by **Differential Represented Barcode Analysis**: binarise each replicate, assigning a 1 if Fold change is above 3 with respect to Mean value, and 0 otherwise^[The `Warning: Detected an unexpected many-to-many relationship between x and y.` results from shared Control samples.]]{fg="blue"} 
+1. [Calculate mean of the 4 controls, followed by **Differential Represented Barcode Analysis**: binarise each replicate, assigning a 1 if Fold change is above 3 with respect to Mean value, and 0 otherwise]{fg="blue"} 
 
 ```{r}
 #| label: differential-barcode-analysis
 #| lst-label: lst-differential-barcode-analysis
-#| lst-cap: Compute the averaged value for control replicates, then binarise for each compound: a `1` denoting a significant positive enrichment for a given `barcode_id`.
+#| lst-cap: Compute the averaged value for control replicates, then binarise for each compound. A `1` denoting a significant positive enrichment for a given `barcode_id`.
 
 # Step 1: Compute control means per barcode_id and Batch ----
 threshold_FC <- 3
@@ -1045,7 +1044,7 @@ saveRDS(se_compound_discretised,
 #| fig-cap: "Heatmap of normalised replication scores, \n generated with the simple Pearson Correlation score."
 
 # Read SummarizedExperiment object
-se_normalised_replicate <- readRDS("./results/compounds/se_normalised_per_replicate_2025-04-28.rds")
+se_normalised_replicate <- readRDS(paste0("./results/compounds/se_normalised_per_replicate_", today_date, ".rds"))
 se_normalised_replicate_mat <- SummarizedExperiment::assay(se_normalised_replicate)
 se_normalised_pheno_data_replicate <- SummarizedExperiment::colData(se_normalised_replicate)
 se_normalised_pheno_data_replicate$log10Conc <- if_else(se_normalised_pheno_data_replicate$Concentrations==0, 
@@ -1108,7 +1107,7 @@ ggsave(paste0("figures/compounds/heatmap_normalised_replicates_", today_date,".p
 #| fig-cap: "Heatmap of normalised compounds by batch(aggregated over replicates) with CC."
 
 # Read SummarizedExperiment object
-se_normalised_compound_batch <- readRDS("./results/compounds/se_normalised_per_compound_by_batch_2025-04-28.rds")
+se_normalised_compound_batch <- readRDS(paste0("./results/compounds/se_normalised_per_compound_by_batch_", today_date, ".rds"))
 se_normalised_compound_batch_mat <- SummarizedExperiment::assay(se_normalised_compound_batch)
 se_pheno_data_normalised_compound_batch <- SummarizedExperiment::colData(se_normalised_compound_batch)
 # Compute global correlation score
@@ -1126,7 +1125,7 @@ ha <- ComplexHeatmap::HeatmapAnnotation(df = se_pheno_data_normalised_compound_b
 # Define Heatmap
 heatmap_normalised_compound_batch <- ComplexHeatmap::Heatmap(cor_per_compound_by_batch, 
                                           col=col_heatmap_scale, 
-                                          name = "CC for all Compounds", 
+                                          name = "CC for all Compound", 
                                           show_row_names = TRUE,
                                           show_column_names = TRUE, 
                                           row_dend_reorder = TRUE,
@@ -1149,7 +1148,7 @@ ggsave(paste0("figures/compounds/heatmap_normalised_compound_by_batch_", today_d
 #| fig-cap: "Heatmap generated with the simple Pearson Correlation score."
 
 # Read SummarizedExperiment object
-se_normalised_compound <- readRDS("./results/compounds/se_normalised_per_compound_2025-04-28.rds")
+se_normalised_compound <- readRDS(paste0("./results/compounds/se_normalised_per_compound_", today_date, ".rds"))
 se_normalised_compound_mat <- SummarizedExperiment::assay(se_normalised_compound)
 se_normalised_pheno_data_compound <- SummarizedExperiment::colData(se_normalised_compound)
 # Compute global correlation score
@@ -1167,7 +1166,7 @@ ha <- ComplexHeatmap::HeatmapAnnotation(df = se_normalised_pheno_data_compound |
 # Define Heatmap
 heatmap_normalised_compound <- ComplexHeatmap::Heatmap(cor_per_compound, 
                                           col=col_heatmap_scale, 
-                                          name = "CC for all Compounds", 
+                                          name = "CC for all Compound", 
                                           show_row_names = TRUE,
                                           show_column_names = TRUE, 
                                           row_dend_reorder = FALSE,
@@ -1191,7 +1190,7 @@ ggsave(paste0("figures/compounds/heatmap_normalised_compound_", today_date,".pdf
 #| fig-cap: "Heatmaps at the replicates level."
 
 # Read SummarizedExperiment object
-se_binarised_replicates <- readRDS("./results/compounds/se_discretised_per_replicate_2025-04-28.rds")
+se_binarised_replicates <- readRDS(paste0("./results/compounds/se_discretised_per_replicate_", today_date, ".rds"))
 se_binarised_replicates_mat <- SummarizedExperiment::assay(se_binarised_replicates)
 se_binarised_pheno_data_replicate <- SummarizedExperiment::colData(se_binarised_replicates)
 # Compute global correlation score
@@ -1231,7 +1230,7 @@ ggsave(paste0("figures/compounds/heatmap_binarised_replicates_", today_date,".pd
 #| fig-cap: "Heatmaps at the compound by batch level."
 
 # Read SummarizedExperiment object
-se_binarised_compound_batch <- readRDS("./results/compounds/se_discretised_per_compound_by_batch_2025-04-28.rds")
+se_binarised_compound_batch <- readRDS(paste0("./results/compounds/se_discretised_per_compound_by_batch_", today_date, ".rds"))
 se_binarised_compound_batch_mat <- SummarizedExperiment::assay(se_binarised_compound_batch)
 se_binarised_pheno_data_compound_batch <- SummarizedExperiment::colData(se_binarised_compound_batch)
 # Compute global correlation score
@@ -1271,7 +1270,7 @@ ggsave(paste0("figures/compounds/heatmap_binarised_compound_by_batch_", today_da
 #| fig-cap: "Heamaps at the compound level."
 
 # Read SummarizedExperiment object
-se_binarised_compound <- readRDS("./results/compounds/se_discretised_per_compound_2025-04-28.rds")
+se_binarised_compound <- readRDS(paste0("./results/compounds/se_discretised_per_compound_", today_date, ".rds"))
 se_binarised_compound_mat <- SummarizedExperiment::assay(se_binarised_compound)
 se_binarised_pheno_data_compound <- SummarizedExperiment::colData(se_binarised_compound)
 # Compute global correlation score
@@ -1375,7 +1374,7 @@ igraph::write_graph(graph = compound_graph,
 
 ## Compute Cell Lines Similarities
 
-### Cell Line by Samples
+### Cell Line by Compound
 
 ```{r}
 #| label: fig-heatmap-cell-lines-by-samples
@@ -1415,6 +1414,7 @@ ggsave(paste0("figures/cell_lines/heatmap_cell_lines_by_samples_", today_date,".
 ```{r}
 #| label: fig-heatmap-cell-lines-by-cell-lines
 #| fig-cap: "Histogram of the distribution of cell resistance (for a given barcode ID, returns the total number of cell lines identified)."
+#| cache: true
 
 # 1) evaluation of cell resistance
 present_cells <- rowSums(se_binarised_compound_batch_mat)
@@ -1453,6 +1453,10 @@ ggsave(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date
 
 
 # Perspectives
+
+## Alternative metrics
+
+- [Compute correlations with strongly sparse vectors?](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_1-you-have-a-clear-question-is-gene-a-activity-7322971683596734464-5BqV)
 
 ## Pair Single Cell with (or without) Drug fingerprints
 
