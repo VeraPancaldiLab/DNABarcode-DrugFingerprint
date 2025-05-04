@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-GB" xml:lang="en-GB"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>1&nbsp; Data management: metadata correction and cleansing – Inferring the MoA of drugs based on barcode fingerprints.</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./methods.html" rel="next">
+<link href="./index.html" rel="prev">
+<link href="./assets/favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-86daaaaad7353f9cc0c554efc1dd6d94.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-f8dc6eab18fde03278982b0b35885446.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-2f278a1226d9ba6da7f61205d60cdf5d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-64136358cfb85196bf3d352ee32f7b63.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><style>html{ scroll-behavior: smooth; }</style>
+<script async="" src="https://hypothes.is/embed.js"></script><script>
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    document.body.classList.add('hypothesis-enabled');
+  });
+</script><link href="site_libs/tabwid-1.1.3/tabwid.css" rel="stylesheet">
+<script src="site_libs/tabwid-1.1.3/tabwid.js"></script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+<meta property="og:title" content="1&nbsp; Data management: metadata correction and cleansing – Inferring the MoA of drugs based on barcode fingerprints.">
+<meta property="og:description" content="">
+<meta property="og:site_name" content="Inferring the MoA of drugs based on barcode fingerprints.">
+</head>
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data-management.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Data management: metadata correction and cleansing</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Cell Barcoding and Drug Fingerprints</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://github.com/VeraPancaldiLab/DNABarcode-DrugFingerprint/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="./Inferring-the-MoA-of-drugs-based-on-barcode-fingerprints..docx" title="Download Docx" class="quarto-navigation-tool px-1" aria-label="Download Docx"><i class="bi bi-file-word"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-management.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Data management: metadata correction and cleansing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Methods: normalise, identify DRBs and save as <code>SummarizedExperiment</code> objects</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Results: Heatmaps and Drug networks, based on barcode fingerprints</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./perspectives.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Future perspectives: single-cell integration.</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cell-lines-databases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Appendix: publish to standardised cell line repositories.</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliographic References</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#reproducibility" id="toc-reproducibility" class="nav-link active" data-scroll-target="#reproducibility"><span class="header-section-number">1.1</span> Reproducibility</a></li>
+  <li>
+<a href="#sec-select-exp" id="toc-sec-select-exp" class="nav-link" data-scroll-target="#sec-select-exp"><span class="header-section-number">1.2</span> Barcode counts cleaning</a>
+  <ul>
+<li><a href="#todo-barcode-counts-inconsistencies" id="toc-todo-barcode-counts-inconsistencies" class="nav-link" data-scroll-target="#todo-barcode-counts-inconsistencies"><span class="header-section-number">1.2.1</span> TODO: barcode counts inconsistencies</a></li>
+  <li><a href="#overview-of-barcode-counts" id="toc-overview-of-barcode-counts" class="nav-link" data-scroll-target="#overview-of-barcode-counts"><span class="header-section-number">1.2.2</span> Overview of barcode counts</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#sec-metadata-phenotypes" id="toc-sec-metadata-phenotypes" class="nav-link" data-scroll-target="#sec-metadata-phenotypes"><span class="header-section-number">1.3</span> Phenotype metadata cleaning</a>
+  <ul>
+<li><a href="#save-phenotype-metadata" id="toc-save-phenotype-metadata" class="nav-link" data-scroll-target="#save-phenotype-metadata"><span class="header-section-number">1.3.1</span> Save phenotype Metadata</a></li>
+  </ul>
+</li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/VeraPancaldiLab/DNABarcode-DrugFingerprint/edit/master/data-management.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/VeraPancaldiLab/DNABarcode-DrugFingerprint/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/VeraPancaldiLab/DNABarcode-DrugFingerprint/blob/master/data-management.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content column-body" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">
+<span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Data management: metadata correction and cleansing</span>
+</h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-body">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><section id="reproducibility" class="level2" data-number="1.1"><h2 data-number="1.1" class="anchored" data-anchor-id="reproducibility">
+<span class="header-section-number">1.1</span> Reproducibility</h2>
+<p>I list below the R packages required to reproduce the analyses.</p>
+<div class="cell" data-layout-align="center">
+<details open="" class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## data wrangling</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org">stringr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org">readr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/">purrr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## reporting</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ardata-fr.github.io/flextable-book/">flextable</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## plotting</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jokergoo/ComplexHeatmap">ComplexHeatmap</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/">cowplot</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">grid</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">RColorBrewer</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r.igraph.org/">igraph</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## auxiliary functions</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="st">"R/utils.R"</span><span class="op">)</span></span>
+<span><span class="va">today_date</span> <span class="op">&lt;-</span> <span class="st">"2025-04-28"</span></span>
+<span><span class="co">## today_date &lt;- format(Sys.Date(), "%Y-%m-%d")</span></span>
+<span></span>
+<span><span class="co">## set the seed, for fixing generation of ComplexHeatmaps (dendogram clustering)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<ul>
+<li>
+<a href="https://drive.google.com/drive/folders/1pMSX4M4kHcDGxcsCzsMYHHM6VRvBHHUO">Original Google Drive repository</a>.</li>
+</ul></section><section id="sec-select-exp" class="level2" data-number="1.2"><h2 data-number="1.2" class="anchored" data-anchor-id="sec-select-exp">
+<span class="header-section-number">1.2</span> Barcode counts cleaning</h2>
+<p>We early discarded <code>exp130921_in vivo.csv</code> from the experiences</p>
+<!-- - ['Experiment Date': `130921` and 'Run Date': `101121` ]{fg="red"} -->
+<!-- ```{r} -->
+<!-- #| label: select-expression-130921 -->
+<!-- #| eval: false -->
+<!-- #| echo: false -->
+<!-- exp130921_expression <- readr::read_csv("data/barcode-counts/exp130921.csv")  -->
+<!-- exp130921_1_expression <- readr::read_csv("data/barcode-counts/exp130921_1.csv")  -->
+<!-- selected_dataset <- compare_dataframes(exp130921_expression, exp130921_1_expression) -->
+<!-- ``` -->
+<!-- [Conclusion: Keep `exp130921.csv`, and discard expression file `exp130921_1.csv`. The latter indeed exhibited fewer barcode IDs, while on the shared overlap, both datasets are identical.]{fg="red"} -->
+<div class="cell" data-layout-align="center">
+<div id="lst-rename-bad-date" class="r cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-rename-bad-date-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;1.1: Update labelling of latest experience.
+</figcaption><div aria-describedby="lst-rename-bad-date-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode" id="lst-rename-bad-date"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">exp271221</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"data/barcode-counts/exp271221.csv"</span><span class="op">)</span> </span>
+<span><span class="va">exp271221_whole</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv2</a></span><span class="op">(</span><span class="st">"old-data-backup/data-raw/barcode-counts/exp211221cor.csv"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>barcode_id <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">selected_dataset</span> <span class="op">&lt;-</span> <span class="fu">compare_dataframes</span><span class="op">(</span><span class="va">exp271221</span>, <span class="va">exp271221_whole</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.rename</a></span><span class="op">(</span><span class="st">"data/barcode-counts/exp211221.csv"</span>, <span class="st">"data/barcode-counts/exp271221.csv"</span><span class="op">)</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<p><span data-fg="red" style="color: red;">In <a href="#lst-rename-bad-date" class="quarto-xref">Listing&nbsp;<span>1.1</span></a>, we rename expression file <code>exp211221.csv</code> into <code>exp271221.csv</code>, relying on date annotations.</span></p>
+<p><span data-fg="red" style="color: red;">While the <em>dose-response</em> experience <code>exp200921_dose response osim</code> exhibits distinct biological objective, it turned out that the 4 control biological replicates are shared with classical compound response comparison <code>exp200921.csv</code>. However, <strong>the number of sequenced barcode IDs differ in both experiences!!</strong> In addition, note that <code>exp200921.csv</code> has been tagged as discarded, except for the Controls!!</span></p>
+<p>Code snippets in <a href="#lst-281022" class="quarto-xref">Listing&nbsp;<span>1.2</span></a> and <a href="#lst-281022-time-course" class="quarto-xref">Listing&nbsp;<span>1.3</span></a> aim at replacing unprecise labelling of barcode IDs (no concentration, no time duration, …) in the 2022 batch experiences.</p>
+<div class="cell" data-layout-align="center">
+<div id="lst-281022" class="r cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-281022-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;1.2: Update labelling of latest experience.
+</figcaption><div aria-describedby="lst-281022-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode" id="lst-281022"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## extract old colnames</span></span>
+<span><span class="va">exp281022_expression</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"data/barcode-counts/exp281022.csv"</span><span class="op">)</span> </span>
+<span><span class="co">## cat(colnames(exp281022_expression), file = "281022_old_labels.txt", sep = "\n")</span></span>
+<span></span>
+<span><span class="co">## extract mapping old_names with new_names</span></span>
+<span><span class="va">mapping_old_new_281022</span> <span class="op">&lt;-</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"data/Table of compounds_whole_2025-04-28.xlsx"</span>, </span>
+<span>                                             sheet <span class="op">=</span> <span class="st">"Sample Mapping 281022"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">labels_old_new_281022</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html">setNames</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mapping_old_new_281022</span><span class="op">$</span><span class="va">OLD_replicate_label</span>, </span>
+<span>                                  nm <span class="op">=</span> <span class="va">mapping_old_new_281022</span><span class="op">$</span><span class="va">NEW_replicate_label</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## apply change labelling</span></span>
+<span><span class="va">exp281022_expression</span> <span class="op">&lt;-</span> <span class="va">exp281022_expression</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">all_of</a></span><span class="op">(</span><span class="va">labels_old_new_281022</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html">write_csv</a></span><span class="op">(</span><span class="va">exp281022_expression</span>, <span class="st">"data/barcode-counts/exp281022.csv"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div id="lst-281022-time-course" class="r cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-281022-time-course-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;1.3: Update time course experiences.
+</figcaption><div aria-describedby="lst-281022-time-course-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode" id="lst-281022-time-course"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">exp281022_expression_timecourse</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"data/barcode-counts/exp281022_time course.csv"</span><span class="op">)</span> </span>
+<span><span class="co">## cat(colnames(exp281022_expression_timecourse), file = "281022_timecourse_old_labels.txt", sep = "\n")</span></span>
+<span></span>
+<span><span class="co">## update colnames ----</span></span>
+<span></span>
+<span><span class="va">mapping_old_new_time_course</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"data/Table of compounds_whole_2025-04-28.xlsx"</span>, </span>
+<span>                                     sheet <span class="op">=</span> <span class="st">"Sample Mapping Time Course"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">labels_old_new_time_course</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html">setNames</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mapping_old_new_time_course</span><span class="op">$</span><span class="va">OLD_replicate_label</span>, </span>
+<span>                                       nm <span class="op">=</span> <span class="va">mapping_old_new_time_course</span><span class="op">$</span><span class="va">NEW_replicate_label</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## apply change labelling</span></span>
+<span><span class="va">exp281022_expression_timecourse</span> <span class="op">&lt;-</span> <span class="va">exp281022_expression_timecourse</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">all_of</a></span><span class="op">(</span><span class="va">labels_old_new_time_course</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html">write_csv</a></span><span class="op">(</span><span class="va">exp281022_expression_timecourse</span>,</span>
+<span>                 <span class="st">"data/barcode-counts/exp281022_time course.csv"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## To evaluate whether controls are different between experiment 281022 and 281022 Time Course</span></span>
+<span><span class="va">controls_exp281022</span> <span class="op">&lt;-</span> <span class="va">exp281022_expression</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">key_barcode</span>, <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">matches</a></span><span class="op">(</span><span class="st">"^ctl"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">exp281022_expression_timecourse</span> <span class="op">|&gt;</span> </span>
+<span>                      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">key_barcode</span>, <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">matches</a></span><span class="op">(</span><span class="st">"^Ctrl"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                    by<span class="op">=</span><span class="st">"key_barcode"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">controls_exp281022</span><span class="op">$</span><span class="va">ctl2</span>, <span class="va">controls_exp281022</span><span class="op">$</span><span class="va">Ctrl2</span><span class="op">)</span> <span class="co">## they strongly correlate with each other, but not a perfect match -&gt; controls are indeed distinct</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<!-- ### Additional comments -->
+<!-- - `exp130921_in_vivo`: cells injected in living mice (control versus osermintinimb). -->
+<!-- - `exp281022`: control, protac, cetuximab and gefitinib ($n=4$ replicates each time) were sampled in T25 flasks. P42 and P43 correspond to cells grown without treatment for 42 or 43 passages, and were used for evaluating *barcode drift* technical artefact. -->
+<!-- - `exp281022_time course`: time course experiment. -->
+<section id="todo-barcode-counts-inconsistencies" class="level3" data-number="1.2.1"><h3 data-number="1.2.1" class="anchored" data-anchor-id="todo-barcode-counts-inconsistencies">
+<span class="header-section-number">1.2.1</span> TODO: barcode counts inconsistencies</h3>
+<p>Things to consider:</p>
+<ul>
+<li><span data-fg="red" style="color: red;">Format used is <strong>French csv</strong>, instead of international CSV. CSV means for ‘comma-separated value’, maybe consider switching <a href="https://support.microsoft.com/en-us/office/import-or-export-text-txt-or-csv-files-5250ac4c-663c-47ce-937b-339e391393ba">Excel settings</a>.</span></li>
+<li><span data-fg="red" style="color: red;">I rename the first colname of each expression file as <code>barcode_id</code>, storing unequivocal tag.</span></li>
+<li>Some barcode counts exhibit final line <code>index</code>, for which reason?</li>
+</ul></section><section id="overview-of-barcode-counts" class="level3" data-number="1.2.2"><h3 data-number="1.2.2" class="anchored" data-anchor-id="overview-of-barcode-counts">
+<span class="header-section-number">1.2.2</span> Overview of barcode counts</h3>
+<p>We report in <a href="#tbl-overview-barcode-counts" class="quarto-xref">Table&nbsp;<span>1.1</span></a> a summary of the barcode counts (File location, <code>batch_id</code>, and dimensions of the counts matrix) considered for the generation of the Heatmaps, and the construction of a drug-drug network.</p>
+<details open="" class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## 1) summarise kept batches ----</span></span>
+<span><span class="va">barcode_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="st">"./data/barcode-counts/"</span>,</span>
+<span>                            pattern <span class="op">=</span> <span class="st">"exp.*\\.csv"</span>,</span>
+<span>                            full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">kept_barcode_summaries</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">barcode_files</span>, <span class="kw">function</span><span class="op">(</span><span class="va">filename</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">barcode_counts</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="va">filename</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="va">experience_name</span> <span class="op">&lt;-</span> <span class="va">filename</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html">basename</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/fileutils.html">file_path_sans_ext</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">experience_summary</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>`Experience Name`<span class="op">=</span> <span class="va">experience_name</span>,</span>
+<span>                                       Features<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Barcode matrix contains: "</span>,</span>
+<span>                                                        <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">barcode_counts</span><span class="op">)</span>,</span>
+<span>                                                        <span class="st">" unique barcode IDs, and "</span>,</span>
+<span>                                                        <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">barcode_counts</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span>, <span class="st">" replicates."</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">experience_summary</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/list_c.html">list_rbind</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/flextable.html">flextable</a></span><span class="op">(</span><span class="va">kept_barcode_summaries</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/bold.html">bold</a></span><span class="op">(</span>part<span class="op">=</span><span class="st">"header"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## 2) summarise discarded batches ----</span></span>
+<span><span class="va">discarded_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="st">"./data/barcode-counts/temp discarded/"</span>,</span>
+<span>                            pattern <span class="op">=</span> <span class="st">"exp.*\\.csv"</span>,</span>
+<span>                            full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## change format + barcode name</span></span>
+<span><span class="va">barcode_discarded_summaries</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">discarded_files</span>, <span class="kw">function</span><span class="op">(</span><span class="va">filename</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">barcode_counts</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="va">filename</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="va">experience_name</span> <span class="op">&lt;-</span> <span class="va">filename</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html">basename</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/fileutils.html">file_path_sans_ext</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">experience_summary</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>`Experience Name`<span class="op">=</span> <span class="va">experience_name</span>,</span>
+<span>                                       Features<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Barcode matrix contains: "</span>,</span>
+<span>                                                        <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">barcode_counts</span><span class="op">)</span>,</span>
+<span>                                                        <span class="st">" unique barcode IDs, and "</span>,</span>
+<span>                                                        <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">barcode_counts</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span>, <span class="st">" replicates."</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">experience_summary</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/list_c.html">list_rbind</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/flextable.html">flextable</a></span><span class="op">(</span><span class="va">barcode_discarded_summaries</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/bold.html">bold</a></span><span class="op">(</span>part<span class="op">=</span><span class="st">"header"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div id="tbl-overview-barcode-counts" class="quarto-layout-panel anchored">
+<figure class="quarto-float quarto-float-tbl figure"><div aria-describedby="tbl-overview-barcode-counts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="tbl-overview-barcode-counts" style="flex-basis: 50.0%;justify-content: center;">
+<div id="tbl-overview-barcode-counts-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-tbl figure"><div aria-describedby="tbl-overview-barcode-counts-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div class="tabwid">
+<style>.cl-52e08058{}.cl-52d09db4{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-52d09ddc{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-52d7970e{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-52d7d1b0{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-52d7d1ba{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-52d7d1c4{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="cl-52e08058">
+<thead><tr style="overflow-wrap:break-word;">
+<th class="cl-52d7d1b0"><p class="cl-52d7970e"><span class="cl-52d09db4">Experience Name</span></p></th>
+<th class="cl-52d7d1b0"><p class="cl-52d7970e"><span class="cl-52d09db4">Features</span></p></th>
+</tr></thead>
+<tbody>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">exp010821</span></p></td>
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">Barcode matrix contains: 869714 unique barcode IDs, and 16 replicates.</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">exp040821</span></p></td>
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">Barcode matrix contains: 869714 unique barcode IDs, and 16 replicates.</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">exp070222</span></p></td>
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">Barcode matrix contains: 93132 unique barcode IDs, and 68 replicates.</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">exp130921</span></p></td>
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">Barcode matrix contains: 627539 unique barcode IDs, and 24 replicates.</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">exp151121</span></p></td>
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">Barcode matrix contains: 844434 unique barcode IDs, and 60 replicates.</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">exp181021</span></p></td>
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">Barcode matrix contains: 813579 unique barcode IDs, and 59 replicates.</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">exp200921</span></p></td>
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">Barcode matrix contains: 627539 unique barcode IDs, and 40 replicates.</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">exp200921_dose response osim</span></p></td>
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">Barcode matrix contains: 1067031 unique barcode IDs, and 20 replicates.</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">exp220322</span></p></td>
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">Barcode matrix contains: 93132 unique barcode IDs, and 66 replicates.</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">exp271221</span></p></td>
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">Barcode matrix contains: 844434 unique barcode IDs, and 80 replicates.</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">exp281022</span></p></td>
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">Barcode matrix contains: 315642 unique barcode IDs, and 22 replicates.</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">exp281022_time course</span></p></td>
+<td class="cl-52d7d1ba"><p class="cl-52d7970e"><span class="cl-52d09ddc">Barcode matrix contains: 398004 unique barcode IDs, and 51 replicates.</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-52d7d1c4"><p class="cl-52d7970e"><span class="cl-52d09ddc">exp300821</span></p></td>
+<td class="cl-52d7d1c4"><p class="cl-52d7970e"><span class="cl-52d09ddc">Barcode matrix contains: 413335 unique barcode IDs, and 28 replicates.</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-tbl" id="tbl-overview-barcode-counts-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Kept Batches
+</figcaption></figure>
+</div>
+</div>
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="tbl-overview-barcode-counts" style="flex-basis: 50.0%;justify-content: center;">
+<div id="tbl-overview-barcode-counts-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-tbl figure"><div aria-describedby="tbl-overview-barcode-counts-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div class="tabwid">
+<style>.cl-54b104c0{}.cl-54a3b5f4{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-54a3b5fe{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-54a94c6c{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-54a97d54{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-54a97d5e{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-54a97d68{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="cl-54b104c0">
+<thead><tr style="overflow-wrap:break-word;">
+<th class="cl-54a97d54"><p class="cl-54a94c6c"><span class="cl-54a3b5f4">Experience Name</span></p></th>
+<th class="cl-54a97d54"><p class="cl-54a94c6c"><span class="cl-54a3b5f4">Features</span></p></th>
+</tr></thead>
+<tbody>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-54a97d5e"><p class="cl-54a94c6c"><span class="cl-54a3b5fe">exp130921_in vivo</span></p></td>
+<td class="cl-54a97d5e"><p class="cl-54a94c6c"><span class="cl-54a3b5fe">Barcode matrix contains: 813579 unique barcode IDs, and 16 replicates.</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-54a97d68"><p class="cl-54a94c6c"><span class="cl-54a3b5fe">exp200921_dose response osim</span></p></td>
+<td class="cl-54a97d68"><p class="cl-54a94c6c"><span class="cl-54a3b5fe">Barcode matrix contains: 813579 unique barcode IDs, and 20 replicates.</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-tbl" id="tbl-overview-barcode-counts-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Removed batches
+</figcaption></figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-tbl" id="tbl-overview-barcode-counts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.1: Overview of the Barcoding Batches.
+</figcaption></figure>
+</div>
+<p>From <a href="#tbl-overview-barcode-counts" class="quarto-xref">Table&nbsp;<span>1.1</span></a>, 13 barcode experiences are included in the analysis, whereas 2 batches/experiences are filtered out.</p>
+</section></section><section id="sec-metadata-phenotypes" class="level2" data-number="1.3"><h2 data-number="1.3" class="anchored" data-anchor-id="sec-metadata-phenotypes">
+<span class="header-section-number">1.3</span> Phenotype metadata cleaning</h2>
+<ul>
+<li><span data-fg="red" style="color: red;">General question: what’s the difference between <code>Run Date</code> and <code>Experiment Date</code>?</span></li>
+</ul>
+<p>Most of the R instructions reported in this section aim at rendering the <code>Table of compounds</code> file compliant with the <code>tidy</code> format, see <a href="#tip-tidyformat" class="quarto-xref">Tip&nbsp;<span>1.1</span></a>. These data-wrangling operations are split in 4 steps:</p>
+<ol type="1">
+<li><p>In <a href="#lst-process-pheno1" class="quarto-xref">Listing&nbsp;<span>1.4</span></a>, we homogenise <code>Concentrations</code>, <code>Date</code> and <code>Duration</code> to ISO standards, while dealing with erroneous missing values generated by fused Excel cells. <span data-fg="red" style="color: red;">Besides, we removed special, non-ascii characters that could not be processed by visualisation plots, such as <span class="math inline">\(NF-\kappa B\)</span>.</span></p></li>
+<li><p>In <a href="#lst-process-pheno2" class="quarto-xref">Listing&nbsp;<span>1.5</span></a>, we retrieve from each individual barcode counts profile, the individual replicates ID identifying unequivocally each replicate. We set apart replicates that could be mapped back to original <code>Table of compounds</code> file.</p></li>
+<li><p>In <a href="#lst-process-pheno3" class="quarto-xref">Listing&nbsp;<span>1.6</span></a>, we merge together in a comprehensive phenotype table the short <code>Samples_ID</code> (short term referring to drugs listed in <code>Compound</code> column), the full <code>Compound</code> (complete name of drugs) and map each of them to its complete list of replicates (from 2 to 8). We save the output in <code>data-derived</code>.</p></li>
+<li><p>Finally, in <a href="#lst-check-pheno-data-1" class="quarto-xref">Listing&nbsp;<span>1.7</span></a> and <a href="#lst-check-pheno-data-2" class="quarto-xref">Listing&nbsp;<span>1.8</span></a>, we perform several posterior <em>data integrity checks</em> to verify if i) we were able to map each individual replicate ID to its original ID in <code>Table of compounds</code>, and ii) if the number of replicates reported in <a href="data/Table of compounds_whole_2025-04-28.xlsx"><code>Table of compounds</code></a> was consistent with the number of barcode profiles.</p></li>
+</ol>
+<div class="cell" data-layout-align="center">
+<div id="lst-process-pheno1" class="r cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-process-pheno1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;1.4: Coerce original Excel file reporting experimental design to tidy format.
+</figcaption><div aria-describedby="lst-process-pheno1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode" id="lst-process-pheno1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pheno_colnames</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>Pathway <span class="op">=</span> <span class="st">"Pathways"</span>, MoA <span class="op">=</span> <span class="st">"...2"</span>, </span>
+<span>                    Compound <span class="op">=</span> <span class="st">"Samples"</span>, Replicates <span class="op">=</span> <span class="st">"Replicates"</span>,</span>
+<span>                    Concentrations <span class="op">=</span> <span class="st">"Concentrations"</span>, Date <span class="op">=</span> <span class="st">"Experiment date"</span>,</span>
+<span>                    `Run date` <span class="op">=</span> <span class="st">"Run date"</span>, Duration<span class="op">=</span><span class="st">"Duration"</span>, </span>
+<span>                    Kept<span class="op">=</span><span class="st">"Kept"</span>, Comments <span class="op">=</span> <span class="st">"Comments"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## prune irrelevant colnames ----</span></span>
+<span><span class="co">## data/Table of compounds_stringent_2025-04-18.xlsx</span></span>
+<span><span class="va">pheno_data</span> <span class="op">&lt;-</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx</a></span><span class="op">(</span><span class="st">"data/Table of compounds_whole_2025-04-28.xlsx"</span>,</span>
+<span>                                sheet <span class="op">=</span> <span class="st">"Experimental Design"</span>,</span>
+<span>                                col_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"text"</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"numeric"</span>, </span>
+<span>                                              <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"text"</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"logical"</span>, <span class="st">"text"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">all_of</a></span><span class="op">(</span><span class="va">pheno_colnames</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/fill.html">fill</a></span><span class="op">(</span><span class="va">Pathway</span>, <span class="va">MoA</span>, .direction <span class="op">=</span> <span class="st">"down"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pheno_data_discarded</span> <span class="op">&lt;-</span> <span class="va">pheno_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">Kept</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Add batches and correct for fused Excel cells ----</span></span>
+<span></span>
+<span><span class="va">pheno_data</span> <span class="op">&lt;-</span> <span class="va">pheno_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="co">## extract last 6 numbers</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Compound <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"Control"</span>, <span class="va">MoA</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>                                  <span class="va">MoA</span>, <span class="va">Compound</span><span class="op">)</span>,</span>
+<span>                `Run date` <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_sub.html">str_sub</a></span><span class="op">(</span><span class="va">`Run date`</span>, <span class="op">-</span><span class="fl">6</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>                Batch_ID<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"exp"</span>, <span class="va">Date</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/fill.html">fill</a></span><span class="op">(</span><span class="va">Compound</span>, .direction <span class="op">=</span> <span class="st">"down"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="co">## remove unwanted replicates</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Kept</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Batch_ID <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">Comments</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Dose Response"</span><span class="op">)</span>, </span>
+<span>                                          <span class="st">"exp200921_dose response osim"</span>, <span class="va">Batch_ID</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Batch_ID <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">Comments</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Time Course"</span><span class="op">)</span>, </span>
+<span>                                          <span class="st">"exp281022_time course"</span>, <span class="va">Batch_ID</span><span class="op">)</span>, </span>
+<span>                Pathway <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Pathway</span><span class="op">)</span>, <span class="va">MoA</span>, <span class="fu">enc_to_ascii</span><span class="op">(</span><span class="va">Pathway</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span> <span class="va">Comments</span>, <span class="op">-</span><span class="va">Kept</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span>.keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co">## remove duplicates</span></span>
+<span></span>
+<span><span class="co">## format concentrations, creating both 'Concentrations_ID' and 'Concentrations' in Moles ----</span></span>
+<span><span class="va">pheno_data</span> <span class="op">&lt;-</span> <span class="va">pheno_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Concentrations<span class="op">=</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">Compound</span><span class="op">==</span><span class="st">"Control"</span>, <span class="st">"000 uM"</span>, <span class="va">Concentrations</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Concentrations<span class="op">=</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">Compound</span><span class="op">==</span><span class="st">"Osimertinb+sorafenib"</span>, <span class="st">"015 uM"</span>, <span class="va">Concentrations</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html">separate_wider_delim</a></span><span class="op">(</span><span class="va">Concentrations</span>, delim <span class="op">=</span> <span class="st">" "</span>, names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Concentrations Value"</span>, <span class="st">"Unit"</span><span class="op">)</span>, cols_remove <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>OLD_Concentrations<span class="op">=</span><span class="va">Concentrations</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Unit <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span></span>
+<span>    <span class="va">Unit</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"uM"</span>, <span class="st">"µM"</span>, <span class="st">"µg/ml"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"u"</span>,</span>
+<span>    <span class="va">Unit</span> <span class="op">==</span> <span class="st">"nM"</span> <span class="op">~</span> <span class="st">"n"</span>, </span>
+<span>    <span class="va">Unit</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"mg/kg"</span>, <span class="st">"mM"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"m"</span>, </span>
+<span>  <span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Concentrations<span class="op">=</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_number.html">parse_number</a></span><span class="op">(</span><span class="va">`Concentrations Value`</span>, trim_ws <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                            locale <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/locale.html">locale</a></span><span class="op">(</span>decimal_mark <span class="op">=</span> <span class="st">","</span>, grouping_mark <span class="op">=</span> <span class="st">"."</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Concentrations <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span></span>
+<span>    <span class="va">Unit</span> <span class="op">==</span> <span class="st">"u"</span> <span class="op">~</span> <span class="va">Concentrations</span> <span class="op">*</span><span class="fl">10</span><span class="op">^</span><span class="op">-</span><span class="fl">6</span>,</span>
+<span>    <span class="va">Unit</span> <span class="op">==</span> <span class="st">"n"</span> <span class="op">~</span> <span class="va">Concentrations</span> <span class="op">*</span><span class="fl">10</span><span class="op">^</span><span class="op">-</span><span class="fl">9</span>, </span>
+<span>    <span class="va">Unit</span> <span class="op">==</span> <span class="st">"m"</span> <span class="op">~</span> <span class="va">Concentrations</span> <span class="op">*</span><span class="fl">10</span><span class="op">^</span><span class="op">-</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>`Concentrations Value`<span class="op">=</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_number.html">parse_number</a></span><span class="op">(</span><span class="va">`Concentrations Value`</span>, trim_ws <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                            locale <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/locale.html">locale</a></span><span class="op">(</span>decimal_mark <span class="op">=</span> <span class="st">","</span>, grouping_mark <span class="op">=</span> <span class="st">"."</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>                  <span class="fu">format_concentrations</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unite.html">unite</a></span><span class="op">(</span>col <span class="op">=</span><span class="st">"Concentrations_ID"</span>, <span class="va">`Concentrations Value`</span>, <span class="va">Unit</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## format Durations, creating both 'Duration_ID' and 'Duration' as an integer value in Days ----</span></span>
+<span><span class="va">pheno_data</span> <span class="op">&lt;-</span> <span class="va">pheno_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="co">## extract last 6 numbers, as the only ones used for identification of samples downstream</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Duration_ID <span class="op">=</span> <span class="va">Duration</span>,</span>
+<span>                Duration <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_number.html">parse_number</a></span><span class="op">(</span><span class="va">Duration</span>, trim_ws <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                        locale <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/locale.html">locale</a></span><span class="op">(</span>decimal_mark <span class="op">=</span> <span class="st">"."</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>                Duration <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"m$"</span>,  <span class="va">Duration_ID</span><span class="op">)</span>,</span>
+<span>                                          <span class="va">Duration</span><span class="op">*</span><span class="fl">30</span>, <span class="va">Duration</span><span class="op">)</span><span class="op">)</span> </span>
+<span>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled" title="Metadata inconsistencies and Conversion to UIC Units">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Metadata inconsistencies and Conversion to UIC Units
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<!-- - [For compound `SBI-0206965`, both `Date` and `Run date` were wrongly reported (either not stored in the proper barcode counts profile, or mistyped in `Table of Compound`).]{fg="red"} -->
+<ul>
+<li><p><span data-fg="red" style="color: red;">In <code>Run date</code>, when there was a range instead of a fixed Date, I kept only the end of the interval, as used for labelling colnames in barcode counts.</span></p></li>
+<li><p><span data-fg="red" style="color: red;">Homogenise units for the <code>Concentrations</code> colname: convert everything to moles.</span></p></li>
+<li><p><span data-fg="red" style="color: red;">Homogenise units for <code>Date</code> and <code>Run date</code>, using international ISO 8601 format: <code>YYYY-MM-DD</code></span></p></li>
+</ul>
+</div>
+</div>
+</div>
+<p>In <a href="#lst-process-pheno2" class="quarto-xref">Listing&nbsp;<span>1.5</span></a> and <a href="#lst-process-pheno3" class="quarto-xref">Listing&nbsp;<span>1.6</span></a>, we identify which raw barcode counts matrices avalaible in folder <code>barcode-counts</code> are not reported in the global experimental dataset, and reciprocally. Finally, we only <strong>keep experiences that are both reported in <code>Table of compounds</code> and present in <code>barcode-counts</code> folder.</strong>.</p>
+<div class="cell" data-layout-align="center">
+<div id="lst-process-pheno2" class="r cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-process-pheno2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;1.5: Identify shared experience IDs between experimental design table (<code>Table of compounds</code>), and barcode-count counts profiles.
+</figcaption><div aria-describedby="lst-process-pheno2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode" id="lst-process-pheno2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## keep only relevant files </span></span>
+<span><span class="va">barcodes_filenames</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="st">"./data/barcode-counts/"</span>,</span>
+<span>                                pattern <span class="op">=</span> <span class="st">"^exp.*\\.csv$"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">barcodes_IDs</span> <span class="op">&lt;-</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx</a></span><span class="op">(</span><span class="st">"data/Table of compounds_whole_2025-04-28.xlsx"</span>,</span>
+<span>                                       sheet<span class="op">=</span><span class="st">"Batch Mapping"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Filename</span>, <span class="va">Batch_ID</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">Batch_ID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"exp130921_in vivo"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Filename <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">Filename</span>, <span class="st">".csv"</span><span class="op">)</span>, </span>
+<span>         Date <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">Batch_ID</span>, <span class="st">"(?&lt;=^exp)[[:digit:]]{6}"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<!-- ::: {.callout-important title="Missing information on Table of Compound and missing Experiences"} -->
+<!-- We note the following inconsistencies: -->
+<!-- 1. Using ``{r} setdiff(barcodes_filenames, barcodes_IDs$Filename)``, we note that the following files present in `data-raw` will be excluded: . For details, report to @sec-select-exp. -->
+<!-- 2. Using ``{r} setdiff(barcodes_IDs$Filename, barcodes_filenames)``, we certified that all remaining filenames in the folder were properly mapped. -->
+<!-- 3. Using ``{r} setdiff(pheno_data$Batch_ID, barcodes_IDs$Batch_ID)``, all experiments  reported in original `Table of Compound` could have been mapped back to an existing experiment, once `Control - time zero` have been discarded.  -->
+<!-- ::: -->
+<p>To generate the final phenotype dataset, we only keep experiences that were reported both in <code>Table of Compound</code> and folder <code>barcode-counts</code> in <a href="#lst-process-pheno3" class="quarto-xref">Listing&nbsp;<span>1.6</span></a>. <span data-fg="red" style="color: red;"><strong>Please ensure that <code>Drugs Mapping</code> sheet in <a href="data/Table of compounds_whole_2025-04-28.xlsx"><code>Table of compounds</code></a> is correct.</strong></span></p>
+<div class="cell" data-layout-align="center">
+<div id="lst-process-pheno3" class="r cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-process-pheno3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;1.6: Map each compound to its full list of replicates. Generate a <code>Batch_ID</code> to unequivocally ientify each run of experiences, and convert all run Dates to their international format.
+</figcaption><div aria-describedby="lst-process-pheno3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode" id="lst-process-pheno3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## step 1) keep only shared Batch_ID experiences ----</span></span>
+<span><span class="va">barcodes_IDs</span> <span class="op">&lt;-</span> <span class="va">barcodes_IDs</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">semi_join</a></span><span class="op">(</span><span class="va">pheno_data</span>, by<span class="op">=</span><span class="st">"Batch_ID"</span><span class="op">)</span></span>
+<span><span class="co">## exp201021 is discarded, that's normal, we just want to keep the controls!!</span></span>
+<span><span class="va">pheno_data</span> <span class="op">&lt;-</span> <span class="va">pheno_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">semi_join</a></span><span class="op">(</span><span class="va">barcodes_IDs</span>, by<span class="op">=</span><span class="st">"Batch_ID"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## step 2) extract individual replicate IDs directly from sample experiences ----</span></span>
+<span><span class="co">## Filename &lt;- "exp281022.csv"; Batch_ID &lt;- "exp281022"; Date &lt;- "281022"</span></span>
+<span><span class="va">ID_mapping</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/pmap.html">pmap</a></span><span class="op">(</span><span class="va">barcodes_IDs</span>, <span class="kw">function</span><span class="op">(</span><span class="va">Filename</span>, <span class="va">Batch_ID</span>, <span class="va">Date</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co">## build path</span></span>
+<span>  <span class="va">counts_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"data"</span>,<span class="st">"barcode-counts"</span>, </span>
+<span>                               <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">Filename</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">## extract replicate names (reading the header)</span></span>
+<span>  <span class="va">replicates_ID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span><span class="op">(</span><span class="va">counts_path</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, split <span class="op">=</span> <span class="st">","</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_subset.html">str_subset</a></span><span class="op">(</span><span class="st">"\\S"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co">## remove empty strings and 'key'</span></span>
+<span>    <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_subset.html">str_subset</a></span><span class="op">(</span><span class="st">"barcode_id"</span>, negate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co">## ID: combination of letters, numbers and -, followed by '[1-4]_', starting the sample's name</span></span>
+<span>  <span class="va">dataset_ID</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>Batch_ID <span class="op">=</span> <span class="va">Batch_ID</span>, </span>
+<span>                               Date <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">replicates_ID</span>,</span>
+<span>                                                           <span class="st">"(?&lt;=_exp)[[:alnum:]]{6}"</span><span class="op">)</span>,</span>
+<span>                               Replicates_ID <span class="op">=</span> <span class="va">replicates_ID</span>,</span>
+<span>                               `Run date` <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">replicates_ID</span>,</span>
+<span>                                                                 <span class="st">"(?&lt;=_run)[[:alnum:]]{6}(?=_)"</span><span class="op">)</span>,</span>
+<span>                               Concentrations_ID <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">replicates_ID</span>, </span>
+<span>                                                                        <span class="st">"(?&lt;=[1-8]_)[[:digit:]]{3}[gmnux]{1}(?=_exp)"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="co">## account for second notation syntax for concentrations</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Concentrations_ID <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Concentrations_ID</span><span class="op">)</span>, </span>
+<span>                                              <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">replicates_ID</span>,</span>
+<span>                                                                   <span class="st">"(?&lt;=[1-8]_)[0-9]{1}\\.[0-9]{2}[gmnux]{1}(?=_exp)"</span><span class="op">)</span>,</span>
+<span>                                              <span class="va">Concentrations_ID</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">## Deal with two time notations</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"Time"</span>,<span class="va">Batch_ID</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">dataset_ID</span> <span class="op">&lt;-</span> <span class="va">dataset_ID</span> <span class="op">|&gt;</span> </span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span> <span class="op">(</span>Samples_ID <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">replicates_ID</span>,</span>
+<span>                                                       <span class="st">"(?&lt;=_)[[[:alnum:]]\\-]+(?=[1-8]_)"</span><span class="op">)</span>, </span>
+<span>                     Duration_ID<span class="op">=</span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">replicates_ID</span>,</span>
+<span>                                                       <span class="st">"^[[[:alnum:]]\\.]{1,3}[dm](?=_)"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="kw">else</span> <span class="op">{</span></span>
+<span>      <span class="va">dataset_ID</span> <span class="op">&lt;-</span> <span class="va">dataset_ID</span> <span class="op">|&gt;</span> </span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span> <span class="op">(</span>Samples_ID <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">replicates_ID</span>,</span>
+<span>                                                       <span class="st">"^[[[:alnum:]]\\-]+(?=[1-8]{1}_)"</span><span class="op">)</span>, </span>
+<span>                     Duration_ID<span class="op">=</span><span class="st">"9d"</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>                                 </span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">dataset_ID</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/list_c.html">list_rbind</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## deal with specific p42 and p43</span></span>
+<span><span class="va">ID_mapping</span> <span class="op">&lt;-</span> <span class="va">ID_mapping</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Samples_ID <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"^p42"</span>, <span class="va">Replicates_ID</span><span class="op">)</span>, <span class="st">"p42"</span>, <span class="va">Samples_ID</span><span class="op">)</span>, </span>
+<span>                Samples_ID <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"^p43"</span>, <span class="va">Replicates_ID</span><span class="op">)</span>, <span class="st">"p43"</span>, <span class="va">Samples_ID</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## remove irrelavant samples</span></span>
+<span><span class="va">ID_mapping</span> <span class="op">&lt;-</span> <span class="va">ID_mapping</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"^p42|^p43|^CTRL"</span>, <span class="va">Replicates_ID</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co">## detect miscatech samples</span></span>
+<span><span class="co">## ID_mapping_missing &lt;- ID_mapping |&gt;</span></span>
+<span><span class="co">##   filter(if_any(everything(), is.na))</span></span>
+<span></span>
+<span><span class="co">## step 3) map short compound IDs with full compound names ----</span></span>
+<span><span class="va">mapping_compounds</span> <span class="op">&lt;-</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx</a></span><span class="op">(</span><span class="st">"data/Table of compounds_whole_2025-04-28.xlsx"</span>,</span>
+<span>                                sheet <span class="op">=</span> <span class="st">"Drugs Mapping"</span><span class="op">)</span></span>
+<span><span class="va">ID_mapping</span> <span class="op">&lt;-</span> <span class="va">ID_mapping</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">mapping_compounds</span>, by <span class="op">=</span> <span class="st">"Samples_ID"</span><span class="op">)</span></span>
+<span><span class="co">## test &lt;- ID_mapping |&gt; anti_join(mapping_compounds, by = "Samples_ID")</span></span>
+<span><span class="co">## test2 &lt;- mapping_compounds |&gt; anti_join(ID_mapping, by = "Samples_ID")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<!-- - `X13271` with concentration `005u`, both run on `Run Date: 180821`, have been discarded in *counts*. -->
+<p>Finally, in <a href="#lst-check-pheno-data-1" class="quarto-xref">Listing&nbsp;<span>1.7</span></a>, we map all replicates (one column in a given barcode count matrix) to its comprehensive metadata descripion (stored in <code>Tables of compounds</code>), using as <strong>primary and foreign keys</strong> the following 6 variables: <code>Batch_ID</code>, <code>Compound</code>, <code>Duration_ID</code>, <code>Run date</code>, <code>Date</code>, and <code>Concentrations_ID</code>.</p>
+<div class="cell" data-layout-align="center">
+<div id="lst-check-pheno-data-1" class="r cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-check-pheno-data-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;1.7: Extract discarded replicates
+</figcaption><div aria-describedby="lst-check-pheno-data-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode" id="lst-check-pheno-data-1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">replicates_discarded</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">anti_join</a></span><span class="op">(</span><span class="va">ID_mapping</span>, <span class="va">pheno_data</span>,</span>
+<span>                                     by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Batch_ID"</span>,  <span class="st">"Compound"</span>, <span class="st">"Duration_ID"</span>,</span>
+<span>                                            <span class="st">"Run date"</span>, <span class="st">"Date"</span>, <span class="st">"Concentrations_ID"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pheno_data_unmapped</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">anti_join</a></span><span class="op">(</span><span class="va">pheno_data</span>,</span>
+<span>                                     <span class="va">ID_mapping</span>,</span>
+<span>                                     by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Batch_ID"</span>,  <span class="st">"Compound"</span>, <span class="st">"Duration_ID"</span>,</span>
+<span>                                            <span class="st">"Run date"</span>, <span class="st">"Date"</span>, <span class="st">"Concentrations_ID"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pheno_data_unmapped</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">Compound</span>, <span class="va">Date</span>, <span class="va">Concentrations_ID</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/flextable.html">flextable</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/bold.html">bold</a></span><span class="op">(</span>part <span class="op">=</span> <span class="st">"header"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+<div id="tbl-check-pheno-data" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-layout-align="center">
+<figure class="quarto-float quarto-float-tbl figure"><div aria-describedby="tbl-check-pheno-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div class="tabwid">
+<style>.cl-55899d4e{}.cl-557f01ea{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-55832252{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-5583225c{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-55834d54{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-55834d68{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="cl-55899d4e"><thead><tr style="overflow-wrap:break-word;">
+<th class="cl-55834d54"><p class="cl-55832252"><span class="cl-557f01ea">Pathway</span></p></th>
+<th class="cl-55834d54"><p class="cl-55832252"><span class="cl-557f01ea">MoA</span></p></th>
+<th class="cl-55834d54"><p class="cl-55832252"><span class="cl-557f01ea">Compound</span></p></th>
+<th class="cl-55834d68"><p class="cl-5583225c"><span class="cl-557f01ea">Replicates</span></p></th>
+<th class="cl-55834d54"><p class="cl-55832252"><span class="cl-557f01ea">Concentrations_ID</span></p></th>
+<th class="cl-55834d54"><p class="cl-55832252"><span class="cl-557f01ea">OLD_Concentrations</span></p></th>
+<th class="cl-55834d54"><p class="cl-55832252"><span class="cl-557f01ea">Date</span></p></th>
+<th class="cl-55834d54"><p class="cl-55832252"><span class="cl-557f01ea">Run date</span></p></th>
+<th class="cl-55834d68"><p class="cl-5583225c"><span class="cl-557f01ea">Duration</span></p></th>
+<th class="cl-55834d54"><p class="cl-55832252"><span class="cl-557f01ea">Batch_ID</span></p></th>
+<th class="cl-55834d68"><p class="cl-5583225c"><span class="cl-557f01ea">Concentrations</span></p></th>
+<th class="cl-55834d54"><p class="cl-55832252"><span class="cl-557f01ea">Duration_ID</span></p></th>
+</tr></thead></table>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-tbl" id="tbl-check-pheno-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.2: Identify set of experiences reported in <code>Table of compounds</code> that could not be mapped against their corresponding Barcode counts replicates. We check this information with an <code>anti_join</code> between original <em>phenotype</em> and <em>counts</em>, returning samples from <code>Table of Compound</code> that could not have been mapped back.
+</figcaption></figure>
+</div>
+</div>
+<p>In <a href="#tbl-check-pheno-data-2" class="quarto-xref">Table&nbsp;<span>1.3</span></a>, we check discrepancies between the number of barcode replicates reported in <code>Table of compounds</code> with the number of replicates avalaible in barcode counts matrices. <span data-fg="red" style="color: red;">And it turned out that <code>compound</code>: XAV-939, <code>Date</code>: 220322, is reported with 4 replicates, while only 2 could be found in <a href="./data/barcode-counts/exp220322.csv"><code>exp220322</code> barcode count matrix</a></span></p>
+<div class="cell" data-layout-align="center">
+<div id="lst-check-pheno-data-2" class="r cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-check-pheno-data-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;1.8: Secound round of data wrangling quality controls on <em>counts</em> versus <em>phenotype data</em>, focusing on divergent number of replicates.
+</figcaption><div aria-describedby="lst-check-pheno-data-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode" id="lst-check-pheno-data-2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">replicate_inconsistencies</span> <span class="op">&lt;-</span> <span class="va">pheno_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">ID_mapping</span>,</span>
+<span>                    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Batch_ID"</span>, <span class="st">"Date"</span>, </span>
+<span>                           <span class="st">"Compound"</span>, <span class="st">"Run date"</span>,</span>
+<span>                           <span class="st">"Concentrations_ID"</span>, <span class="st">"Duration_ID"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Batch_ID</span>, <span class="va">Compound</span>, <span class="va">Date</span>, <span class="va">Replicates</span>, <span class="va">Concentrations_ID</span>,<span class="va">Duration_ID</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>n<span class="op">=</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">n</span><span class="op">!=</span><span class="va">Replicates</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/flextable.html">flextable</a></span><span class="op">(</span><span class="va">replicate_inconsistencies</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/autofit.html">autofit</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/bold.html">bold</a></span><span class="op">(</span>part <span class="op">=</span> <span class="st">"header"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+<div id="tbl-check-pheno-data-2" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-layout-align="center">
+<figure class="quarto-float quarto-float-tbl figure"><div aria-describedby="tbl-check-pheno-data-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div class="tabwid">
+<style>.cl-55eba6f6{}.cl-55dfd678{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-55dfd68c{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-55e4953c{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-55e49550{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-55e4bfa8{width:1.041in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-55e4bfbc{width:1.033in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-55e4bfbd{width:0.795in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-55e4bfc6{width:0.998in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-55e4bfd0{width:1.551in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-55e4bfda{width:1.1in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-55e4bfdb{width:0.37in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-55e4bfe4{width:1.041in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-55e4bfe5{width:1.033in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-55e4bfee{width:0.795in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-55e4bff8{width:0.998in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-55e4bff9{width:1.551in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-55e4c002{width:1.1in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-55e4c00c{width:0.37in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="cl-55eba6f6">
+<thead><tr style="overflow-wrap:break-word;">
+<th class="cl-55e4bfa8"><p class="cl-55e4953c"><span class="cl-55dfd678">Batch_ID</span></p></th>
+<th class="cl-55e4bfbc"><p class="cl-55e4953c"><span class="cl-55dfd678">Compound</span></p></th>
+<th class="cl-55e4bfbd"><p class="cl-55e4953c"><span class="cl-55dfd678">Date</span></p></th>
+<th class="cl-55e4bfc6"><p class="cl-55e49550"><span class="cl-55dfd678">Replicates</span></p></th>
+<th class="cl-55e4bfd0"><p class="cl-55e4953c"><span class="cl-55dfd678">Concentrations_ID</span></p></th>
+<th class="cl-55e4bfda"><p class="cl-55e4953c"><span class="cl-55dfd678">Duration_ID</span></p></th>
+<th class="cl-55e4bfdb"><p class="cl-55e49550"><span class="cl-55dfd678">n</span></p></th>
+</tr></thead>
+<tbody><tr style="overflow-wrap:break-word;">
+<td class="cl-55e4bfe4"><p class="cl-55e4953c"><span class="cl-55dfd68c">exp220322</span></p></td>
+<td class="cl-55e4bfe5"><p class="cl-55e4953c"><span class="cl-55dfd68c">XAV-939</span></p></td>
+<td class="cl-55e4bfee"><p class="cl-55e4953c"><span class="cl-55dfd68c">220322</span></p></td>
+<td class="cl-55e4bff8"><p class="cl-55e49550"><span class="cl-55dfd68c">4</span></p></td>
+<td class="cl-55e4bff9"><p class="cl-55e4953c"><span class="cl-55dfd68c">080u</span></p></td>
+<td class="cl-55e4c002"><p class="cl-55e4953c"><span class="cl-55dfd68c">9d</span></p></td>
+<td class="cl-55e4c00c"><p class="cl-55e49550"><span class="cl-55dfd68c">2</span></p></td>
+</tr></tbody>
+</table>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-tbl" id="tbl-check-pheno-data-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.3: Secound round of data wrangling quality controls on <em>counts</em> versus <em>phenotype data</em>, focusing on divergent number of replicates.
+</figcaption></figure>
+</div>
+</div>
+<section id="save-phenotype-metadata" class="level3" data-number="1.3.1"><h3 data-number="1.3.1" class="anchored" data-anchor-id="save-phenotype-metadata">
+<span class="header-section-number">1.3.1</span> Save phenotype Metadata</h3>
+<p>By applying all the formatting analyses reported in <a href="#sec-metadata-phenotypes" class="quarto-xref"><span>Section 1.3</span></a>, we generate in <a href="#tbl-phenotype-metadata-saving" class="quarto-xref">Table&nbsp;<span>1.4</span></a> a global metadata phenotypic table, adhering to tidy principles <a href="#tip-tidyformat" class="quarto-xref">Tip&nbsp;<span>1.1</span></a>.</p>
+<div id="tip-tidyformat" class="callout callout-style-default callout-tip callout-titled" title="Tidy Data Format (Key Principles)">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip&nbsp;1.1: Tidy Data Format (Key Principles)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>
+<strong>Each variable has its own column</strong>.</li>
+<li>
+<strong>Each observation has its own row</strong> – Every row corresponds to one observation.</li>
+<li>
+<strong>Each value has its own cell</strong> – Each cell contains a single, unique value.</li>
+</ol>
+<p>This format streamlines data wrangling, and generally speaking, data analysis and visualisation. In other words, prefer simpler <code>CSV</code> formats for the experimental design, and avoid <em>cell fusion</em> in Excel documents. Finally, for the formatted tabular representation in documentations, I use <code>flextable</code>.</p>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div id="lst-save-pheno-metadata" class="r cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-save-pheno-metadata-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;1.9: Save the final metadata annotations for barcodes, using Today’s date for historical versioning.
+</figcaption><div aria-describedby="lst-save-pheno-metadata-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode" id="lst-save-pheno-metadata"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## step 4) Use international date formats ----</span></span>
+<span><span class="va">pheno_data_formatted</span> <span class="op">&lt;-</span> <span class="va">pheno_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">ID_mapping</span>,</span>
+<span>                    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Batch_ID"</span>, <span class="st">"Date"</span>, </span>
+<span>                           <span class="st">"Compound"</span>, <span class="st">"Run date"</span>,</span>
+<span>                           <span class="st">"Concentrations_ID"</span>, <span class="st">"Duration_ID"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Batch_ID</span>, <span class="va">Pathway</span>, <span class="va">MoA</span>,</span>
+<span>                <span class="va">Compound</span>, <span class="va">Samples_ID</span>, </span>
+<span>                <span class="va">Replicates</span>, <span class="va">Replicates_ID</span>,</span>
+<span>                <span class="va">Concentrations</span>, <span class="va">Concentrations_ID</span>, </span>
+<span>                <span class="va">Date</span>, <span class="va">`Run date`</span>, <span class="va">Duration</span>, <span class="va">Duration_ID</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="co">## convert to ISO 1860 Date format</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Date <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">dmy</a></span><span class="op">(</span><span class="va">Date</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>         `Run date`<span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">dmy</a></span><span class="op">(</span><span class="va">`Run date`</span><span class="op">)</span>, </span>
+<span>  <span class="co">## artifically de-duplicate controls for exp, simplify the analytical workflow </span></span>
+<span>  Replicates_ID <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">Batch_ID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"exp200921_dose response osim"</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span>                                   <span class="va">Compound</span><span class="op">==</span><span class="st">"Control"</span>,</span>
+<span>                                 <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"exp200921_"</span>, <span class="st">"exp200921_dose_response_"</span>, <span class="va">Replicates_ID</span><span class="op">)</span>,</span>
+<span>                                 <span class="va">Replicates_ID</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## 2) QC: guarantee uniqueness of the replicates</span></span>
+<span><span class="va">pheno_data_deduplicated</span> <span class="op">&lt;-</span> <span class="va">pheno_data_formatted</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">Replicates_ID</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span><span class="op">(</span><span class="va">pheno_data_deduplicated</span>, <span class="va">pheno_data_formatted</span><span class="op">)</span></span>
+<span><span class="co">##  [1] TRUE</span></span>
+<span></span>
+<span><span class="co">## 3) save as .xlsx file discarded and preserved replicates</span></span>
+<span></span>
+<span><span class="va">barcode_counts_summaries</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"kept counts"</span> <span class="op">=</span> <span class="va">kept_barcode_summaries</span>,</span>
+<span>                                 <span class="st">"kept compounds"</span> <span class="op">=</span> <span class="va">pheno_data</span>,</span>
+<span>                                 <span class="st">"kept replicates"</span> <span class="op">=</span> <span class="va">pheno_data_formatted</span> <span class="op">|&gt;</span> </span>
+<span>                                   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Compound</span>, <span class="va">Replicates_ID</span><span class="op">)</span>,</span>
+<span>                                 <span class="st">"discarded counts"</span> <span class="op">=</span> <span class="va">barcode_discarded_summaries</span>, </span>
+<span>                                 <span class="st">"discarded compounds"</span><span class="op">=</span><span class="va">pheno_data_discarded</span>, </span>
+<span>                                 <span class="st">"discarded replicates"</span> <span class="op">=</span> <span class="va">replicates_discarded</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">openxlsx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/openxlsx/man/write.xlsx.html">write.xlsx</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">barcode_counts_summaries</span>,</span>
+<span>                     file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"./data/logs/barcode_metadata_overview_"</span>,</span>
+<span>                                   <span class="va">today_date</span>,<span class="st">".xlsx"</span><span class="op">)</span>,</span>
+<span>                     overwrite <span class="op">=</span> <span class="cn">TRUE</span>, asTable <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co">## 4) save the tidy phenotype metatada table ----</span></span>
+<span><span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html">write_csv</a></span><span class="op">(</span><span class="va">pheno_data_formatted</span>,</span>
+<span>                 file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"data/pheno_data_metadata_"</span>, <span class="va">today_date</span>,<span class="st">".csv"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/flextable.html">flextable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">pheno_data_formatted</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/autofit.html">autofit</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/bold.html">bold</a></span><span class="op">(</span>part<span class="op">=</span><span class="st">"header"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+<div id="tbl-phenotype-metadata-saving" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-layout-align="center">
+<figure class="quarto-float quarto-float-tbl figure"><div aria-describedby="tbl-phenotype-metadata-saving-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div class="tabwid">
+<style>.cl-5733e41a{}.cl-5723ef88{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5723ef9c{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-572a4446{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-572a4450{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-572a9392{width:1.041in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a939c{width:0.871in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a93a6{width:0.778in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a93b0{width:1.033in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a93b1{width:1.117in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a93ba{width:0.998in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a93c4{width:3.165in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a93ce{width:1.313in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a93cf{width:1.551in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a93d8{width:1.067in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a93d9{width:1.067in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a93e2{width:0.863in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a93e3{width:1.1in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a93f6{width:1.041in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a93f7{width:0.871in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a9400{width:0.778in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a940a{width:1.033in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a940b{width:1.117in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a9414{width:0.998in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a941e{width:3.165in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a941f{width:1.313in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a9428{width:1.551in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a9429{width:1.067in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a9432{width:1.067in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a943c{width:0.863in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a943d{width:1.1in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a9446{width:1.041in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a9450{width:0.871in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a9451{width:0.778in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a945a{width:1.033in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a945b{width:1.117in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a9464{width:0.998in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a9465{width:3.165in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a946e{width:1.313in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a946f{width:1.551in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a9478{width:1.067in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a9482{width:1.067in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a9483{width:0.863in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-572a948c{width:1.1in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="cl-5733e41a">
+<thead><tr style="overflow-wrap:break-word;">
+<th class="cl-572a9392"><p class="cl-572a4446"><span class="cl-5723ef88">Batch_ID</span></p></th>
+<th class="cl-572a939c"><p class="cl-572a4446"><span class="cl-5723ef88">Pathway</span></p></th>
+<th class="cl-572a93a6"><p class="cl-572a4446"><span class="cl-5723ef88">MoA</span></p></th>
+<th class="cl-572a93b0"><p class="cl-572a4446"><span class="cl-5723ef88">Compound</span></p></th>
+<th class="cl-572a93b1"><p class="cl-572a4446"><span class="cl-5723ef88">Samples_ID</span></p></th>
+<th class="cl-572a93ba"><p class="cl-572a4450"><span class="cl-5723ef88">Replicates</span></p></th>
+<th class="cl-572a93c4"><p class="cl-572a4446"><span class="cl-5723ef88">Replicates_ID</span></p></th>
+<th class="cl-572a93ce"><p class="cl-572a4450"><span class="cl-5723ef88">Concentrations</span></p></th>
+<th class="cl-572a93cf"><p class="cl-572a4446"><span class="cl-5723ef88">Concentrations_ID</span></p></th>
+<th class="cl-572a93d8"><p class="cl-572a4446"><span class="cl-5723ef88">Date</span></p></th>
+<th class="cl-572a93d9"><p class="cl-572a4450"><span class="cl-5723ef88">Run date</span></p></th>
+<th class="cl-572a93e2"><p class="cl-572a4450"><span class="cl-5723ef88">Duration</span></p></th>
+<th class="cl-572a93e3"><p class="cl-572a4446"><span class="cl-5723ef88">Duration_ID</span></p></th>
+</tr></thead>
+<tbody>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-572a93f6"><p class="cl-572a4446"><span class="cl-5723ef9c">exp010821</span></p></td>
+<td class="cl-572a93f7"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a9400"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a940a"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a940b"><p class="cl-572a4446"><span class="cl-5723ef9c">Contro</span></p></td>
+<td class="cl-572a9414"><p class="cl-572a4450"><span class="cl-5723ef9c">4</span></p></td>
+<td class="cl-572a941e"><p class="cl-572a4446"><span class="cl-5723ef9c">Contro1_000u_exp010821_run180821_03</span></p></td>
+<td class="cl-572a941f"><p class="cl-572a4450"><span class="cl-5723ef9c">0</span></p></td>
+<td class="cl-572a9428"><p class="cl-572a4446"><span class="cl-5723ef9c">000u</span></p></td>
+<td class="cl-572a9429"><p class="cl-572a4446"><span class="cl-5723ef9c">2021-08-01</span></p></td>
+<td class="cl-572a9432"><p class="cl-572a4450"><span class="cl-5723ef9c">2021-08-18</span></p></td>
+<td class="cl-572a943c"><p class="cl-572a4450"><span class="cl-5723ef9c">9</span></p></td>
+<td class="cl-572a943d"><p class="cl-572a4446"><span class="cl-5723ef9c">9d</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-572a93f6"><p class="cl-572a4446"><span class="cl-5723ef9c">exp010821</span></p></td>
+<td class="cl-572a93f7"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a9400"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a940a"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a940b"><p class="cl-572a4446"><span class="cl-5723ef9c">Contro</span></p></td>
+<td class="cl-572a9414"><p class="cl-572a4450"><span class="cl-5723ef9c">4</span></p></td>
+<td class="cl-572a941e"><p class="cl-572a4446"><span class="cl-5723ef9c">Contro2_000u_exp010821_run180821_04</span></p></td>
+<td class="cl-572a941f"><p class="cl-572a4450"><span class="cl-5723ef9c">0</span></p></td>
+<td class="cl-572a9428"><p class="cl-572a4446"><span class="cl-5723ef9c">000u</span></p></td>
+<td class="cl-572a9429"><p class="cl-572a4446"><span class="cl-5723ef9c">2021-08-01</span></p></td>
+<td class="cl-572a9432"><p class="cl-572a4450"><span class="cl-5723ef9c">2021-08-18</span></p></td>
+<td class="cl-572a943c"><p class="cl-572a4450"><span class="cl-5723ef9c">9</span></p></td>
+<td class="cl-572a943d"><p class="cl-572a4446"><span class="cl-5723ef9c">9d</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-572a93f6"><p class="cl-572a4446"><span class="cl-5723ef9c">exp010821</span></p></td>
+<td class="cl-572a93f7"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a9400"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a940a"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a940b"><p class="cl-572a4446"><span class="cl-5723ef9c">Contro</span></p></td>
+<td class="cl-572a9414"><p class="cl-572a4450"><span class="cl-5723ef9c">4</span></p></td>
+<td class="cl-572a941e"><p class="cl-572a4446"><span class="cl-5723ef9c">Contro3_000u_exp010821_run180821_05</span></p></td>
+<td class="cl-572a941f"><p class="cl-572a4450"><span class="cl-5723ef9c">0</span></p></td>
+<td class="cl-572a9428"><p class="cl-572a4446"><span class="cl-5723ef9c">000u</span></p></td>
+<td class="cl-572a9429"><p class="cl-572a4446"><span class="cl-5723ef9c">2021-08-01</span></p></td>
+<td class="cl-572a9432"><p class="cl-572a4450"><span class="cl-5723ef9c">2021-08-18</span></p></td>
+<td class="cl-572a943c"><p class="cl-572a4450"><span class="cl-5723ef9c">9</span></p></td>
+<td class="cl-572a943d"><p class="cl-572a4446"><span class="cl-5723ef9c">9d</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-572a93f6"><p class="cl-572a4446"><span class="cl-5723ef9c">exp010821</span></p></td>
+<td class="cl-572a93f7"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a9400"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a940a"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a940b"><p class="cl-572a4446"><span class="cl-5723ef9c">Contro</span></p></td>
+<td class="cl-572a9414"><p class="cl-572a4450"><span class="cl-5723ef9c">4</span></p></td>
+<td class="cl-572a941e"><p class="cl-572a4446"><span class="cl-5723ef9c">Contro4_000u_exp010821_run180821_06</span></p></td>
+<td class="cl-572a941f"><p class="cl-572a4450"><span class="cl-5723ef9c">0</span></p></td>
+<td class="cl-572a9428"><p class="cl-572a4446"><span class="cl-5723ef9c">000u</span></p></td>
+<td class="cl-572a9429"><p class="cl-572a4446"><span class="cl-5723ef9c">2021-08-01</span></p></td>
+<td class="cl-572a9432"><p class="cl-572a4450"><span class="cl-5723ef9c">2021-08-18</span></p></td>
+<td class="cl-572a943c"><p class="cl-572a4450"><span class="cl-5723ef9c">9</span></p></td>
+<td class="cl-572a943d"><p class="cl-572a4446"><span class="cl-5723ef9c">9d</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-572a93f6"><p class="cl-572a4446"><span class="cl-5723ef9c">exp040821</span></p></td>
+<td class="cl-572a93f7"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a9400"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a940a"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a940b"><p class="cl-572a4446"><span class="cl-5723ef9c">Contro</span></p></td>
+<td class="cl-572a9414"><p class="cl-572a4450"><span class="cl-5723ef9c">4</span></p></td>
+<td class="cl-572a941e"><p class="cl-572a4446"><span class="cl-5723ef9c">Contro1_000u_exp040821_run180821_25</span></p></td>
+<td class="cl-572a941f"><p class="cl-572a4450"><span class="cl-5723ef9c">0</span></p></td>
+<td class="cl-572a9428"><p class="cl-572a4446"><span class="cl-5723ef9c">000u</span></p></td>
+<td class="cl-572a9429"><p class="cl-572a4446"><span class="cl-5723ef9c">2021-08-04</span></p></td>
+<td class="cl-572a9432"><p class="cl-572a4450"><span class="cl-5723ef9c">2021-08-18</span></p></td>
+<td class="cl-572a943c"><p class="cl-572a4450"><span class="cl-5723ef9c">9</span></p></td>
+<td class="cl-572a943d"><p class="cl-572a4446"><span class="cl-5723ef9c">9d</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-572a9446"><p class="cl-572a4446"><span class="cl-5723ef9c">exp040821</span></p></td>
+<td class="cl-572a9450"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a9451"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a945a"><p class="cl-572a4446"><span class="cl-5723ef9c">Control</span></p></td>
+<td class="cl-572a945b"><p class="cl-572a4446"><span class="cl-5723ef9c">Contro</span></p></td>
+<td class="cl-572a9464"><p class="cl-572a4450"><span class="cl-5723ef9c">4</span></p></td>
+<td class="cl-572a9465"><p class="cl-572a4446"><span class="cl-5723ef9c">Contro2_000u_exp040821_run180821_26</span></p></td>
+<td class="cl-572a946e"><p class="cl-572a4450"><span class="cl-5723ef9c">0</span></p></td>
+<td class="cl-572a946f"><p class="cl-572a4446"><span class="cl-5723ef9c">000u</span></p></td>
+<td class="cl-572a9478"><p class="cl-572a4446"><span class="cl-5723ef9c">2021-08-04</span></p></td>
+<td class="cl-572a9482"><p class="cl-572a4450"><span class="cl-5723ef9c">2021-08-18</span></p></td>
+<td class="cl-572a9483"><p class="cl-572a4450"><span class="cl-5723ef9c">9</span></p></td>
+<td class="cl-572a948c"><p class="cl-572a4446"><span class="cl-5723ef9c">9d</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-phenotype-metadata-saving-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.4
+</figcaption></figure>
+</div>
+</div>
+<p><strong>Conclusion</strong>: on a total of 544, 532 replicates are kept, and 12 replicates were removed.</p>
+
+
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/verapancaldilab\.github\.io\/DNABarcode-DrugFingerprint\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+      for (let i=0; i<annoteTargets.length; i++) {
+        const annoteTarget = annoteTargets[i];
+        const targetCell = annoteTarget.getAttribute("data-target-cell");
+        const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+        const contentFn = () => {
+          const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          if (content) {
+            const tipContent = content.cloneNode(true);
+            tipContent.classList.add("code-annotation-tip-content");
+            return tipContent.outerHTML;
+          }
+        }
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          onShow: (instance) => {
+            selectCodeLines(instance.reference);
+            instance.reference.classList.add('code-annotation-active');
+            window.tippy.hideAll();
+          },
+          onHide: (instance) => {
+            unselectCodeLines();
+            instance.reference.classList.remove('code-annotation-active');
+          },
+          maxWidth: 300,
+          delay: [50, 0],
+          duration: [200, 0],
+          offset: [5, 10],
+          arrow: true,
+          appendTo: function(el) {
+            return el.parentElement.parentElement.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'quarto',
+          placement: 'right',
+          popperOptions: {
+            modifiers: [
+            {
+              name: 'flip',
+              options: {
+                flipVariations: false, // true by default
+                allowedAutoPlacements: ['right'],
+                fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+              },
+            },
+            {
+              name: 'preventOverflow',
+              options: {
+                mainAxis: false,
+                altAxis: false
+              }
+            }
+            ]        
+          }      
+        };
+        window.tippy(annoteTarget, config); 
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation column-body"><div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Welcome">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Welcome</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./methods.html" class="pagination-link" aria-label="Methods: normalise, identify DRBs and save as `SummarizedExperiment` objects">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Methods: normalise, identify DRBs and save as <code>SummarizedExperiment</code> objects</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Written by Bastien CHASSAGNOL and Marie-Pier SCOTT-KELLY and Vera PANCALDI and Luca GRUMULATO, with <a href="https://quarto.org/">Quarto</a>.</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/VeraPancaldiLab/DNABarcode-DrugFingerprint/edit/master/data-management.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/VeraPancaldiLab/DNABarcode-DrugFingerprint/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/VeraPancaldiLab/DNABarcode-DrugFingerprint/blob/master/data-management.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+<li class="nav-item compact">
+    <a class="nav-link active" href="https://github.com/VeraPancaldiLab/DNABarcode-DrugFingerprint/" aria-current="page">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+</div>
+  </div>
+</footer>
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

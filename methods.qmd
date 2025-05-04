@@ -21,6 +21,10 @@ library(purrr)
 ## reporting
 library(flextable)
 
+# automated package linting
+library(xml2)
+library(downlit)
+
 ## auxiliary functions
 source("R/utils.R")
 today_date <- "2025-04-28"
@@ -31,11 +35,11 @@ set.seed(20)
 ```
 
 
-### Preprocessing barcode counts{#sec-batch-processing}
+## Preprocessing barcode counts{#sec-batch-processing}
 
 **Code colour**: [Luca's protocol]{fg="blue"}, and [Bastien's comments and perspectives]{fg="red"}
 
-#### **Background Noise Removal** and `SummarizedExperiment` stantardised storage
+### **Background Noise Removal** and `SummarizedExperiment` stantardised storage
 
 [Eliminate barcodes for which the combined counts of the 4 controls per barcode are below a given threshold, here `5`.]{fg="blue"} 
 
@@ -96,7 +100,7 @@ barcode_counts_aggregated <- barcode_counts_aggregated |>
 
 - [Density plot of controls + justify why + check absence of outliers, to evaluate the relevance of this threshold, `HTSFilter`, comparison with existing filtering approaches.]{fg="red"}
 
-#### **Normalisation**
+### **Normalisation**
 
 -   [Normalize barcodes so that the total number of counts per sample is equal to `100,000`]{fg="blue"}. This operation is performed in @lst-cpm-normalisation.
 
@@ -115,7 +119,7 @@ barcode_counts_normalised <- barcode_counts_aggregated |>
 
 -   [Close to two existing normalisation methods: **Counts Per Million (CPM)** which additionally scales raw counts by total library size and multiplies by $1,000,000$ and **Total Count Scaling (TCS)**: Scales raw counts by the total number of reads (or mapped reads) in each sample, then multiplies by a fixed number (e.g., 100,000). Would compare other normalisation approaches + ignore biological or technical biases + generate MA plots for verifying the mean-variance correction trend + not suitable for DEGs analyses. Apply concatenation phase of all samples before normalising. [Preprocessing and normalisation functions for transcriptomics: a general overview](https://www.linkedin.com/posts/%F0%9F%8E%AF-ming-tommy-tang-40650014_rna-seq-normalization-what-you-need-to-activity-7313919533780516864-6jFm)]{fg="red"}
 
-#### Prepare `SummarizedExperiment` objects for normalised data
+### Prepare `SummarizedExperiment` objects for normalised data
 
 - Higher level of granularity in @lst-SummarizedExperiment-replicates:
 
@@ -227,7 +231,7 @@ saveRDS(se_compound, file = paste0("./results/compounds/se_normalised_per_compou
 ```
 
 
-### **Differential analyses** and Binarisation
+## **Differential analyses** and Binarisation
 
 1. [Calculate mean of the 4 controls, followed by **Differential Represented Barcode Analysis**: binarise each replicate, assigning a 1 if Fold change is above 3 with respect to Mean value, and 0 otherwise]{fg="blue"} 
 
@@ -263,7 +267,7 @@ barcode_discretised_replicates <- barcode_discretised_replicates |>
 
 [^1]: Test the **Helmert contrast** to evaluate *compound dose response*, or *time-course replicates*. Also For repeated measures across time, see [One Way repeated measure ANOVA in R](https://www.r-bloggers.com/2025/02/one-way-repeated-measure-anova-in-r/)
 
-#### `SummarizedExperiment` of binarised markers
+### `SummarizedExperiment` of binarised markers
 
 - `SummarizedExperiment` at the replicates level (controls being discarded)
 

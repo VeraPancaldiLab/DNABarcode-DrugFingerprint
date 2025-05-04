@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 book:
-  title: "Inferring the MoA of new drugs through the analysis of heterogeneous response to treatment of different subpopulations of cancer cells"
+  title: "Inferring the MoA of drugs based on barcode fingerprints."
   reader-mode: true
   author: "Bastien CHASSAGNOL and Vera PANCALDI and Luca GRUMULATO and Marie-Pier SCOTT KELLY"
   date: last-modified
