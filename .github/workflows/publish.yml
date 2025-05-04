@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
-  push:
-    branches: [main, master]
+#  push:
+ #   branches: [main, master]
 
 name: Quarto Publish
 
@@ -17,7 +17,7 @@ jobs:
       - name: Install system dependencies required for CRAN packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev
+          sudo apt-get install -y libcurl4-openssl-dev libglpk40
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
