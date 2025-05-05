@@ -4,7 +4,7 @@ knitr:
     comment: "## "
     class.output: "code_output"
     fig.align: "center"
-    out.width: "100%"
+    out.width: "95%"
     R.options:
       # Display tibbles: general formatting
       dplyr.print_min: 6

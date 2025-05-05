@@ -1,3 +1,4 @@
+# compare the content of two dataframes, return the most comprehensive
 compare_dataframes <- function(df1, df2) {
 
   # compare dimensions and ids
@@ -46,7 +47,7 @@ compare_dataframes <- function(df1, df2) {
 
 }
 
-
+# Helper functions to homogenise `Concentration_ID`
 format_concentrations <- function(x) {
   x_formatted <- sapply(x, function(number_to_format) {
     if (number_to_format %% 1 == 0) {  # Check if x is an integer
@@ -58,9 +59,21 @@ format_concentrations <- function(x) {
   return(x_formatted)
 }
 
-
+# Convert unconventional characters to ASCII symbols, such as greek letters
 enc_to_ascii <- function(text, replace_with = ".") {
   iconv(text, from = "UTF-8", to = "ASCII", sub = replace_with)
+}
+
+# Return the size of a ComplexHeatmap matrix
+calc_ht_size <- function(ht, unit = "inch") {
+  pdf(NULL)
+  ht  <- ComplexHeatmap::draw(ht)
+  w  <- ComplexHeatmap:::width(ht) |>
+    grid::convertX(unit, valueOnly = TRUE)
+  h  <- ComplexHeatmap:::height(ht) |>
+    grid::convertY(unit, valueOnly = TRUE)
+  dev.off()
+  return(list(width=w, height=h))
 }
 
 

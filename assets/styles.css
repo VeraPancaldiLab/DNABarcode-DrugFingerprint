@@ -1,0 +1,7 @@
+.scroll-container {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-width: 1400px;
+  white-space: nowrap;
+  max-height: 500px;
+}

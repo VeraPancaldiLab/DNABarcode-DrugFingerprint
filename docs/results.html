@@ -151,13 +151,13 @@ const typesetMath = (el) => {
 window.Quarto = {
   typesetMath
 };
-</script>
+</script><link rel="stylesheet" href="assets/styles.css">
 <meta property="og:title" content="3&nbsp; Results: Heatmaps and Drug networks, based on barcode fingerprints – Inferring the MoA of drugs based on barcode fingerprints.">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://verapancaldilab.github.io/DNABarcode-DrugFingerprint/results_files/figure-html/fig-heatmap-cell-lines-by-cell-lines-1.png">
+<meta property="og:image" content="https://verapancaldilab.github.io/DNABarcode-DrugFingerprint/figures/compounds/heatmap_normalised_replicates_2025-04-28.png">
 <meta property="og:site_name" content="Inferring the MoA of drugs based on barcode fingerprints.">
-<meta property="og:image:height" content="960">
-<meta property="og:image:width" content="1344">
+<meta property="og:image:height" content="4567">
+<meta property="og:image:width" content="6545">
 </head>
 <body class="nav-sidebar docked">
 
@@ -255,7 +255,7 @@ window.Quarto = {
 </nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2"><h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="3"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
 <li><a href="#reproducibility" id="toc-reproducibility" class="nav-link active" data-scroll-target="#reproducibility"><span class="header-section-number">3.1</span> Reproducibility</a></li>
@@ -309,9 +309,6 @@ window.Quarto = {
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org">stringr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/">purrr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">## reporting</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ardata-fr.github.io/flextable-book/">flextable</a></span><span class="op">)</span></span>
-<span></span>
 <span><span class="co">## plotting</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jokergoo/ComplexHeatmap">ComplexHeatmap</a></span><span class="op">)</span></span>
@@ -319,6 +316,7 @@ window.Quarto = {
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">grid</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">RColorBrewer</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r.igraph.org/">igraph</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/magick/">magick</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## auxiliary functions</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="st">"R/utils.R"</span><span class="op">)</span></span>
@@ -332,7 +330,7 @@ window.Quarto = {
 </section><section id="compute-compound-similarities" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="compute-compound-similarities">
 <span class="header-section-number">3.2</span> Compute Compound Similarities</h2>
 <ul>
-<li><p><span data-fg="blue" style="color: blue;">Actual computation of the correlation matrix using <code><a href="https://rdrr.io/r/stats/cor.html">stats::cor</a></code>.</span></p></li>
+<li><p><span data-fg="blue" style="color: blue;">Correlation matrix computed with <code><a href="https://rdrr.io/r/stats/cor.html">stats::cor</a></code>.</span></p></li>
 <li><p><span data-fg="red" style="color: red;">Yet, we have to try other correlation methods on the continuous space, or consider other metrics if working on the discrete space. Unbalanced Wassertein distance, or relatives, for distinct input and output dimensions.</span></p></li>
 </ul>
 <section id="compound-heatmaps" class="level3" data-number="3.2.1"><h3 data-number="3.2.1" class="anchored" data-anchor-id="compound-heatmaps">
@@ -362,8 +360,9 @@ window.Quarto = {
 <section id="heatmap-with-pearson-correlation-score" class="level4" data-number="3.2.1.1"><h4 data-number="3.2.1.1" class="anchored" data-anchor-id="heatmap-with-pearson-correlation-score">
 <span class="header-section-number">3.2.1.1</span> Heatmap with Pearson correlation score</h4>
 <ul>
-<li>Heatmap in <span class="quarto-unresolved-ref">?fig-heatmap-normalised-replicate</span> is generated at the replicate level:</li>
+<li>Heatmap in <a href="#fig-heatmap-normalised-replicate" class="quarto-xref">Figure&nbsp;<span>3.1</span></a> is generated at the replicate level:</li>
 </ul>
+<div class="scroll-container">
 <div class="cell" data-layout-align="center">
 <details open="" class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Read SummarizedExperiment object</span></span>
 <span><span class="va">se_normalised_replicate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"./results/compounds/se_normalised_per_replicate_"</span>, <span class="va">today_date</span>, <span class="st">".rds"</span><span class="op">)</span><span class="op">)</span></span>
@@ -404,27 +403,62 @@ window.Quarto = {
 <span>                                          <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/anno_barplot.html">anno_barplot</a></span><span class="op">(</span><span class="va">se_normalised_pheno_data_replicate</span><span class="op">$</span><span class="va">log10Conc</span><span class="op">)</span>, </span>
 <span>                                        Duration <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">se_normalised_pheno_data_replicate</span><span class="op">$</span><span class="va">Duration</span>, <span class="st">"d"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">## Generate Heatmap</span></span>
+<span><span class="co">## 1) Generate HeatMap</span></span>
 <span><span class="va">heatmap_normalised_replicates</span> <span class="op">&lt;-</span> <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/Heatmap.html">Heatmap</a></span><span class="op">(</span><span class="va">cor_per_replicate</span>, </span>
-<span>                                          col<span class="op">=</span><span class="va">col_heatmap_scale</span>, </span>
-<span>                                          name <span class="op">=</span> <span class="st">"CC for all Replicates"</span>, </span>
-<span>                                          show_row_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                          show_column_names <span class="op">=</span> <span class="cn">FALSE</span>, </span>
-<span>                                          row_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                          column_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                          row_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, </span>
-<span>                                          top_annotation <span class="op">=</span> <span class="va">top_ha</span>, </span>
-<span>                                          right_annotation <span class="op">=</span> <span class="va">row_ha</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.grab.html">grid.grabExpr</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>                                                         col<span class="op">=</span><span class="va">col_heatmap_scale</span>, </span>
+<span>                                                         name <span class="op">=</span> <span class="st">"CC for all Replicates"</span>, </span>
+<span>                                                         show_row_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                                                         show_column_names <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>                                                         row_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                                                         column_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                                         <span class="co">## font size</span></span>
+<span>                                                         row_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                                                         column_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                                                         column_names_rot <span class="op">=</span> <span class="fl">45</span>,</span>
+<span>                                                         top_annotation <span class="op">=</span> <span class="va">top_ha</span>,</span>
+<span>                                                         right_annotation <span class="op">=</span> <span class="va">row_ha</span>, </span>
+<span>                                                         <span class="co">## matrix size</span></span>
+<span>                                                         width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">cor_per_replicate</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">1</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
+<span>                                                         height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">cor_per_replicate</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">1</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span> </span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_normalised_replicates_"</span>, <span class="va">today_date</span>,<span class="st">".pdf"</span><span class="op">)</span>, </span>
-<span>       <span class="va">heatmap_normalised_replicates</span>, dpi <span class="op">=</span> <span class="fl">600</span>, width <span class="op">=</span> <span class="fl">20</span>, height <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<span><span class="va">size_heatmap</span> <span class="op">&lt;-</span> <span class="fu">calc_ht_size</span><span class="op">(</span><span class="va">heatmap_normalised_replicates</span><span class="op">)</span></span>
+<span><span class="va">padding_heatmap</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">15</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"mm"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## 2) Save png and pdf outputs</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/png.html">png</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_normalised_replicates_"</span>, <span class="va">today_date</span>,<span class="st">".png"</span><span class="op">)</span>,</span>
+<span>    res <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>    width <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">width</span>, height <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">height</span>, units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"in"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">heatmap_normalised_replicates</span> <span class="op">|&gt;</span> <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="va">padding_heatmap</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">##  png </span></span>
+<span><span class="co">##    2</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_normalised_replicates_"</span>, <span class="va">today_date</span>,<span class="st">".png"</span><span class="op">)</span>,</span>
+<span>                        auto_pdf <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                        dpi <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_normalised_replicates_"</span>, <span class="va">today_date</span>,<span class="st">".pdf"</span><span class="op">)</span>,</span>
+<span>       <span class="va">heatmap_normalised_replicates</span> <span class="op">|&gt;</span></span>
+<span>         <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="va">padding_heatmap</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>         <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.grab.html">grid.grabExpr</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>       dpi <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>       width <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">width</span>, height <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">height</span>, units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"in"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div id="fig-heatmap-normalised-replicate" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-heatmap-normalised-replicate-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="figures/compounds/heatmap_normalised_replicates_2025-04-28.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;3.1: Heatmap of normalised replication scores, generated with the simple Pearson Correlation score."><img src="figures/compounds/heatmap_normalised_replicates_2025-04-28.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-heatmap-normalised-replicate-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.1: Heatmap of normalised replication scores, generated with the simple Pearson Correlation score.
+</figcaption></figure>
+</div>
+</div>
+</div>
 </div>
 <ul>
-<li>Heatmap in <span class="quarto-unresolved-ref">?fig-heatmap-normalised-compound-batch</span> is generated by averaging normalised barcode counts over replicates:</li>
+<li>Heatmap in <a href="#fig-heatmap-normalised-compound-batch" class="quarto-xref">Figure&nbsp;<span>3.2</span></a> is generated by averaging normalised barcode counts over replicates:</li>
 </ul>
+<div class="scroll-container">
 <div class="cell" data-layout-align="center">
 <details open="" class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Read SummarizedExperiment object</span></span>
 <span><span class="va">se_normalised_compound_batch</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"./results/compounds/se_normalised_per_compound_by_batch_"</span>, <span class="va">today_date</span>, <span class="st">".rds"</span><span class="op">)</span><span class="op">)</span></span>
@@ -444,25 +478,60 @@ window.Quarto = {
 <span></span>
 <span><span class="co">## Define Heatmap</span></span>
 <span><span class="va">heatmap_normalised_compound_batch</span> <span class="op">&lt;-</span> <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/Heatmap.html">Heatmap</a></span><span class="op">(</span><span class="va">cor_per_compound_by_batch</span>, </span>
-<span>                                          col<span class="op">=</span><span class="va">col_heatmap_scale</span>, </span>
-<span>                                          name <span class="op">=</span> <span class="st">"CC for all Compound"</span>, </span>
-<span>                                          show_row_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                          show_column_names <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                          row_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                          column_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                          column_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>,</span>
-<span>                                          row_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>, </span>
-<span>                                          top_annotation <span class="op">=</span> <span class="va">ha</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.grab.html">grid.grabExpr</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>                                                             col<span class="op">=</span><span class="va">col_heatmap_scale</span>, </span>
+<span>                                                             name <span class="op">=</span> <span class="st">"CC for all Compound"</span>, </span>
+<span>                                                             show_row_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                                                             show_column_names <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                                             row_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                                                             column_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                                             row_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>,</span>
+<span>                                                             column_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span>
+<span>                                                             column_names_rot <span class="op">=</span> <span class="fl">45</span>,</span>
+<span>                                                             top_annotation <span class="op">=</span> <span class="va">ha</span>,</span>
+<span>                                                             <span class="co">## matrix size</span></span>
+<span>                                                             width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">cor_per_compound_by_batch</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">2</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
+<span>                                                             height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">cor_per_compound_by_batch</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">2</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_normalised_compound_by_batch_"</span>, <span class="va">today_date</span>,<span class="st">".pdf"</span><span class="op">)</span>, </span>
-<span>       <span class="va">heatmap_normalised_compound_batch</span>, dpi <span class="op">=</span> <span class="fl">600</span>, width <span class="op">=</span> <span class="fl">20</span>, height <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<span></span>
+<span></span>
+<span><span class="va">size_heatmap</span> <span class="op">&lt;-</span> <span class="fu">calc_ht_size</span><span class="op">(</span><span class="va">heatmap_normalised_compound_batch</span><span class="op">)</span></span>
+<span><span class="va">padding_heatmap</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">15</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"mm"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## 2) Save png and pdf outputs</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/png.html">png</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_normalised_compound_by_batch_"</span>, <span class="va">today_date</span>,<span class="st">".png"</span><span class="op">)</span>,</span>
+<span>    res <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>    width <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">width</span>, height <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">height</span>, units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"in"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">heatmap_normalised_compound_batch</span> <span class="op">|&gt;</span> <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="va">padding_heatmap</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">##  png </span></span>
+<span><span class="co">##    2</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_normalised_compound_by_batch_"</span>, <span class="va">today_date</span>,<span class="st">".png"</span><span class="op">)</span>,</span>
+<span>                        auto_pdf <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                        dpi <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_normalised_compound_by_batch_"</span>, <span class="va">today_date</span>,<span class="st">".pdf"</span><span class="op">)</span>,</span>
+<span>       <span class="va">heatmap_normalised_compound_batch</span> <span class="op">|&gt;</span></span>
+<span>         <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="va">padding_heatmap</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>         <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.grab.html">grid.grabExpr</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>       dpi <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>       width <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">width</span>, height <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">height</span>, units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"in"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div id="fig-heatmap-normalised-compound-batch" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-heatmap-normalised-compound-batch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="figures/compounds/heatmap_normalised_compound_by_batch_2025-04-28.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;3.2: Heatmap of normalised compounds by batch(aggregated over replicates) with CC."><img src="figures/compounds/heatmap_normalised_compound_by_batch_2025-04-28.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-heatmap-normalised-compound-batch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.2: Heatmap of normalised compounds by batch(aggregated over replicates) with CC.
+</figcaption></figure>
+</div>
+</div>
+</div>
 </div>
 <ul>
 <li>Heatmap in <span class="quarto-unresolved-ref">?fig-heatmap-global-compound</span> is generated at the compound level:</li>
 </ul>
+<div class="scroll-container">
 <div class="cell" data-layout-align="center">
 <details open="" class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Read SummarizedExperiment object</span></span>
 <span><span class="va">se_normalised_compound</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"./results/compounds/se_normalised_per_compound_"</span>, <span class="va">today_date</span>, <span class="st">".rds"</span><span class="op">)</span><span class="op">)</span></span>
@@ -482,26 +551,60 @@ window.Quarto = {
 <span></span>
 <span><span class="co">## Define Heatmap</span></span>
 <span><span class="va">heatmap_normalised_compound</span> <span class="op">&lt;-</span> <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/Heatmap.html">Heatmap</a></span><span class="op">(</span><span class="va">cor_per_compound</span>, </span>
-<span>                                          col<span class="op">=</span><span class="va">col_heatmap_scale</span>, </span>
-<span>                                          name <span class="op">=</span> <span class="st">"CC for all Compound"</span>, </span>
-<span>                                          show_row_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                          show_column_names <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                          row_dend_reorder <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                                          column_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                          <span class="co">## font size</span></span>
-<span>                                          row_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>, </span>
-<span>                                          top_annotation <span class="op">=</span> <span class="va">ha</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.grab.html">grid.grabExpr</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>                                                       col<span class="op">=</span><span class="va">col_heatmap_scale</span>, </span>
+<span>                                                       name <span class="op">=</span> <span class="st">"CC for all Compound"</span>, </span>
+<span>                                                       show_row_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                                                       show_column_names <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                                       row_dend_reorder <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                                                       column_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                                       <span class="co">## font size</span></span>
+<span>                                                       row_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>,</span>
+<span>                                                       column_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>,</span>
+<span>                                                       column_names_rot <span class="op">=</span> <span class="fl">45</span>,</span>
+<span>                                                       top_annotation <span class="op">=</span> <span class="va">ha</span>,</span>
+<span>                                                       <span class="co">## matrix size</span></span>
+<span>                                                       width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">cor_per_compound</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">3</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
+<span>                                                       height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">cor_per_compound</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">3</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span> </span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_normalised_compound_"</span>, <span class="va">today_date</span>,<span class="st">".pdf"</span><span class="op">)</span>, </span>
-<span>       <span class="va">heatmap_normalised_compound</span>, dpi <span class="op">=</span> <span class="fl">600</span>, width <span class="op">=</span> <span class="fl">20</span>, height <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<span><span class="va">size_heatmap</span> <span class="op">&lt;-</span> <span class="fu">calc_ht_size</span><span class="op">(</span><span class="va">heatmap_normalised_compound</span><span class="op">)</span></span>
+<span><span class="va">padding_heatmap</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">15</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"mm"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## 2) Save png and pdf outputs</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/png.html">png</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_normalised_compound_"</span>, <span class="va">today_date</span>,<span class="st">".png"</span><span class="op">)</span>,</span>
+<span>    res <span class="op">=</span> <span class="fl">300</span>,</span>
+<span>    width <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">width</span>, height <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">height</span>, units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"in"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">heatmap_normalised_compound</span> <span class="op">|&gt;</span> <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="va">padding_heatmap</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">##  png </span></span>
+<span><span class="co">##    2</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_normalised_compound_"</span>, <span class="va">today_date</span>,<span class="st">".png"</span><span class="op">)</span>,</span>
+<span>                        auto_pdf <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                        dpi <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_normalised_compound_"</span>, <span class="va">today_date</span>,<span class="st">".pdf"</span><span class="op">)</span>,</span>
+<span>       <span class="va">heatmap_normalised_compound</span> <span class="op">|&gt;</span></span>
+<span>         <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="va">padding_heatmap</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>         <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.grab.html">grid.grabExpr</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>       dpi <span class="op">=</span> <span class="fl">300</span>,</span>
+<span>       width <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">width</span>, height <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">height</span>, units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"in"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div id="fig-heatmap-normalised-compound" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-heatmap-normalised-compound-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="figures/compounds/heatmap_normalised_compound_2025-04-28.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3.3: Heatmap generated with the simple Pearson Correlation score."><img src="figures/compounds/heatmap_normalised_compound_2025-04-28.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-heatmap-normalised-compound-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.3: Heatmap generated with the simple Pearson Correlation score.
+</figcaption></figure>
+</div>
+</div>
+</div>
 </div>
 </section><section id="heatmap-with-pearson-correlation-and-binarised-values" class="level4" data-number="3.2.1.2"><h4 data-number="3.2.1.2" class="anchored" data-anchor-id="heatmap-with-pearson-correlation-and-binarised-values">
 <span class="header-section-number">3.2.1.2</span> Heatmap with Pearson correlation and binarised values</h4>
+<div class="scroll-container">
 <ul>
-<li>Heatmap at the replicates level in <span class="quarto-unresolved-ref">?fig-heatmap-binarised-replicates</span>:</li>
+<li>Heatmap at the replicates level in <a href="#fig-heatmap-binarised-replicates" class="quarto-xref">Figure&nbsp;<span>3.4</span></a>:</li>
 </ul>
 <div class="cell" data-layout-align="center">
 <details open="" class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Read SummarizedExperiment object</span></span>
@@ -522,25 +625,59 @@ window.Quarto = {
 <span></span>
 <span></span>
 <span><span class="va">heatmap_binarised_replicates</span> <span class="op">&lt;-</span> <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/Heatmap.html">Heatmap</a></span><span class="op">(</span><span class="va">cor_per_replicates</span>, </span>
-<span>                                            col<span class="op">=</span><span class="va">col_heatmap_scale</span>, </span>
-<span>                                            name <span class="op">=</span> <span class="st">"CC at binarised Compound Level"</span>,</span>
-<span>                                            show_row_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                            show_column_names <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                            row_dend_reorder <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                                            column_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                            <span class="co">## font size</span></span>
-<span>                                            row_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, </span>
-<span>                                            top_annotation <span class="op">=</span> <span class="va">ha</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.grab.html">grid.grabExpr</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>                                                        col<span class="op">=</span><span class="va">col_heatmap_scale</span>, </span>
+<span>                                                        name <span class="op">=</span> <span class="st">"CC at binarised Compound Level"</span>,</span>
+<span>                                                        show_row_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                                                        show_column_names <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                                        row_dend_reorder <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                                                        column_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                                        <span class="co">## font size</span></span>
+<span>                                                        row_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                                                        column_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                                                        column_names_rot <span class="op">=</span> <span class="fl">45</span>,</span>
+<span>                                                        top_annotation <span class="op">=</span> <span class="va">ha</span>,</span>
+<span>                                                        <span class="co">## matrix size</span></span>
+<span>                                                        width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">cor_per_replicate</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">1</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
+<span>                                                        height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">cor_per_replicate</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">1</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span> </span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_binarised_replicates_"</span>, <span class="va">today_date</span>,<span class="st">".pdf"</span><span class="op">)</span>, </span>
-<span>       <span class="va">heatmap_binarised_replicates</span>, dpi <span class="op">=</span> <span class="fl">600</span>, width <span class="op">=</span> <span class="fl">20</span>, height <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>                                            </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<span><span class="va">size_heatmap</span> <span class="op">&lt;-</span> <span class="fu">calc_ht_size</span><span class="op">(</span><span class="va">heatmap_binarised_replicates</span><span class="op">)</span></span>
+<span><span class="va">padding_heatmap</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">15</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"mm"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## 2) Save png and pdf outputs</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/png.html">png</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_binarised_replicates_"</span>, <span class="va">today_date</span>,<span class="st">".png"</span><span class="op">)</span>,</span>
+<span>    res <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>    width <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">width</span>, height <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">height</span>, units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"in"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">heatmap_binarised_replicates</span> <span class="op">|&gt;</span> <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="va">padding_heatmap</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">##  png </span></span>
+<span><span class="co">##    2</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_binarised_replicates_"</span>, <span class="va">today_date</span>,<span class="st">".png"</span><span class="op">)</span>,</span>
+<span>                        auto_pdf <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                        dpi <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_binarised_replicates_"</span>, <span class="va">today_date</span>,<span class="st">".pdf"</span><span class="op">)</span>,</span>
+<span>       <span class="va">heatmap_binarised_replicates</span> <span class="op">|&gt;</span></span>
+<span>         <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="va">padding_heatmap</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>         <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.grab.html">grid.grabExpr</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>       dpi <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>       width <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">width</span>, height <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">height</span>, units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"in"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div id="fig-heatmap-binarised-replicates" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-heatmap-binarised-replicates-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="figures/compounds/heatmap_binarised_replicates_2025-04-28.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;3.4: Heatmaps at the replicates level."><img src="figures/compounds/heatmap_binarised_replicates_2025-04-28.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-heatmap-binarised-replicates-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.4: Heatmaps at the replicates level.
+</figcaption></figure>
+</div>
+</div>
+</div>
 </div>
 <ul>
-<li>Heatmap at the compound by batch level in <span class="quarto-unresolved-ref">?fig-heatmap-binarised-compound-by-batch</span> (aggregated over technical replicates):</li>
+<li>Heatmap at the compound by batch level in <a href="#fig-heatmap-binarised-compound-by-batch" class="quarto-xref">Figure&nbsp;<span>3.5</span></a> (aggregated over technical replicates):</li>
 </ul>
+<div class="scroll-container">
 <div class="cell" data-layout-align="center">
 <details open="" class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Read SummarizedExperiment object</span></span>
 <span><span class="va">se_binarised_compound_batch</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"./results/compounds/se_discretised_per_compound_by_batch_"</span>, <span class="va">today_date</span>, <span class="st">".rds"</span><span class="op">)</span><span class="op">)</span></span>
@@ -560,25 +697,61 @@ window.Quarto = {
 <span></span>
 <span></span>
 <span><span class="va">heatmap_binarised_compound_batch</span> <span class="op">&lt;-</span> <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/Heatmap.html">Heatmap</a></span><span class="op">(</span><span class="va">cor_per_compound_by_batch</span>, </span>
-<span>                                            col<span class="op">=</span><span class="va">col_heatmap_scale</span>, </span>
-<span>                                            name <span class="op">=</span> <span class="st">"CC at binarised Compound Level"</span>,</span>
-<span>                                            show_row_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                            show_column_names <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                            row_dend_reorder <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                                            column_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                            <span class="co">## font size</span></span>
-<span>                                            row_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>, </span>
-<span>                                            top_annotation <span class="op">=</span> <span class="va">ha</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.grab.html">grid.grabExpr</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>                                                            col<span class="op">=</span><span class="va">col_heatmap_scale</span>, </span>
+<span>                                                            name <span class="op">=</span> <span class="st">"CC at binarised Compound Level"</span>,</span>
+<span>                                                            show_row_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                                                            show_column_names <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                                            row_dend_reorder <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                                                            column_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                                            <span class="co">## font size</span></span>
+<span>                                                            row_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>,</span>
+<span>                                                            column_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span>
+<span>                                                            column_names_rot <span class="op">=</span> <span class="fl">45</span>,</span>
+<span>                                                            top_annotation <span class="op">=</span> <span class="va">ha</span>,</span>
+<span>                                                            <span class="co">## matrix size</span></span>
+<span>                                                            width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">cor_per_compound_by_batch</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">2</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
+<span>                                                            height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">cor_per_compound_by_batch</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">2</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_binarised_compound_by_batch_"</span>, <span class="va">today_date</span>,<span class="st">".pdf"</span><span class="op">)</span>, </span>
-<span>       <span class="va">heatmap_binarised_compound_batch</span>, dpi <span class="op">=</span> <span class="fl">600</span>, width <span class="op">=</span> <span class="fl">20</span>, height <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>                                            </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<span></span>
+<span></span>
+<span><span class="va">size_heatmap</span> <span class="op">&lt;-</span> <span class="fu">calc_ht_size</span><span class="op">(</span><span class="va">heatmap_binarised_compound_batch</span><span class="op">)</span></span>
+<span><span class="va">padding_heatmap</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">15</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"mm"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## 2) Save png and pdf outputs</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/png.html">png</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_binarised_compound_by_batch_"</span>, <span class="va">today_date</span>,<span class="st">".png"</span><span class="op">)</span>,</span>
+<span>    res <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>    width <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">width</span>, height <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">height</span>, units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"in"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">heatmap_binarised_compound_batch</span> <span class="op">|&gt;</span> <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="va">padding_heatmap</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">##  png </span></span>
+<span><span class="co">##    2</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_binarised_compound_by_batch_"</span>, <span class="va">today_date</span>,<span class="st">".png"</span><span class="op">)</span>,</span>
+<span>                        auto_pdf <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                        dpi <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_binarised_compound_by_batch_"</span>, <span class="va">today_date</span>,<span class="st">".pdf"</span><span class="op">)</span>,</span>
+<span>       <span class="va">heatmap_binarised_compound_batch</span> <span class="op">|&gt;</span></span>
+<span>         <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="va">padding_heatmap</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>         <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.grab.html">grid.grabExpr</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>       dpi <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>       width <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">width</span>, height <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">height</span>, units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"in"</span><span class="op">)</span><span class="op">)</span>                              </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div id="fig-heatmap-binarised-compound-by-batch" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-heatmap-binarised-compound-by-batch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="figures/compounds/heatmap_binarised_compound_by_batch_2025-04-28.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;3.5: Heatmaps at the compound by batch level."><img src="figures/compounds/heatmap_binarised_compound_by_batch_2025-04-28.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-heatmap-binarised-compound-by-batch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.5: Heatmaps at the compound by batch level.
+</figcaption></figure>
+</div>
+</div>
+</div>
 </div>
 <ul>
-<li>Heatmap at the compound level in <span class="quarto-unresolved-ref">?fig-heatmap-binarised-compound</span>.</li>
+<li>Heatmap at the compound level in <a href="#fig-heatmap-binarised-compound" class="quarto-xref">Figure&nbsp;<span>3.6</span></a>.</li>
 </ul>
+<div class="scroll-container">
 <div class="cell" data-layout-align="center">
 <details open="" class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Read SummarizedExperiment object</span></span>
 <span><span class="va">se_binarised_compound</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"./results/compounds/se_discretised_per_compound_"</span>, <span class="va">today_date</span>, <span class="st">".rds"</span><span class="op">)</span><span class="op">)</span></span>
@@ -598,21 +771,53 @@ window.Quarto = {
 <span></span>
 <span></span>
 <span><span class="va">heatmap_binarised_compound</span> <span class="op">&lt;-</span> <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/Heatmap.html">Heatmap</a></span><span class="op">(</span><span class="va">cor_per_compound</span>, </span>
-<span>                                            col<span class="op">=</span><span class="va">col_heatmap_scale</span>, </span>
-<span>                                            name <span class="op">=</span> <span class="st">"CC at binarised Compound Level"</span>,</span>
-<span>                                            show_row_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                            show_column_names <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                            column_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>,</span>
-<span>                                            row_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                            column_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                            row_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>, </span>
-<span>                                            top_annotation <span class="op">=</span> <span class="va">ha</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.grab.html">grid.grabExpr</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>                                                      col<span class="op">=</span><span class="va">col_heatmap_scale</span>, </span>
+<span>                                                      name <span class="op">=</span> <span class="st">"CC at binarised Compound Level"</span>,</span>
+<span>                                                      show_row_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                                                      show_column_names <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                                      row_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                                                      column_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                                      row_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>,</span>
+<span>                                                      column_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>,</span>
+<span>                                                      column_names_rot <span class="op">=</span> <span class="fl">45</span>,</span>
+<span>                                                      top_annotation <span class="op">=</span> <span class="va">ha</span>,</span>
+<span>                                                      <span class="co">## matrix size</span></span>
+<span>                                                      width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">cor_per_compound</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">4</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
+<span>                                                      height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">cor_per_compound</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">4</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span> </span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_binarised_compound_"</span>, <span class="va">today_date</span>,<span class="st">".pdf"</span><span class="op">)</span>, </span>
-<span>       <span class="va">heatmap_binarised_compound</span>, dpi <span class="op">=</span> <span class="fl">600</span>, width <span class="op">=</span> <span class="fl">20</span>, height <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>                                            </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<span><span class="va">size_heatmap</span> <span class="op">&lt;-</span> <span class="fu">calc_ht_size</span><span class="op">(</span><span class="va">heatmap_binarised_compound</span><span class="op">)</span></span>
+<span><span class="va">padding_heatmap</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">10</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"mm"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## 2) Save png and pdf outputs</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/png.html">png</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_binarised_compound_"</span>, <span class="va">today_date</span>,<span class="st">".png"</span><span class="op">)</span>,</span>
+<span>    res <span class="op">=</span> <span class="fl">300</span>,</span>
+<span>    width <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">width</span>, height <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">height</span>, units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"in"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">heatmap_binarised_compound</span> <span class="op">|&gt;</span> <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="va">padding_heatmap</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">##  png </span></span>
+<span><span class="co">##    2</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_binarised_compound_"</span>, <span class="va">today_date</span>,<span class="st">".png"</span><span class="op">)</span>,</span>
+<span>                        auto_pdf <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                        dpi <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/heatmap_binarised_compound_"</span>, <span class="va">today_date</span>,<span class="st">".pdf"</span><span class="op">)</span>,</span>
+<span>       <span class="va">heatmap_binarised_compound</span> <span class="op">|&gt;</span></span>
+<span>         <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="va">padding_heatmap</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>         <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.grab.html">grid.grabExpr</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>       dpi <span class="op">=</span> <span class="fl">300</span>,</span>
+<span>       width <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">width</span>, height <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">height</span>, units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"in"</span><span class="op">)</span><span class="op">)</span>                            </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div id="fig-heatmap-binarised-compound" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-heatmap-binarised-compound-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="figures/compounds/heatmap_binarised_compound_2025-04-28.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;3.6: Heamaps at the compound level."><img src="figures/compounds/heatmap_binarised_compound_2025-04-28.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-heatmap-binarised-compound-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.6: Heamaps at the compound level.
+</figcaption></figure>
+</div>
+</div>
+</div>
 </div>
 <!-- ```{r} -->
 <!-- #| label: combine-Heatmap -->
@@ -625,10 +830,12 @@ window.Quarto = {
 </section></section><section id="compound-networks" class="level3" data-number="3.2.2"><h3 data-number="3.2.2" class="anchored" data-anchor-id="compound-networks">
 <span class="header-section-number">3.2.2</span> Compound Networks</h3>
 <ul>
-<li>Plot weighted undirected compound graphs with <code><a href="https://r.igraph.org/reference/graph_from_adjacency_matrix.html">igraph::graph_from_adjacency_matrix</a></code> in <span class="quarto-unresolved-ref">?fig-igraph-drug</span>, filtering out pairwise connections between 2 drugs if the <span class="math inline">\(p\)</span>-value is not significant and absolute correlation score is below 0.8:</li>
+<li>Plot weighted undirected compound graphs with <code><a href="https://r.igraph.org/reference/graph_from_adjacency_matrix.html">igraph::graph_from_adjacency_matrix</a></code> in <a href="#fig-igraph-drug" class="quarto-xref">Figure&nbsp;<span>3.7</span></a>, filtering out pairwise connections between 2 drugs if the <span class="math inline">\(p\)</span>-value is not significant and absolute correlation score is below 0.8:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<details open="" class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## 1) Compute correlation matrix and p-values ----</span></span>
+<details open="" class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#| label: fig-igraph-drug</span></span>
+<span></span>
+<span><span class="co">## 1) Compute correlation matrix and p-values ----</span></span>
 <span><span class="va">cor_res</span> <span class="op">&lt;-</span> <span class="fu">Hmisc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Hmisc/man/rcorr.html">rcorr</a></span><span class="op">(</span><span class="va">se_binarised_compound_mat</span>, type <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span>
 <span><span class="va">cor_binarised_compound</span> <span class="op">&lt;-</span> <span class="va">cor_res</span><span class="op">$</span><span class="va">r</span></span>
 <span><span class="va">pval_binarised_compound</span> <span class="op">&lt;-</span> <span class="va">cor_res</span><span class="op">$</span><span class="va">P</span></span>
@@ -648,6 +855,10 @@ window.Quarto = {
 <span></span>
 <span><span class="va">layout_graph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/layout_with_fr.html">layout_with_fr</a></span><span class="op">(</span><span class="va">compound_graph</span>,</span>
 <span>                                       niter <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
+<span><span class="co"># graph dimension sizes</span></span>
+<span><span class="va">graph_width</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">layout_graph</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">graph_height</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">layout_graph</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">aspect_ratio</span> <span class="op">&lt;-</span> <span class="va">graph_width</span> <span class="op">/</span> <span class="va">graph_height</span></span>
 <span></span>
 <span><span class="va">vertex_structure</span> <span class="op">&lt;-</span> <span class="va">se_binarised_pheno_data_compound</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -656,7 +867,8 @@ window.Quarto = {
 <span><span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">compound_graph</span><span class="op">)</span><span class="op">$</span><span class="va">color</span> <span class="op">&lt;-</span> <span class="va">vertex_structure</span><span class="op">$</span><span class="va">color</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html">pdf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/compound_graph_"</span>, <span class="va">today_date</span>, <span class="st">".pdf"</span><span class="op">)</span>, </span>
-<span>    width <span class="op">=</span> <span class="fl">16</span>, height <span class="op">=</span> <span class="fl">16</span>, useDingbats <span class="op">=</span> <span class="cn">TRUE</span>, compress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>    width <span class="op">=</span> <span class="fl">14</span> <span class="op">*</span> <span class="va">aspect_ratio</span>, height <span class="op">=</span> <span class="fl">14</span>, </span>
+<span>    useDingbats <span class="op">=</span> <span class="cn">TRUE</span>, compress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">compound_graph</span>, layout <span class="op">=</span> <span class="va">layout_graph</span>, vertex.size <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>     <span class="co">## vertex.label.dist= 2,</span></span>
 <span>     main <span class="op">=</span> <span class="st">"Compound network interaction.</span></span>
@@ -664,21 +876,48 @@ window.Quarto = {
 <span><span class="st">     and in yellow other pathways.</span></span>
 <span><span class="st">     Edge widths are proportional to the coefficient of correlation."</span>, </span>
 <span>     edge.width <span class="op">=</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/E.html">E</a></span><span class="op">(</span><span class="va">compound_graph</span><span class="op">)</span><span class="op">$</span><span class="va">weight</span> <span class="op">*</span> <span class="fl">20</span>,</span>
-<span>     vertex.label.cex <span class="op">=</span> <span class="fl">1</span>, curved <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span>
+<span>     vertex.label.cex <span class="op">=</span> <span class="fl">0.9</span>, curved <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">##  png </span></span>
 <span><span class="co">##    2</span></span>
 <span></span>
 <span><span class="co">## 4) export PNG and readable graph formats for Neo4J</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/png.html">png</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/compound_graph_"</span>, <span class="va">today_date</span>, <span class="st">".png"</span><span class="op">)</span>, </span>
+<span>    width <span class="op">=</span> <span class="fl">14</span> <span class="op">*</span> <span class="va">aspect_ratio</span>, height <span class="op">=</span> <span class="fl">14</span>, </span>
+<span>    res <span class="op">=</span> <span class="fl">200</span>, units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"in"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">compound_graph</span>, layout <span class="op">=</span> <span class="va">layout_graph</span>, vertex.size <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>     <span class="co">## vertex.label.dist= 2,</span></span>
+<span>     main <span class="op">=</span> <span class="st">"Compound network interaction.</span></span>
+<span><span class="st">     In green, drugs related with the EGFR mechanism,</span></span>
+<span><span class="st">     and in yellow other pathways.</span></span>
+<span><span class="st">     Edge widths are proportional to the coefficient of correlation."</span>, </span>
+<span>     edge.width <span class="op">=</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/E.html">E</a></span><span class="op">(</span><span class="va">compound_graph</span><span class="op">)</span><span class="op">$</span><span class="va">weight</span> <span class="op">*</span> <span class="fl">20</span>,</span>
+<span>     vertex.label.cex <span class="op">=</span> <span class="fl">0.9</span>, curved <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">##  png </span></span>
+<span><span class="co">##    2</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/compounds/compound_graph_"</span>, <span class="va">today_date</span>, <span class="st">".png"</span><span class="op">)</span>,</span>
+<span>                        dpi <span class="op">=</span> <span class="fl">200</span>, auto_pdf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/write_graph.html">write_graph</a></span><span class="op">(</span>graph <span class="op">=</span> <span class="va">compound_graph</span>, </span>
 <span>                    file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"./results/compounds/compound_network_"</span>, <span class="va">today_date</span>, <span class="st">".graphml"</span><span class="op">)</span>,</span>
 <span>                    format <span class="op">=</span> <span class="st">"graphml"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+</details><div class="cell-output-display">
+<div id="fig-igraph-drug" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-igraph-drug-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="figures/compounds/compound_graph_2025-04-28.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;3.7: Drug-drug network interactions, at the compound level."><img src="figures/compounds/compound_graph_2025-04-28.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-igraph-drug-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.7: Drug-drug network interactions, at the compound level.
+</figcaption></figure>
+</div>
+</div>
 </div>
 </section></section><section id="compute-cell-lines-similarities" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="compute-cell-lines-similarities">
 <span class="header-section-number">3.3</span> Compute Cell Lines Similarities</h2>
 <section id="cell-line-by-compound" class="level3" data-number="3.3.1"><h3 data-number="3.3.1" class="anchored" data-anchor-id="cell-line-by-compound">
 <span class="header-section-number">3.3.1</span> Cell Line by Compound</h3>
+<div class="scroll-container">
 <div class="cell" data-layout-align="center">
 <details open="" class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">se_binarised_compound_batch_fac</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">se_binarised_compound_batch_mat</span>, <span class="fl">2</span>, <span class="va">as.character</span><span class="op">)</span></span>
 <span></span>
@@ -696,62 +935,117 @@ window.Quarto = {
 <span>                                                        show_row_dend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                                                        column_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>                                                        show_column_names <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                                        <span class="co">## clustering_distance_columns = "pearson",</span></span>
-<span>                                                        column_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>, </span>
-<span>                                                        top_annotation <span class="op">=</span> <span class="va">ha</span>, </span>
-<span>                                                        <span class="co">## compression issues</span></span>
-<span>                                                        use_raster <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.grab.html">grid.grabExpr</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>                                                        column_names_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>,</span>
+<span>                                                        column_names_rot <span class="op">=</span> <span class="fl">45</span>,</span>
+<span>                                                        top_annotation <span class="op">=</span> <span class="va">ha</span>,</span>
+<span>                                                        <span class="co">## matrix size</span></span>
+<span>                                                        width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">se_binarised_compound_batch_fac</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">3</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
+<span>                                                        height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">se_binarised_compound_batch_fac</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
+<span>                                                        use_raster <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/cell_lines/heatmap_cell_lines_by_samples_"</span>, <span class="va">today_date</span>,<span class="st">".pdf"</span><span class="op">)</span>, </span>
-<span>       <span class="va">heatmap_cell_lines_by_sample</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">20</span>, height <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>                                            </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<span><span class="va">size_heatmap</span> <span class="op">&lt;-</span> <span class="fu">calc_ht_size</span><span class="op">(</span><span class="va">heatmap_cell_lines_by_sample</span><span class="op">)</span></span>
+<span><span class="va">padding_heatmap</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">10</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"mm"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## 2) Save png and pdf outputs</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/png.html">png</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/cell_lines/heatmap_cell_lines_by_samples_"</span>, <span class="va">today_date</span>,<span class="st">".png"</span><span class="op">)</span>,</span>
+<span>    res <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>    width <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">width</span>, height <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">height</span>, units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"in"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">heatmap_cell_lines_by_sample</span> <span class="op">|&gt;</span> <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="va">padding_heatmap</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">##  png </span></span>
+<span><span class="co">##    2</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/cell_lines/heatmap_cell_lines_by_samples_"</span>, <span class="va">today_date</span>,<span class="st">".png"</span><span class="op">)</span>,</span>
+<span>                        auto_pdf <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                        dpi <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/cell_lines/heatmap_cell_lines_by_samples_"</span>, <span class="va">today_date</span>,<span class="st">".pdf"</span><span class="op">)</span>,</span>
+<span>       <span class="va">heatmap_cell_lines_by_sample</span> <span class="op">|&gt;</span></span>
+<span>         <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="va">padding_heatmap</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>         <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.grab.html">grid.grabExpr</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>       dpi <span class="op">=</span> <span class="fl">200</span>, limitsize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>       width <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">width</span>, height <span class="op">=</span> <span class="va">size_heatmap</span><span class="op">$</span><span class="va">height</span>, units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"in"</span><span class="op">)</span><span class="op">)</span>                                  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div id="fig-heatmap-cell-lines-by-samples" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-heatmap-cell-lines-by-samples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="figures/cell_lines/heatmap_cell_lines_by_samples_2025-04-28.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;3.8: Heatmap cell lines by samples, averaging over replicates."><img src="figures/cell_lines/heatmap_cell_lines_by_samples_2025-04-28.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-heatmap-cell-lines-by-samples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.8: Heatmap cell lines by samples, averaging over replicates.
+</figcaption></figure>
+</div>
+</div>
+</div>
 </div>
 </section><section id="cell-line-correlation" class="level3" data-number="3.3.2"><h3 data-number="3.3.2" class="anchored" data-anchor-id="cell-line-correlation">
 <span class="header-section-number">3.3.2</span> Cell Line Correlation</h3>
+<div class="scroll-container">
 <div class="cell" data-layout-align="center">
-<details open="" class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## 1) evaluation of cell resistance</span></span>
-<span><span class="va">present_cells</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">se_binarised_compound_batch_mat</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">present_cells</span>, </span>
-<span>     breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">present_cells</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>     main<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span></span>
+<details open="" class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ## 1) evaluation of cell resistance</span></span>
+<span><span class="co"># present_cells &lt;- rowSums(se_binarised_compound_batch_mat)</span></span>
+<span><span class="co"># hist(present_cells, </span></span>
+<span><span class="co">#      breaks = length(unique(present_cells)),</span></span>
+<span><span class="co">#      main=NULL)</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ## 2) filtered Heatmaps </span></span>
+<span><span class="co"># threshold_cell_prevalence &lt;- 10 ## alternatively, remove cells that are not present in all samples</span></span>
+<span><span class="co"># se_binarised_compact &lt;- se_binarised_compound_batch_mat[present_cells &gt;</span></span>
+<span><span class="co">#                                                              threshold_cell_prevalence, ]</span></span>
+<span><span class="co"># cor_cell_lines &lt;- cor(t(se_binarised_compact))</span></span>
+<span><span class="co"># col_heatmap_scale &lt;- circlize::colorRamp2(c(min(cor_cell_lines, na.rm = TRUE),</span></span>
+<span><span class="co">#                                             0, </span></span>
+<span><span class="co">#                                             max(cor_cell_lines, na.rm = TRUE)),</span></span>
+<span><span class="co">#                                       c("blue", "white", "red"))</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ## 3) generate Heatmap of correlation cell lines</span></span>
+<span><span class="co"># heatmap_cell_lines_by_cell_lines &lt;- ComplexHeatmap::Heatmap(cor_cell_lines, </span></span>
+<span><span class="co">#                                                             col = col_heatmap_scale, </span></span>
+<span><span class="co">#                                                             name = "Heatmap: cell-line by cell line",</span></span>
+<span><span class="co">#                                                             show_row_names = FALSE,</span></span>
+<span><span class="co">#                                                             row_dend_reorder = TRUE,</span></span>
+<span><span class="co">#                                                             show_row_dend = TRUE,</span></span>
+<span><span class="co">#                                                             column_dend_reorder = TRUE, </span></span>
+<span><span class="co">#                                                             show_column_names = FALSE, </span></span>
+<span><span class="co">#                                                             na_col = "black", </span></span>
+<span><span class="co">#                                                             use_raster = TRUE, </span></span>
+<span><span class="co">#                                                             raster_resize_mat = mean,</span></span>
+<span><span class="co">#                                                             ## matrix size</span></span>
+<span><span class="co">#                                                             width = ncol(cor_cell_lines)*unit(0.1, "mm"),</span></span>
+<span><span class="co">#                                                             height = nrow(cor_cell_lines)*unit(0., "mm")) </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># size_heatmap &lt;- calc_ht_size(heatmap_cell_lines_by_cell_lines)</span></span>
+<span><span class="co"># padding_heatmap &lt;- unit(c(2, 2, 2, 2), "mm")</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ## 2) Save png and pdf outputs</span></span>
+<span><span class="co"># png(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".png"),</span></span>
+<span><span class="co">#     res = 100,</span></span>
+<span><span class="co">#     width = size_heatmap$width, height = size_heatmap$height, units = c("in"))</span></span>
+<span><span class="co"># heatmap_cell_lines_by_cell_lines |&gt; ComplexHeatmap::draw(padding = padding_heatmap)</span></span>
+<span><span class="co"># dev.off()</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># knitr::include_graphics(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".png"),</span></span>
+<span><span class="co">#                         auto_pdf = TRUE,</span></span>
+<span><span class="co">#                         dpi = 100)</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ggsave(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".pdf"),</span></span>
+<span><span class="co">#        heatmap_cell_lines_by_cell_lines |&gt;</span></span>
+<span><span class="co">#          ComplexHeatmap::draw(padding = padding_heatmap) |&gt;</span></span>
+<span><span class="co">#          grid::grid.grabExpr(),</span></span>
+<span><span class="co">#        dpi = 100,</span></span>
+<span><span class="co">#        width = size_heatmap$width, height = size_heatmap$height, units = c("in"))  </span></span>
 <span></span>
-<span><span class="co">## 2) filtered Heatmaps </span></span>
-<span><span class="va">threshold_cell_prevalence</span> <span class="op">&lt;-</span> <span class="fl">10</span> <span class="co">## alternatively, remove cells that are not present in all samples</span></span>
-<span><span class="va">se_binarised_compact</span> <span class="op">&lt;-</span> <span class="va">se_binarised_compound_batch_mat</span><span class="op">[</span><span class="va">present_cells</span> <span class="op">&gt;</span></span>
-<span>                                                             <span class="va">threshold_cell_prevalence</span>, <span class="op">]</span></span>
-<span><span class="va">cor_cell_lines</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">se_binarised_compact</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">col_heatmap_scale</span> <span class="op">&lt;-</span> <span class="fu">circlize</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/circlize/man/colorRamp2.html">colorRamp2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">cor_cell_lines</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>                                            <span class="fl">0</span>, </span>
-<span>                                            <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">cor_cell_lines</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                                      <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"blue"</span>, <span class="st">"white"</span>, <span class="st">"red"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">## 3) generate Heatmap of correlation cell lines</span></span>
-<span><span class="va">heatmap_cell_lines_by_cell_lines</span> <span class="op">&lt;-</span> <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/Heatmap.html">Heatmap</a></span><span class="op">(</span><span class="va">cor_cell_lines</span>, </span>
-<span>                                                        col <span class="op">=</span> <span class="va">col_heatmap_scale</span>, </span>
-<span>                                                        name <span class="op">=</span> <span class="st">"Heatmap: cell-line by cell line"</span>,</span>
-<span>                                                        show_row_names <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                                                        row_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                                        show_row_dend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                                        column_dend_reorder <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                                        show_column_names <span class="op">=</span> <span class="cn">FALSE</span>, </span>
-<span>                                                        na_col <span class="op">=</span> <span class="st">"black"</span>, </span>
-<span>                                                        use_raster <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                                        raster_resize_mat <span class="op">=</span> <span class="va">mean</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.grab.html">grid.grabExpr</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/cell_lines/heatmap_cell_lines_by_cell_lines_"</span>, <span class="va">today_date</span>,<span class="st">".pdf"</span><span class="op">)</span>, </span>
-<span>       <span class="va">heatmap_cell_lines_by_cell_lines</span>, dpi <span class="op">=</span> <span class="fl">600</span>, width <span class="op">=</span> <span class="fl">20</span>, height <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/cell_lines/heatmap_cell_lines_by_cell_lines_"</span>, <span class="va">today_date</span>,<span class="st">".pdf"</span><span class="op">)</span>,</span>
+<span>                        auto_pdf <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                        dpi <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-heatmap-cell-lines-by-cell-lines" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-heatmap-cell-lines-by-cell-lines-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="results_files/figure-html/fig-heatmap-cell-lines-by-cell-lines-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;3.1: Histogram of the distribution of cell resistance (for a given barcode ID, returns the total number of cell lines identified)."><img src="results_files/figure-html/fig-heatmap-cell-lines-by-cell-lines-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></a>
+<a href="figures/cell_lines/heatmap_cell_lines_by_cell_lines_2025-04-28.pdf" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;3.9: Histogram of the distribution of cell resistance (for a given barcode ID, returns the total number of cell lines identified)."><embed src="figures/cell_lines/heatmap_cell_lines_by_cell_lines_2025-04-28.pdf" class="img-fluid quarto-figure quarto-figure-center" style="width:95.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-heatmap-cell-lines-by-cell-lines-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.1: Histogram of the distribution of cell resistance (for a given barcode ID, returns the total number of cell lines identified).
+Figure&nbsp;3.9: Histogram of the distribution of cell resistance (for a given barcode ID, returns the total number of cell lines identified).
 </figcaption></figure>
+</div>
 </div>
 </div>
 </div>
