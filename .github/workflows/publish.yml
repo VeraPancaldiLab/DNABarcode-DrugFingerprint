@@ -14,13 +14,14 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+
       - name: Install ImageMagick (for webp conversion and Heatmap rasterisation)
         uses: mfinelli/setup-imagemagick@v6.0.0
 
       - name: Install system dependencies required for CRAN packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev libglpk40 libmagick++-7
+          sudo apt-get install -y libcurl4-openssl-dev libglpk40
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
