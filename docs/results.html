@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.6.40">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>3&nbsp; Results: Heatmaps and Drug networks, based on barcode fingerprints – Inferring the MoA of drugs based on barcode fingerprints.</title>
+<title>3&nbsp; Results: Heatmaps and Drug networks, based on barcode fingerprints – Inferring the MoA of drugs based on barcode fingerprints</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -152,10 +152,10 @@ window.Quarto = {
   typesetMath
 };
 </script><link rel="stylesheet" href="assets/styles.css">
-<meta property="og:title" content="3&nbsp; Results: Heatmaps and Drug networks, based on barcode fingerprints – Inferring the MoA of drugs based on barcode fingerprints.">
+<meta property="og:title" content="3&nbsp; Results: Heatmaps and Drug networks, based on barcode fingerprints – Inferring the MoA of drugs based on barcode fingerprints">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://verapancaldilab.github.io/DNABarcode-DrugFingerprint/figures/compounds/heatmap_normalised_replicates_2025-04-28.png">
-<meta property="og:site_name" content="Inferring the MoA of drugs based on barcode fingerprints.">
+<meta property="og:site_name" content="Inferring the MoA of drugs based on barcode fingerprints">
 <meta property="og:image:height" content="4567">
 <meta property="og:image:width" content="6545">
 </head>
@@ -180,7 +180,7 @@ window.Quarto = {
       <a href="./">Cell Barcoding and Drug Fingerprints</a> 
         <div class="sidebar-tools-main tools-wide">
     <a href="https://github.com/VeraPancaldiLab/DNABarcode-DrugFingerprint/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
-    <a href="./Inferring-the-MoA-of-drugs-based-on-barcode-fingerprints..docx" title="Download Docx" class="quarto-navigation-tool px-1" aria-label="Download Docx"><i class="bi bi-file-word"></i></a>
+    <a href="./Inferring-the-MoA-of-drugs-based-on-barcode-fingerprints.docx" title="Download Docx" class="quarto-navigation-tool px-1" aria-label="Download Docx"><i class="bi bi-file-word"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -276,7 +276,6 @@ window.Quarto = {
 <a href="#compute-cell-lines-similarities" id="toc-compute-cell-lines-similarities" class="nav-link" data-scroll-target="#compute-cell-lines-similarities"><span class="header-section-number">3.3</span> Compute Cell Lines Similarities</a>
   <ul>
 <li><a href="#cell-line-by-compound" id="toc-cell-line-by-compound" class="nav-link" data-scroll-target="#cell-line-by-compound"><span class="header-section-number">3.3.1</span> Cell Line by Compound</a></li>
-  <li><a href="#cell-line-correlation" id="toc-cell-line-correlation" class="nav-link" data-scroll-target="#cell-line-correlation"><span class="header-section-number">3.3.2</span> Cell Line Correlation</a></li>
   </ul>
 </li>
   </ul><div class="toc-actions"><ul><li><a href="https://github.com/VeraPancaldiLab/DNABarcode-DrugFingerprint/edit/master/results.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/VeraPancaldiLab/DNABarcode-DrugFingerprint/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/VeraPancaldiLab/DNABarcode-DrugFingerprint/blob/master/results.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
@@ -529,7 +528,7 @@ Figure&nbsp;3.2: Heatmap of normalised compounds by batch(aggregated over replic
 </div>
 </div>
 <ul>
-<li>Heatmap in <span class="quarto-unresolved-ref">?fig-heatmap-global-compound</span> is generated at the compound level:</li>
+<li>Heatmap in <a href="#fig-heatmap-normalised-compound" class="quarto-xref">Figure&nbsp;<span>3.3</span></a> is generated at the compound level:</li>
 </ul>
 <div class="scroll-container">
 <div class="cell" data-layout-align="center">
@@ -977,78 +976,63 @@ Figure&nbsp;3.8: Heatmap cell lines by samples, averaging over replicates.
 </div>
 </div>
 </div>
-</section><section id="cell-line-correlation" class="level3" data-number="3.3.2"><h3 data-number="3.3.2" class="anchored" data-anchor-id="cell-line-correlation">
-<span class="header-section-number">3.3.2</span> Cell Line Correlation</h3>
-<div class="scroll-container">
-<div class="cell" data-layout-align="center">
-<details open="" class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ## 1) evaluation of cell resistance</span></span>
-<span><span class="co"># present_cells &lt;- rowSums(se_binarised_compound_batch_mat)</span></span>
-<span><span class="co"># hist(present_cells, </span></span>
-<span><span class="co">#      breaks = length(unique(present_cells)),</span></span>
-<span><span class="co">#      main=NULL)</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ## 2) filtered Heatmaps </span></span>
-<span><span class="co"># threshold_cell_prevalence &lt;- 10 ## alternatively, remove cells that are not present in all samples</span></span>
-<span><span class="co"># se_binarised_compact &lt;- se_binarised_compound_batch_mat[present_cells &gt;</span></span>
-<span><span class="co">#                                                              threshold_cell_prevalence, ]</span></span>
-<span><span class="co"># cor_cell_lines &lt;- cor(t(se_binarised_compact))</span></span>
-<span><span class="co"># col_heatmap_scale &lt;- circlize::colorRamp2(c(min(cor_cell_lines, na.rm = TRUE),</span></span>
-<span><span class="co">#                                             0, </span></span>
-<span><span class="co">#                                             max(cor_cell_lines, na.rm = TRUE)),</span></span>
-<span><span class="co">#                                       c("blue", "white", "red"))</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ## 3) generate Heatmap of correlation cell lines</span></span>
-<span><span class="co"># heatmap_cell_lines_by_cell_lines &lt;- ComplexHeatmap::Heatmap(cor_cell_lines, </span></span>
-<span><span class="co">#                                                             col = col_heatmap_scale, </span></span>
-<span><span class="co">#                                                             name = "Heatmap: cell-line by cell line",</span></span>
-<span><span class="co">#                                                             show_row_names = FALSE,</span></span>
-<span><span class="co">#                                                             row_dend_reorder = TRUE,</span></span>
-<span><span class="co">#                                                             show_row_dend = TRUE,</span></span>
-<span><span class="co">#                                                             column_dend_reorder = TRUE, </span></span>
-<span><span class="co">#                                                             show_column_names = FALSE, </span></span>
-<span><span class="co">#                                                             na_col = "black", </span></span>
-<span><span class="co">#                                                             use_raster = TRUE, </span></span>
-<span><span class="co">#                                                             raster_resize_mat = mean,</span></span>
-<span><span class="co">#                                                             ## matrix size</span></span>
-<span><span class="co">#                                                             width = ncol(cor_cell_lines)*unit(0.1, "mm"),</span></span>
-<span><span class="co">#                                                             height = nrow(cor_cell_lines)*unit(0., "mm")) </span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># size_heatmap &lt;- calc_ht_size(heatmap_cell_lines_by_cell_lines)</span></span>
-<span><span class="co"># padding_heatmap &lt;- unit(c(2, 2, 2, 2), "mm")</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ## 2) Save png and pdf outputs</span></span>
-<span><span class="co"># png(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".png"),</span></span>
-<span><span class="co">#     res = 100,</span></span>
-<span><span class="co">#     width = size_heatmap$width, height = size_heatmap$height, units = c("in"))</span></span>
-<span><span class="co"># heatmap_cell_lines_by_cell_lines |&gt; ComplexHeatmap::draw(padding = padding_heatmap)</span></span>
-<span><span class="co"># dev.off()</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># knitr::include_graphics(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".png"),</span></span>
-<span><span class="co">#                         auto_pdf = TRUE,</span></span>
-<span><span class="co">#                         dpi = 100)</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ggsave(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".pdf"),</span></span>
-<span><span class="co">#        heatmap_cell_lines_by_cell_lines |&gt;</span></span>
-<span><span class="co">#          ComplexHeatmap::draw(padding = padding_heatmap) |&gt;</span></span>
-<span><span class="co">#          grid::grid.grabExpr(),</span></span>
-<span><span class="co">#        dpi = 100,</span></span>
-<span><span class="co">#        width = size_heatmap$width, height = size_heatmap$height, units = c("in"))  </span></span>
-<span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"figures/cell_lines/heatmap_cell_lines_by_cell_lines_"</span>, <span class="va">today_date</span>,<span class="st">".pdf"</span><span class="op">)</span>,</span>
-<span>                        auto_pdf <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                        dpi <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output-display">
-<div id="fig-heatmap-cell-lines-by-cell-lines" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-heatmap-cell-lines-by-cell-lines-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="figures/cell_lines/heatmap_cell_lines_by_cell_lines_2025-04-28.pdf" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;3.9: Histogram of the distribution of cell resistance (for a given barcode ID, returns the total number of cell lines identified)."><embed src="figures/cell_lines/heatmap_cell_lines_by_cell_lines_2025-04-28.pdf" class="img-fluid quarto-figure quarto-figure-center" style="width:95.0%"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-heatmap-cell-lines-by-cell-lines-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.9: Histogram of the distribution of cell resistance (for a given barcode ID, returns the total number of cell lines identified).
-</figcaption></figure>
-</div>
-</div>
-</div>
-</div>
+<!-- ### Cell Line Correlation -->
+<!-- :::{.scroll-container} -->
+<!-- ```{r} -->
+<!-- #| label: fig-heatmap-cell-lines-by-cell-lines -->
+<!-- #| fig-cap: "Histogram of the distribution of cell resistance (for a given barcode ID, returns the total number of cell lines identified)." -->
+<!-- #| cache: false -->
+<!-- ## 1) evaluation of cell resistance -->
+<!-- present_cells <- rowSums(se_binarised_compound_batch_mat) -->
+<!-- hist(present_cells, -->
+<!--      breaks = length(unique(present_cells)), -->
+<!--      main=NULL) -->
+<!-- ## 2) filtered Heatmaps -->
+<!-- threshold_cell_prevalence <- 10 ## alternatively, remove cells that are not present in all samples -->
+<!-- se_binarised_compact <- se_binarised_compound_batch_mat[present_cells > -->
+<!--                                                              threshold_cell_prevalence, ] -->
+<!-- cor_cell_lines <- cor(t(se_binarised_compact)) -->
+<!-- col_heatmap_scale <- circlize::colorRamp2(c(min(cor_cell_lines, na.rm = TRUE), -->
+<!--                                             0, -->
+<!--                                             max(cor_cell_lines, na.rm = TRUE)), -->
+<!--                                       c("blue", "white", "red")) -->
+<!-- ## 3) generate Heatmap of correlation cell lines -->
+<!-- heatmap_cell_lines_by_cell_lines <- ComplexHeatmap::Heatmap(cor_cell_lines, -->
+<!--                                                             col = col_heatmap_scale, -->
+<!--                                                             name = "Heatmap: cell-line by cell line", -->
+<!--                                                             show_row_names = FALSE, -->
+<!--                                                             row_dend_reorder = TRUE, -->
+<!--                                                             show_row_dend = TRUE, -->
+<!--                                                             column_dend_reorder = TRUE, -->
+<!--                                                             show_column_names = FALSE, -->
+<!--                                                             na_col = "black", -->
+<!--                                                             use_raster = TRUE, -->
+<!--                                                             raster_resize_mat = mean, -->
+<!--                                                             ## matrix size -->
+<!--                                                             width = ncol(cor_cell_lines)*unit(0.1, "mm"), -->
+<!--                                                             height = nrow(cor_cell_lines)*unit(0.1, "mm")) -->
+<!-- size_heatmap <- calc_ht_size(heatmap_cell_lines_by_cell_lines) -->
+<!-- padding_heatmap <- unit(c(2, 2, 2, 2), "mm") -->
+<!-- ## 2) Save png and pdf outputs -->
+<!-- # png(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".png"), -->
+<!-- #     res = 100, -->
+<!-- #     width = size_heatmap$width, height = size_heatmap$height, units = c("in")) -->
+<!-- # heatmap_cell_lines_by_cell_lines |> ComplexHeatmap::draw(padding = padding_heatmap) -->
+<!-- # dev.off() -->
+<!-- # knitr::include_graphics(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".png"), -->
+<!-- #                         auto_pdf = TRUE, -->
+<!-- #                         dpi = 200) -->
+<!-- # ggsave(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".pdf"), -->
+<!-- #        heatmap_cell_lines_by_cell_lines |> -->
+<!-- #          ComplexHeatmap::draw(padding = padding_heatmap) |> -->
+<!-- #          grid::grid.grabExpr(), -->
+<!-- #        dpi = 200, -->
+<!-- #        width = size_heatmap$width, height = size_heatmap$height, units = c("in")) -->
+<!-- knitr::include_graphics(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".pdf"), -->
+<!--                         auto_pdf = TRUE, -->
+<!--                         dpi = 200) -->
+<!-- ``` -->
+<!-- ::: -->
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">

@@ -634,72 +634,74 @@ ggsave(paste0("figures/cell_lines/heatmap_cell_lines_by_samples_", today_date,".
 
 :::
 
-### Cell Line Correlation
+<!-- ### Cell Line Correlation -->
 
-:::{.scroll-container}
+<!-- :::{.scroll-container} -->
 
-```{r}
-#| label: fig-heatmap-cell-lines-by-cell-lines
-#| fig-cap: "Histogram of the distribution of cell resistance (for a given barcode ID, returns the total number of cell lines identified)."
-#| cache: false
+<!-- ```{r} -->
+<!-- #| label: fig-heatmap-cell-lines-by-cell-lines -->
+<!-- #| fig-cap: "Histogram of the distribution of cell resistance (for a given barcode ID, returns the total number of cell lines identified)." -->
+<!-- #| cache: false -->
 
-## 1) evaluation of cell resistance
-present_cells <- rowSums(se_binarised_compound_batch_mat)
-hist(present_cells,
-     breaks = length(unique(present_cells)),
-     main=NULL)
+<!-- ## 1) evaluation of cell resistance -->
+<!-- present_cells <- rowSums(se_binarised_compound_batch_mat) -->
+<!-- hist(present_cells, -->
+<!--      breaks = length(unique(present_cells)), -->
+<!--      main=NULL) -->
 
-## 2) filtered Heatmaps
-threshold_cell_prevalence <- 10 ## alternatively, remove cells that are not present in all samples
-se_binarised_compact <- se_binarised_compound_batch_mat[present_cells >
-                                                             threshold_cell_prevalence, ]
-cor_cell_lines <- cor(t(se_binarised_compact))
-col_heatmap_scale <- circlize::colorRamp2(c(min(cor_cell_lines, na.rm = TRUE),
-                                            0,
-                                            max(cor_cell_lines, na.rm = TRUE)),
-                                      c("blue", "white", "red"))
+<!-- ## 2) filtered Heatmaps -->
+<!-- threshold_cell_prevalence <- 10 ## alternatively, remove cells that are not present in all samples -->
+<!-- se_binarised_compact <- se_binarised_compound_batch_mat[present_cells > -->
+<!--                                                              threshold_cell_prevalence, ] -->
+<!-- cor_cell_lines <- cor(t(se_binarised_compact)) -->
+<!-- col_heatmap_scale <- circlize::colorRamp2(c(min(cor_cell_lines, na.rm = TRUE), -->
+<!--                                             0, -->
+<!--                                             max(cor_cell_lines, na.rm = TRUE)), -->
+<!--                                       c("blue", "white", "red")) -->
 
-## 3) generate Heatmap of correlation cell lines
-heatmap_cell_lines_by_cell_lines <- ComplexHeatmap::Heatmap(cor_cell_lines,
-                                                            col = col_heatmap_scale,
-                                                            name = "Heatmap: cell-line by cell line",
-                                                            show_row_names = FALSE,
-                                                            row_dend_reorder = TRUE,
-                                                            show_row_dend = TRUE,
-                                                            column_dend_reorder = TRUE,
-                                                            show_column_names = FALSE,
-                                                            na_col = "black",
-                                                            use_raster = TRUE,
-                                                            raster_resize_mat = mean,
-                                                            ## matrix size
-                                                            width = ncol(cor_cell_lines)*unit(0.1, "mm"),
-                                                            height = nrow(cor_cell_lines)*unit(0., "mm"))
+<!-- ## 3) generate Heatmap of correlation cell lines -->
+<!-- heatmap_cell_lines_by_cell_lines <- ComplexHeatmap::Heatmap(cor_cell_lines, -->
+<!--                                                             col = col_heatmap_scale, -->
+<!--                                                             name = "Heatmap: cell-line by cell line", -->
+<!--                                                             show_row_names = FALSE, -->
+<!--                                                             row_dend_reorder = TRUE, -->
+<!--                                                             show_row_dend = TRUE, -->
+<!--                                                             column_dend_reorder = TRUE, -->
+<!--                                                             show_column_names = FALSE, -->
+<!--                                                             na_col = "black", -->
+<!--                                                             use_raster = TRUE, -->
+<!--                                                             raster_resize_mat = mean, -->
+<!--                                                             ## matrix size -->
+<!--                                                             width = ncol(cor_cell_lines)*unit(0.1, "mm"), -->
+<!--                                                             height = nrow(cor_cell_lines)*unit(0.1, "mm")) -->
 
-size_heatmap <- calc_ht_size(heatmap_cell_lines_by_cell_lines)
-padding_heatmap <- unit(c(2, 2, 2, 2), "mm")
+<!-- size_heatmap <- calc_ht_size(heatmap_cell_lines_by_cell_lines) -->
+<!-- padding_heatmap <- unit(c(2, 2, 2, 2), "mm") -->
 
-## 2) Save png and pdf outputs
-png(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".png"),
-    res = 100,
-    width = size_heatmap$width, height = size_heatmap$height, units = c("in"))
-heatmap_cell_lines_by_cell_lines |> ComplexHeatmap::draw(padding = padding_heatmap)
-dev.off()
+<!-- ## 2) Save png and pdf outputs -->
+<!-- # png(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".png"), -->
+<!-- #     res = 100, -->
+<!-- #     width = size_heatmap$width, height = size_heatmap$height, units = c("in")) -->
+<!-- # heatmap_cell_lines_by_cell_lines |> ComplexHeatmap::draw(padding = padding_heatmap) -->
+<!-- # dev.off() -->
 
-knitr::include_graphics(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".png"),
-                        auto_pdf = TRUE,
-                        dpi = 300)
+<!-- # knitr::include_graphics(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".png"), -->
+<!-- #                         auto_pdf = TRUE, -->
+<!-- #                         dpi = 200) -->
 
-ggsave(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".pdf"),
-       heatmap_cell_lines_by_cell_lines |>
-         ComplexHeatmap::draw(padding = padding_heatmap) |>
-         grid::grid.grabExpr(),
-       dpi = 100,
-       width = size_heatmap$width, height = size_heatmap$height, units = c("in"))
+<!-- # ggsave(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".pdf"), -->
+<!-- #        heatmap_cell_lines_by_cell_lines |> -->
+<!-- #          ComplexHeatmap::draw(padding = padding_heatmap) |> -->
+<!-- #          grid::grid.grabExpr(), -->
+<!-- #        dpi = 200, -->
+<!-- #        width = size_heatmap$width, height = size_heatmap$height, units = c("in")) -->
 
-knitr::include_graphics(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".png"),
-                        auto_pdf = TRUE,
-                        dpi = 300)
-```
+<!-- knitr::include_graphics(paste0("figures/cell_lines/heatmap_cell_lines_by_cell_lines_", today_date,".pdf"), -->
+<!--                         auto_pdf = TRUE, -->
+<!--                         dpi = 200) -->
 
-:::
+
+<!-- ``` -->
+
+<!-- ::: -->
 

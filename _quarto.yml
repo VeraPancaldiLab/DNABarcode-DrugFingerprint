@@ -63,7 +63,7 @@ execute:
   error: false
   eval: true
   echo: true
-  freeze: false # avoid re-running R script analyses when publishing them on GH
+  freeze: auto # avoid re-running R script analyses when publishing them on GH
 tbl-cap-location: bottom
 editor: source
 
