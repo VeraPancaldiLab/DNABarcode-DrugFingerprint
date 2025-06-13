@@ -20,65 +20,49 @@ library(purrr)
 ## reporting
 library(flextable)
 
-## plotting
-library(ggplot2)
-library(ComplexHeatmap)
-library(cowplot)
-library(grid)
-library(RColorBrewer)
-library(igraph)
-
 ## auxiliary functions
 source("R/utils.R")
-today_date <- "2025-04-28"
-## today_date <- format(Sys.Date(), "%Y-%m-%d")
+# today_date <- "2025-04-28"
+today_date <- format(Sys.Date(), "%Y-%m-%d")
 
-## set the seed, for fixing generation of ComplexHeatmaps (dendogram clustering)
-set.seed(20)
 ```
 
 - [Original Google Drive repository](https://drive.google.com/drive/folders/1pMSX4M4kHcDGxcsCzsMYHHM6VRvBHHUO).
 
+- Below, apply recommended `.tsv` file extension for tab-separated tables, and rename unequivocally first `colname` into `barcode_id`:
     
 ```{r}
 #| label: format-barcode-csv
-#| echo: false
+#| echo: true
 #| eval: false
 barcode_files <- list.files("./data/barcode-counts/", 
-                               pattern = "exp.*\\.xlsx", 
+                               pattern = "exp.*\\.tabular", 
                                full.names = TRUE)
 
 ## change format + barcode name
 barcode_matrices <- lapply(barcode_files, function(old_filename) {
-  expression_matrix <- readxl::read_excel(old_filename) |> 
+  expression_matrix <- readxl::read_tsv(old_filename) |> 
     rename(barcode_id = 1)
   
   new_filename <- old_filename |> basename() |> tools::file_path_sans_ext()
   
-  readr::write_csv(expression_matrix, 
-                   file = file.path("data", "barcode-counts", paste0(new_filename, ".csv")))
+  readr::write_tsv(expression_matrix, 
+                   file = file.path("data", "barcode-counts", paste0(new_filename, ".tsv")))
+  unlink(old_filename, force = TRUE)
   
 })
 ```
 
+- List of changes applied for better data management:
+
+  - `exp130921`: switch from `Azacyt1_1,5u_exp130921_run290921_40` to `Azacyt1_1.50u_exp130921_run290921_40`, `1,5u` to `1.50u`.
+  - `exp200921`: switch from `Bafilo1_1,2n_exp200921_run111021_45` to `Bafilo1_1.20n_exp200921_run111021_45`, `1,2n` to `1.20n`.
+  - `exp151121`: switch from `Mitomy1_002x_exp151121_run071221_37` to `Mitomy1_0.02u_exp151121_run071221_37`, `002x` to `0.02u`.
+  - `exp070222`: switch from `Tunica1_0,5x_exp070222_run010322_05` to `Tunica1_0.50u_exp070222_run010322_05`, `0,5x` to `0.50u`.
+  - `exp070222t25`: more comprehensive, so we keep the oldest one (no replicate `cDNA` missing). From `cDNA1_000u_exp281022_run141222_01` to `Contro1_000u_exp281022_run141222_01`! [What does `cDNA` refer to as?]{fg="red"}.
     
 ## Barcode counts cleaning {#sec-select-exp}
 
-We early discarded `exp130921_in vivo.csv` from the experiences
-
-<!-- - ['Experiment Date': `130921` and 'Run Date': `101121` ]{fg="red"} -->
-
-<!-- ```{r} -->
-<!-- #| label: select-expression-130921 -->
-<!-- #| eval: false -->
-<!-- #| echo: false -->
-
-<!-- exp130921_expression <- readr::read_csv("data/barcode-counts/exp130921.csv")  -->
-<!-- exp130921_1_expression <- readr::read_csv("data/barcode-counts/exp130921_1.csv")  -->
-<!-- selected_dataset <- compare_dataframes(exp130921_expression, exp130921_1_expression) -->
-<!-- ``` -->
-
-<!-- [Conclusion: Keep `exp130921.csv`, and discard expression file `exp130921_1.csv`. The latter indeed exhibited fewer barcode IDs, while on the shared overlap, both datasets are identical.]{fg="red"} -->
 
 ```{r}
 #| label: select-expression-300821
@@ -217,77 +201,73 @@ cor(controls_exp281022$ctl2, controls_exp281022$Ctrl2) ## they strongly correlat
 ```
 
 
-
-
 <!-- ### Additional comments -->
 
 <!-- - `exp130921_in_vivo`: cells injected in living mice (control versus osermintinimb). -->
 <!-- - `exp281022`: control, protac, cetuximab and gefitinib ($n=4$ replicates each time) were sampled in T25 flasks. P42 and P43 correspond to cells grown without treatment for 42 or 43 passages, and were used for evaluating *barcode drift* technical artefact. -->
 <!-- - `exp281022_time course`: time course experiment. -->
 
-### TODO: barcode counts inconsistencies
+### Data management good practices
 
 Things to consider:
 
-- [Format used is **French csv**, instead of international CSV. CSV means for 'comma-separated value', maybe consider switching [Excel settings](https://support.microsoft.com/en-us/office/import-or-export-text-txt-or-csv-files-5250ac4c-663c-47ce-937b-339e391393ba).]{fg="red"}
 - [I rename the first colname of each expression file as `barcode_id`, storing unequivocal tag.]{fg="red"}
-- Some barcode counts exhibit final line `index`, for which reason?
 
-### Overview of barcode counts
+<!-- ### Overview of barcode counts -->
 
-We report in @tbl-overview-barcode-counts a summary of the barcode counts (File location, `batch_id`, and dimensions of the counts matrix) considered for the generation of the Heatmaps, and the construction of a drug-drug network.
+<!-- We report in @tbl-overview-barcode-counts a summary of the barcode counts (File location, `batch_id`, and dimensions of the counts matrix) considered for the generation of the Heatmaps, and the construction of a drug-drug network. -->
 
-```{r}
-#| label: tbl-overview-barcode-counts
-#| tbl-cap: "Overview of the Barcoding Batches."
-#| tbl-subcap:
-#|   - "Kept Batches"
-#|   - "Removed batches"
-#| layout-ncol: 2
+<!-- ```{r} -->
+<!-- #| label: tbl-overview-barcode-counts -->
+<!-- #| tbl-cap: "Overview of the Barcoding Batches." -->
+<!-- #| tbl-subcap: -->
+<!-- #|   - "Kept Batches" -->
+<!-- #|   - "Removed batches" -->
+<!-- #| layout-ncol: 2 -->
 
-## 1) summarise kept batches ----
-barcode_files <- list.files("./data/barcode-counts/",
-                            pattern = "exp.*\\.csv",
-                            full.names = TRUE)
+<!-- ## 1) summarise kept batches ---- -->
+<!-- barcode_files <- list.files("./data/barcode-counts/", -->
+<!--                             pattern = "exp.*\\.csv", -->
+<!--                             full.names = TRUE) -->
 
-kept_barcode_summaries <- purrr::map(barcode_files, function(filename) {
-  barcode_counts <- readr::read_csv(filename, show_col_types = FALSE)
-  experience_name <- filename |> basename() |> tools::file_path_sans_ext()
-  experience_summary <- tibble::tibble(`Experience Name`= experience_name,
-                                       Features= paste0("Barcode matrix contains: ",
-                                                        nrow(barcode_counts),
-                                                        " unique barcode IDs, and ",
-                                                        ncol(barcode_counts)-1, " replicates."))
-  return(experience_summary)
-}) |>
-  purrr::list_rbind()
-flextable::flextable(kept_barcode_summaries) |> 
-  bold(part="header")
+<!-- kept_barcode_summaries <- purrr::map(barcode_files, function(filename) { -->
+<!--   barcode_counts <- readr::read_csv(filename, show_col_types = FALSE) -->
+<!--   experience_name <- filename |> basename() |> tools::file_path_sans_ext() -->
+<!--   experience_summary <- tibble::tibble(`Experience Name`= experience_name, -->
+<!--                                        Features= paste0("Barcode matrix contains: ", -->
+<!--                                                         nrow(barcode_counts), -->
+<!--                                                         " unique barcode IDs, and ", -->
+<!--                                                         ncol(barcode_counts)-1, " replicates.")) -->
+<!--   return(experience_summary) -->
+<!-- }) |> -->
+<!--   purrr::list_rbind() -->
+<!-- flextable::flextable(kept_barcode_summaries) |>  -->
+<!--   bold(part="header") -->
 
-## 2) summarise discarded batches ----
-discarded_files <- list.files("./data/barcode-counts/temp discarded/",
-                            pattern = "exp.*\\.csv",
-                            full.names = TRUE)
+<!-- ## 2) summarise discarded batches ---- -->
+<!-- discarded_files <- list.files("./data/barcode-counts/temp discarded/", -->
+<!--                             pattern = "exp.*\\.csv", -->
+<!--                             full.names = TRUE) -->
 
-## change format + barcode name
-barcode_discarded_summaries <- purrr::map(discarded_files, function(filename) {
-  barcode_counts <- readr::read_csv(filename, show_col_types = FALSE)
-  experience_name <- filename |> basename() |> tools::file_path_sans_ext()
-  experience_summary <- tibble::tibble(`Experience Name`= experience_name,
-                                       Features= paste0("Barcode matrix contains: ",
-                                                        nrow(barcode_counts),
-                                                        " unique barcode IDs, and ",
-                                                        ncol(barcode_counts)-1, " replicates."))
-  return(experience_summary)
-}) |>
-  purrr::list_rbind()
+<!-- ## change format + barcode name -->
+<!-- barcode_discarded_summaries <- purrr::map(discarded_files, function(filename) { -->
+<!--   barcode_counts <- readr::read_csv(filename, show_col_types = FALSE) -->
+<!--   experience_name <- filename |> basename() |> tools::file_path_sans_ext() -->
+<!--   experience_summary <- tibble::tibble(`Experience Name`= experience_name, -->
+<!--                                        Features= paste0("Barcode matrix contains: ", -->
+<!--                                                         nrow(barcode_counts), -->
+<!--                                                         " unique barcode IDs, and ", -->
+<!--                                                         ncol(barcode_counts)-1, " replicates.")) -->
+<!--   return(experience_summary) -->
+<!-- }) |> -->
+<!--   purrr::list_rbind() -->
 
-flextable::flextable(barcode_discarded_summaries) |> 
-  bold(part="header")
+<!-- flextable::flextable(barcode_discarded_summaries) |>  -->
+<!--   bold(part="header") -->
 
-```
+<!-- ``` -->
 
-From @tbl-overview-barcode-counts, `{r} nrow(kept_barcode_summaries)` barcode experiences are included in the analysis, whereas `{r} nrow(barcode_discarded_summaries)` batches/experiences are filtered out.
+<!-- From @tbl-overview-barcode-counts, `{r} nrow(kept_barcode_summaries)` barcode experiences are included in the analysis, whereas `{r} nrow(barcode_discarded_summaries)` batches/experiences are filtered out. -->
 
 
 ## Phenotype metadata cleaning {#sec-metadata-phenotypes}
@@ -312,11 +292,11 @@ Most of the R instructions reported in this section aim at rendering the `Table 
 pheno_colnames <- c(Pathway = "Pathways", MoA = "...2", 
                     Compound = "Samples", Replicates = "Replicates",
                     Concentrations = "Concentrations", Date = "Experiment date",
-                    `Run date` = "Run date", Duration="Duration", 
+                    `Run date` = "Run date", Duration = "Duration", 
                     Kept="Kept", Comments = "Comments")
 
 ## prune irrelevant colnames ----
-## data/Table of compounds_stringent_2025-04-18.xlsx
+## data/Table of compounds_stringent_2025-06-13.xlsx
 pheno_data <- readxl::read_xlsx("data/Table of compounds_whole_2025-04-28.xlsx",
                                 sheet = "Experimental Design",
                                 col_types = c(rep("text", 3), "numeric", 
