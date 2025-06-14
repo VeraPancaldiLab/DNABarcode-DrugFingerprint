@@ -26,6 +26,7 @@ source("R/utils.R")
 today_date <- format(Sys.Date(), "%Y-%m-%d")
 
 ```
+## Barcode counts cleaning {#sec-select-exp}
 
 - [Original Google Drive repository](https://drive.google.com/drive/folders/1pMSX4M4kHcDGxcsCzsMYHHM6VRvBHHUO).
 
@@ -53,227 +54,62 @@ barcode_matrices <- lapply(barcode_files, function(old_filename) {
 })
 ```
 
+
+- [I rename the first colname of each expression file as `barcode_id`, storing unequivocal tag.]{fg="red"}
 - List of changes applied for easier mapping between replicates' barcode profiles and samples' metadata:
 
-  - `exp130921_in_vivo`, switch from `Osimer1_001g_exp130921_run101121_28` to `Osimer1_001m_exp130921_run101121_28`, from `001g` to `001m`
-  - `exp130921`: switch from `Azacyt1_1,5u_exp130921_run290921_40` to `Azacyt1_1.50u_exp130921_run290921_40`, `1,5u` to `1.50u`.
-  - `exp200921`: switch from `Bafilo1_1,2n_exp200921_run111021_45` to `Bafilo1_1.20n_exp200921_run111021_45`, `1,2n` to `1.20n`.
+  - `exp130921`, switch from `Osimer1_001g_exp130921_run101121_28` to `Osimer1_001m_exp130921_run101121_28`, from `001g` to `001m` (*in-vivo* context), and switch from `Azacyt1_1,5u_exp130921_run290921_40` to `Azacyt1_1.50u_exp130921_run290921_40`, `1,5u` to `1.50u`^[*In-vivo* = cells injected in living mice, `control` versus `osermintinimb`.].
+  - `exp200921`: switch from `Bafilo1_1,2n_exp200921_run111021_45` to `Bafilo1_1.20n_exp200921_run111021_45`, `1,2n` to `1.20n`. In addition, [the 4 control replicates of *dose-response* batch `exp200921_dose_response` are shared with standard experiment `exp200921.csv`.]{fg="red"}
   - `exp151121`: switch from `Mitomy1_002x_exp151121_run071221_37` to `Mitomy1_0.02u_exp151121_run071221_37`, `002x` to `0.02u`.
   - `exp070222`: switch from `Tunica1_0,5x_exp070222_run010322_05` to `Tunica1_0.50u_exp070222_run010322_05`, `0,5x` to `0.50u`.
   - `exp070222t25`: more comprehensive, so we keep the oldest one (no replicate `cDNA` missing). From `cDNA1_000u_exp281022_run141222_01` to `Contro1_000u_exp281022_run141222_01`! [What does `cDNA` refer to as?]{fg="red"}.
-    
-## Barcode counts cleaning {#sec-select-exp}
+  - `exp281022t25`: one control and 3 Drug Compounds were sampled in **T25 flasks**. `P42` and `P43` are used for evaluating *barcode drift*, a technical artefact in relation with depth sequencing. [Most of the replicates lack of significant effect due to insufficient dose]{fg="red"}.
+- `exp281022gamme` refers to the time course experiment.
 
-
-```{r}
-#| label: select-expression-300821
-#| eval: false
-#| echo: false
-
-
-exp300821 <- readr::read_csv("data/barcode-counts/exp300821.csv") 
-
-## fake additional colnames, containing only missing colnames
-exp300821_whole <- readr::read_csv2("old-data-backup/data-raw/barcode-counts/exp300821.csv") |> 
-  rename(barcode_id = 1)
-selected_dataset <- compare_dataframes(exp300821, exp300821_whole)
-
-setdiff(exp300821$barcode_id, exp300821_whole$barcode_id)
-cor(exp300821$Osimer4_100n_exp300821_run290921_08, exp300821_whole$Osimer4_100n_exp300821_run290921_08)
-
-readr::write_csv(exp300821, "data/barcode-counts/exp300821.csv")
-```
+We report in @tbl-overview-barcode-counts a summary of the barcode counts (File location, `batch_id`, and dimensions).
 
 ```{r}
-#| label: rename-erroneous-date-271221
-#| eval: false
-#| echo: true
-#| lst-label: lst-rename-bad-date
-#| lst-cap: Update labelling of latest experience.
+#| label: tbl-overview-barcode-counts
+#| tbl-cap: "Main Batch features."
 
-exp271221 <- readr::read_csv("data/barcode-counts/exp271221.csv") 
-exp271221_whole <- readr::read_csv2("old-data-backup/data-raw/barcode-counts/exp211221cor.csv") |> 
-  rename(barcode_id = 1)
-selected_dataset <- compare_dataframes(exp271221, exp271221_whole)
+barcode_files <- list.files("./data/barcode-counts/",
+                            pattern = "exp.*\\.tsv",
+                            full.names = TRUE)
+barcode_summaries <- purrr::map(barcode_files, function(filename) {
+  barcode_counts <- readr::read_tsv(filename, show_col_types = FALSE)
+  experience_summary <- tibble::tibble(Filename = basename(filename),
+                                       `Num Barcode IDs` = nrow(barcode_counts),
+                                       `Num Replicates` = ncol(barcode_counts) - 1)
+  return(experience_summary)
+}) |>
+  purrr::list_rbind()
 
-file.rename("data/barcode-counts/exp211221.csv", "data/barcode-counts/exp271221.csv") 
+barcode_summaries <- barcode_summaries |>
+  dplyr::inner_join(readxl::read_excel("data/Table of compounds_whole_2025-06-13.xlsx",
+    sheet = "Batch Mapping"),
+    by = "Filename") |>
+  dplyr::relocate(Batch_ID, .after = Filename) |>
+  dplyr::relocate(`Num Barcode IDs`, `Num Replicates`, .after = `Run date`)
+
+# openxlsx::write.xlsx("./data/temp_batch_mapping.xlsx", 
+#                      asTable = TRUE, x = barcode_summaries)
+
+flextable::flextable(barcode_summaries) |>
+  bold(part = "header") |> 
+  flextable::merge_v(j = c("Filename", "Batch_ID", "General Comments Per Batch"),
+                      part = "body")
 ```
 
-[In @lst-rename-bad-date, we rename expression file `exp211221.csv` into `exp271221.csv`, relying on date annotations.]{fg="red"}
+From @tbl-overview-barcode-counts: 
 
-```{r}
-#| label: discriminate-200921-dose-response-standard
-#| eval: false
-#| echo: false
-
-exp200921_standard <- readr::read_csv("data/barcode-counts/exp200921.csv") 
-exp200921_dose_response <- readr::read_csv("data/barcode-counts/exp200921_dose_response.csv")
-
-
-exp200921_global <- readr::read_tsv("data/barcode-counts/exp200921_whole exp.tabular") |> dplyr::rename(barcode_id="key")
-
-## able to map all samples from global to either dose response or standard
-setdiff(colnames(exp200921_global), 
-        union(colnames(exp200921_dose_response), colnames(exp200921_standard)))
-
-## all dose response variables can be found in whole experiment
-setdiff(colnames(exp200921_dose_response), colnames(exp200921_global))
-readr::write_csv(exp200921_global |> 
-                   dplyr::select(dplyr::all_of(colnames(exp200921_dose_response))), 
-                 "data/barcode-counts/exp200921_dose_response.csv")
-
-## 5 compounds (so 5*4=20) replicates are not avalaible in whole experiment
-## waiting for confirmation before removing them
-intersect(colnames(exp200921_standard), colnames(exp200921_global))
-print("\n\n")
-setdiff(colnames(exp200921_standard), colnames(exp200921_global))
-
-cat(intersect(colnames(exp200921_standard), colnames(exp200921_global)), 
-    file = "./data/logs/replicates_preserved_200921.txt", sep = "\n")
-cat(setdiff(colnames(exp200921_standard), colnames(exp200921_global)), 
-    file = "./data/logs/replicates_discarded_200921.txt", sep = "\n")
-
-## selected_dataset <- compare_dataframes(exp200921_standard, exp200921_dose_response)
-```
-
-[While the *dose-response* experience `exp200921_dose_response` exhibits distinct biological objective, it turned out that the 4 control biological replicates are shared with classical compound response comparison `exp200921.csv`. However, **the number of sequenced barcode IDs differ in both experiences!!** In addition, note that `exp200921.csv` has been tagged as discarded, except for the Controls!!]{fg="red"}
-  
-Code snippets in @lst-281022 and @lst-281022-time-course aim at replacing unprecise labelling of barcode IDs (no concentration, no time duration, ...) in the 2022 batch experiences.
-
-```{r}
-#| label: select-expression-281022
-#| eval: false
-#| echo: true
-#| lst-label: lst-281022
-#| lst-cap: Update labelling of latest experience.
-
-## extract old colnames
-exp281022_expression <- readr::read_csv("data/barcode-counts/exp281022.csv") 
-## cat(colnames(exp281022_expression), file = "281022_old_labels.txt", sep = "\n")
-
-## extract mapping old_names with new_names
-mapping_old_new_281022 <- readxl::read_excel("data/Table of compounds_whole_2025-04-28.xlsx", 
-                                             sheet = "Sample Mapping 281022")
-
-labels_old_new_281022 <- setNames(object = mapping_old_new_281022$OLD_replicate_label, 
-                                  nm = mapping_old_new_281022$NEW_replicate_label)
-
-## apply change labelling
-exp281022_expression <- exp281022_expression |> 
-  dplyr::rename(dplyr::all_of(labels_old_new_281022))
-
-readr::write_csv(exp281022_expression, "data/barcode-counts/exp281022.csv")
-```
-
-
-```{r}
-#| label: select-expression-281022-time-course
-#| eval: false
-#| echo: true
-#| lst-label: lst-281022-time-course
-#| lst-cap: Update time course experiences.
-
-exp281022_expression_timecourse <- readr::read_csv("data/barcode-counts/exp281022_time_course.csv") 
-## cat(colnames(exp281022_expression_timecourse), file = "281022_timecourse_old_labels.txt", sep = "\n")
-
-## update colnames ----
-
-mapping_old_new_time_course <- read_excel("data/Table of compounds_whole_2025-04-28.xlsx", 
-                                     sheet = "Sample Mapping Time Course")
-
-labels_old_new_time_course <- setNames(object = mapping_old_new_time_course$OLD_replicate_label, 
-                                       nm = mapping_old_new_time_course$NEW_replicate_label)
-
-## apply change labelling
-exp281022_expression_timecourse <- exp281022_expression_timecourse |> 
-  dplyr::rename(dplyr::all_of(labels_old_new_time_course))
-
-readr::write_csv(exp281022_expression_timecourse,
-                 "data/barcode-counts/exp281022_time_course.csv")
-
-## To evaluate whether controls are different between experiment 281022 and 281022 Time Course
-controls_exp281022 <- exp281022_expression |> 
-  select(key_barcode, dplyr::matches("^ctl")) |> 
-  dplyr::inner_join(exp281022_expression_timecourse |> 
-                      select(key_barcode, dplyr::matches("^Ctrl")),
-                    by="key_barcode")
-cor(controls_exp281022$ctl2, controls_exp281022$Ctrl2) ## they strongly correlate with each other, but not a perfect match -> controls are indeed distinct
-
-```
-
-
-<!-- ### Additional comments -->
-
-<!-- - `exp130921_in_vivo`: cells injected in living mice (control versus osermintinimb). -->
-<!-- - `exp281022`: control, protac, cetuximab and gefitinib ($n=4$ replicates each time) were sampled in T25 flasks. P42 and P43 correspond to cells grown without treatment for 42 or 43 passages, and were used for evaluating *barcode drift* technical artefact. -->
-<!-- - `exp281022_time_course`: time course experiment. -->
-
-### Data management good practices
-
-Things to consider:
-
-- [I rename the first colname of each expression file as `barcode_id`, storing unequivocal tag.]{fg="red"}
-
-<!-- ### Overview of barcode counts -->
-
-<!-- We report in @tbl-overview-barcode-counts a summary of the barcode counts (File location, `batch_id`, and dimensions of the counts matrix) considered for the generation of the Heatmaps, and the construction of a drug-drug network. -->
-
-<!-- ```{r} -->
-<!-- #| label: tbl-overview-barcode-counts -->
-<!-- #| tbl-cap: "Overview of the Barcoding Batches." -->
-<!-- #| tbl-subcap: -->
-<!-- #|   - "Kept Batches" -->
-<!-- #|   - "Removed batches" -->
-<!-- #| layout-ncol: 2 -->
-
-<!-- ## 1) summarise kept batches ---- -->
-<!-- barcode_files <- list.files("./data/barcode-counts/", -->
-<!--                             pattern = "exp.*\\.csv", -->
-<!--                             full.names = TRUE) -->
-
-<!-- kept_barcode_summaries <- purrr::map(barcode_files, function(filename) { -->
-<!--   barcode_counts <- readr::read_csv(filename, show_col_types = FALSE) -->
-<!--   experience_name <- filename |> basename() |> tools::file_path_sans_ext() -->
-<!--   experience_summary <- tibble::tibble(`Experience Name`= experience_name, -->
-<!--                                        Features= paste0("Barcode matrix contains: ", -->
-<!--                                                         nrow(barcode_counts), -->
-<!--                                                         " unique barcode IDs, and ", -->
-<!--                                                         ncol(barcode_counts)-1, " replicates.")) -->
-<!--   return(experience_summary) -->
-<!-- }) |> -->
-<!--   purrr::list_rbind() -->
-<!-- flextable::flextable(kept_barcode_summaries) |>  -->
-<!--   bold(part="header") -->
-
-<!-- ## 2) summarise discarded batches ---- -->
-<!-- discarded_files <- list.files("./data/barcode-counts/temp discarded/", -->
-<!--                             pattern = "exp.*\\.csv", -->
-<!--                             full.names = TRUE) -->
-
-<!-- ## change format + barcode name -->
-<!-- barcode_discarded_summaries <- purrr::map(discarded_files, function(filename) { -->
-<!--   barcode_counts <- readr::read_csv(filename, show_col_types = FALSE) -->
-<!--   experience_name <- filename |> basename() |> tools::file_path_sans_ext() -->
-<!--   experience_summary <- tibble::tibble(`Experience Name`= experience_name, -->
-<!--                                        Features= paste0("Barcode matrix contains: ", -->
-<!--                                                         nrow(barcode_counts), -->
-<!--                                                         " unique barcode IDs, and ", -->
-<!--                                                         ncol(barcode_counts)-1, " replicates.")) -->
-<!--   return(experience_summary) -->
-<!-- }) |> -->
-<!--   purrr::list_rbind() -->
-
-<!-- flextable::flextable(barcode_discarded_summaries) |>  -->
-<!--   bold(part="header") -->
-
-<!-- ``` -->
-
-<!-- From @tbl-overview-barcode-counts, `{r} nrow(kept_barcode_summaries)` barcode experiences are included in the analysis, whereas `{r} nrow(barcode_discarded_summaries)` batches/experiences are filtered out. -->
+- **Number of barcode counts profiles**: `{r} length(barcode_files)`
+- **Number of batches**:  `{r} length(unique(barcode_summaries$Date))`, retrieved on number of dates.
+- **Number of runs**: `{r} length(unique(barcode_summaries$`Run date`))`, based on the total number of Barcode sequencing Runs. 
+- **Number of experiments**: `{r} length(unique(barcode_summaries$Batch_ID))`, based on Batch IDs.
+- **Technical covariates**: `{r} nrow(barcode_summaries)`, the Cartesian product of batches per run, as both Ending date of experiment, and sequencing can impact the output.
 
 
 ## Phenotype metadata cleaning {#sec-metadata-phenotypes}
-
-- [General question: what's the difference between `Run Date` and `Experiment Date`?]{fg="red"}
 
 Most of the R instructions reported in this section aim at rendering the `Table of compounds` file compliant with the `tidy` format, see @tip-tidyformat. These data-wrangling operations are split in 4 steps:
 
