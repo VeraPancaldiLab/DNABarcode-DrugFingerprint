@@ -56,6 +56,13 @@ thresh_background <- 4
 pheno_data <- readr::read_csv(paste0("./data/pheno_data_metadata_",
                                      today_date, ".csv"))
 
+## artificially add 4 control replicates for exp200921_dose_response ----
+replicates_metadata_augmented <- replicates_metadata |> 
+  dplyr::bind_rows(
+    replicates_metadata |> 
+      dplyr::filter(Compound == "Control" & Batch_ID == "exp200921") |> 
+      dplyr::mutate(Batch_ID = "exp200921_dose_response"))
+
 ## filename <- grep( "exp200921", barcode_files, value = TRUE)[2]
 barcode_counts_aggregated <- purrr::map(barcode_files, function(filename) {
   barcode_counts <- readr::read_csv(filename)
