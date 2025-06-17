@@ -15,8 +15,10 @@ library(tidyr)
 library(stringr)
 library(readr)
 library(readxl)
-library(openxlsx)
 library(purrr)
+
+## plotting
+library(ggplot2)
 
 ## reporting
 library(flextable)
@@ -27,19 +29,152 @@ library(downlit)
 
 ## auxiliary functions
 source("R/utils.R")
-today_date <- "2025-04-28"
+today_date <- "2025-06-13"
 ## today_date <- format(Sys.Date(), "%Y-%m-%d")
 
 ## set the seed, for fixing generation of ComplexHeatmaps (dendogram clustering)
 set.seed(20)
 ```
 
+**Code colour**: [Luca's protocol]{fg="blue"}, and [Bastien's comments and perspectives]{fg="red"}
+
+## Import barcode counts to standardised BioConductor formats
+
+- Read all barcode profiles, and merge them together based on shared `barcode_id`.
+
+```{r}
+#| label: import-barcode-counts-and-merge-them
+#| lst-label: lst-import-barcode-counts-and-merge-them
+#| lst-cap: Import all raw barcode `.tsv` files, and add artificial controls for experiment `exp200921_dose_response`.
+
+pheno_data <- readr::read_csv(paste0("./data/replicates_barcode_metadata_",
+                                     today_date, ".csv"), 
+                              show_col_types = FALSE)
+barcode_files <- unique(pheno_data$Filename)
+
+## 1) artificially add duplicated metadata ----
+    artificial_controls_metadata <- pheno_data |>
+      dplyr::filter(Compound == "Control" & Batch_ID == "exp200921") |>
+      dplyr::mutate(Batch_ID = "exp200921_dose_response", 
+                    Replicates_ID = gsub("run111021", "run101121", Replicates_ID))
+pheno_data <- pheno_data |>
+  dplyr::bind_rows(artificial_controls_metadata)
+
+barcode_counts_aggregated <- purrr::map(barcode_files, function(filename) {
+  barcode_filepath <- file.path("./data/barcode-counts", filename)
+  barcode_counts <- readr::read_tsv(barcode_filepath, 
+                                    show_col_types = FALSE)
+  
+  ## 2) artificially add duplicated control samples for dose-response ----
+  if (filename == "exp200921.tsv") {
+    barcode_duplicated_controls <- barcode_counts |> 
+      dplyr::select("barcode_id", dplyr::matches("^Contro(.*)_000u_exp200921_run111021_")) |> 
+      dplyr::rename_with(
+        .fn = ~ gsub("run111021", "run101121", .x),
+        .cols = starts_with("Contro"))
+    
+    barcode_counts <- barcode_counts |> 
+      dplyr::inner_join(barcode_duplicated_controls, by = "barcode_id")
+  }
+  
+  return(barcode_counts)
+}) |> 
+  purrr::reduce(~ inner_join(.x, .y, by = "barcode_id"))
+
+## 3) check that we can map each barcode replicate to its corresponding metadata information
+stopifnot(identical(setdiff(pheno_data$Replicates_ID, colnames(barcode_counts_aggregated)), character(0)))
+gc()
+```
+
+
+The resulting barcode counts matrix stores `{r} length(unique(barcode_counts_aggregated$barcode_id))` unique **barcode IDs**, and `{r} ncol(barcode_counts_aggregated)-1` unique replicates (with 4 artificially duplicated controls for dose response).
+
+
+### Generating a `DGEList` object from sample counts and metadata
+
+- Export to `EdgeR::DGEList` format.
+
+```{r}
+#| label: export-DGEList
+#| lst-label: lst-export-DGEList
+#| lst-cap: Export to `DGEList` format.
+
+# prepare barcode counts ----
+counts <- barcode_counts_aggregated |> 
+  tibble::column_to_rownames("barcode_id") |> 
+  as.matrix()
+## ensure consistent order
+counts <- counts[, pheno_data$Replicates_ID]
+
+samples <- pheno_data |> 
+  tibble::column_to_rownames("Replicates_ID")
+dge_count <- edgeR::DGEList(counts = counts, 
+                            samples = samples, 
+                            group = samples$Compound,
+                            remove.zeros = TRUE)
+saveRDS(dge_count, 
+        paste0("./data/processed/DGEList_before_filtering_", today_date, ".rds"))
+
+```
+
+### Generating a `SummarizedExperiment` object from sample counts and metadata
+
+```{r}
+#| label: export-SummarizedExperiment
+#| lst-label: lst-export-SummarizedExperiment
+#| lst-cap: Export to `SummarizedExperiment` format.
+
+barcode_metadata <- tibble::tibble(barcode_id = row.names(counts))
+row.names(barcode_metadata) <- row.names(counts)
+
+summarized_before_filtering <- SummarizedExperiment::SummarizedExperiment(
+  assays = list(counts = counts),
+  rowData = barcode_metadata,
+  colData = samples)
+
+saveRDS(summarized_before_filtering, 
+        paste0("./data/processed/SummarizedExperiment_before_filtering_", today_date, ".rds"))
+
+rm(artificial_controls_metadata, barcode_counts_aggregated, barcode_metadata, counts, samples, pheno_data)
+```
+
+## Barcode quality controls
+
+In this section, we use `bartools::thresholdCounts()` to determine an appropriate threshold to maximise signal to noise and retain the most informative barcodes. 
+
+### Remove barcodes with no information
+
+- Remove barcode IDs with only null values. All kept barcode IDs contain at least one non-null value: 
+
+```{r}
+#| label: remove-null-rows
+
+dge_count <- dge_count[rowSums(dge_count$counts) != 0, ]
+```
+
+### Background noise filtering
+
+- Evaluate absolute thresholds on total read counts
+
+```{r}
+test_filtered <- bartools::thresholdCounts(
+  dge_count,
+  type = "relative",
+  threshold = 1e-5,
+  minSamples = 3,
+  plot = TRUE,
+  group = "Compound"
+)
+
+ggsave("./figures/barcode_filtering/test_noise_filtering_plot.pdf", 
+       test_filtered, dpi = 600, width = 14, height = 14)
+```
+
+
 
 ## Preprocessing barcode counts{#sec-batch-processing}
 
-**Code colour**: [Luca's protocol]{fg="blue"}, and [Bastien's comments and perspectives]{fg="red"}
-
-### **Background Noise Removal** and `SummarizedExperiment` stantardised storage
+### **Background Noise Removal**
 
 [Eliminate barcodes for which the combined counts of the 4 controls per barcode are below a given threshold, here `5`.]{fg="blue"} 
 
@@ -48,20 +183,8 @@ set.seed(20)
 #| lst-label: lst-background-filtering
 #| lst-cap: Remove background noise.
 
-barcode_files <- list.files("./data/barcode-counts/",
-                            pattern = "exp.*\\.csv",
-                            full.names = TRUE)
 thresh_background <- 4
-## ./data/pheno_data_metadata_2025-04-18.csv
-pheno_data <- readr::read_csv(paste0("./data/pheno_data_metadata_",
-                                     today_date, ".csv"))
 
-## artificially add 4 control replicates for exp200921_dose_response ----
-replicates_metadata_augmented <- replicates_metadata |> 
-  dplyr::bind_rows(
-    replicates_metadata |> 
-      dplyr::filter(Compound == "Control" & Batch_ID == "exp200921") |> 
-      dplyr::mutate(Batch_ID = "exp200921_dose_response"))
 
 ## filename <- grep( "exp200921", barcode_files, value = TRUE)[2]
 barcode_counts_aggregated <- purrr::map(barcode_files, function(filename) {

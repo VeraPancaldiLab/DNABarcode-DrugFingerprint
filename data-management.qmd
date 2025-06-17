@@ -108,6 +108,93 @@ From @tbl-overview-barcode-counts:
 - **Number of experiments**: `{r} length(unique(barcode_summaries$Batch_ID))`, based on Batch IDs.
 - **Technical covariates**: `{r} nrow(barcode_summaries)`. Is computed as the *Cartesian product* of batches per run, both Date of experiment and sequencing could impact the output.
 
+## `DrugSimDB` to map each compound a Pathway and MoA {#sec-DrugSimDB}
+
+- Map `DrugBank-ID` to their raw generic drug name, with [`drug_id_mapping.tsv`](https://github.com/iit-Demokritos/drug_id_mapping/blob/main/drug-mappings.tsv). 
+
+```{r}
+#| label: map-drugbankID-to-generic-name
+# check after Samples_ID, to highlight duplicates
+
+compound_metadata <- readr::read_csv(paste0("./data/replicates_barcode_metadata_comprehensive_",
+                                     today_date, ".csv"), 
+                              show_col_types = FALSE) |> 
+  dplyr::filter(!Pathway %in% c("Control", "Drug combinations", "Novel compound", "Control - time zero")) |> 
+  dplyr::distinct(Pathway, Compound)
+
+utils::download.file(url = "https://raw.githubusercontent.com/iit-Demokritos/drug_id_mapping/refs/heads/main/drug-mappings.tsv", 
+                     destfile = "./data/drugbank/drug-mappings.tsv")
+drug_mappings <- readr::read_tsv("./data/drugbank/drug-mappings.tsv")
+
+compound_metadata_mapped <- compound_metadata |> 
+  fuzzyjoin::stringdist_left_join(drug_mappings |> 
+                                    dplyr::select(drugbankId, name),
+                                  by = c(Compound = "name"),
+ # https://www.rdocumentation.org/packages/stringdist/versions/0.9.15/topics/stringdist-metrics, Damerau-Levenshtein distance                             
+                                  method = "osa", 
+                                  max_dist = 2,
+                                  distance_col = "distance") |> 
+  dplyr::rename(Generic_Name = name, Compound_Luca = Compound) |> 
+  dplyr::relocate(Generic_Name, .after = Compound_Luca)
+
+openxlsx::write.xlsx(compound_metadata_mapped,
+                     file = "./data/drugbank/mapped_drugs_barcode.xlsx", 
+                     asTable = TRUE)
+
+```
+
+
+  - **Example**: `DrugBankID: DB12218` to its `generic name: Capivasertib`.
+
+- Retrieve [raw drugbank XML](https://www.synapse.org/Portal/filehandleassociation?associatedObjectId=syn22321343&associatedObjectType=FileEntity&fileHandleId=64023744), to map each generic drug name to its corresponding `DrugBank-ID`. 
+  
+  1. Create a free account on [`Synapse`](https://www.synapse.org/Profile:3546765/profile), a website dedicated to open-source.
+  2. Use [`drugbankR`](https://github.com/girke-lab/drugbankR) package to 1) convert the `xml` file format of `DrugBank` into a tidy dataframe, and 2) use `SQLite` syntax to explore it.
+  3. (Alternative): Perform API requests directly on [`DrugBank`](https://go.drugbank.com/drugs), but it requires to log in as an academic, and might be slower than querying a local database. 
+
+### `DrugSimDB` and similarity scores: 
+
+  1. [Update drug-drug similarity measures based on the latest version of `Drugbank`](https://github.com/VafaeeLab/drugSimDB/blob/master/update_databases/ReadMe.md), a tutorial mixing `shell` commands and R scripts. 
+  
+  2. [Main Similarity scores resulting from running DD steps of `DrugBank`](https://figshare.com/articles/dataset/DrugSimDB/11948904). Similarity scores cover 6 items: `Chemical structure`,`Targets`, `Gene Ontology`, `Cellular component`, `Molecular Function` and `Biological process of induced pathways`.
+ 
+
+ 
+```{r}
+#| label: download-drugbank
+#| echo: true
+#| eval: false
+
+library(httr)
+library(jsonlite)
+
+# Get InChIKey from PubChem for Levofloxacin (or use webchem)
+inchikey <- "GSDSWSVVBLHKDQ-UHFFFAOYSA-N"
+
+# Use UniChem to get DrugBank ID
+url <- paste0("https://www.ebi.ac.uk/unichem/rest/inchikey/", inchikey)
+res <- fromJSON(url)
+
+
+url_base <- "https://go.drugbank.com/drugs"
+drug_identifier <- "DB00358"
+drug_detailled_information <- httr2::request(url_base) |>
+  httr2::req_url_path_append(drug_identifier) |>
+  httr2::req_perform() |>
+  httr2::resp_body_json()
+
+url_base <- paste0("https://go.drugbank.com/drugs", drug_identifier)
+res <- jsonlite::fromJSON(url_base)
+
+
+
+
+renv::install("girke-lab/drugbankR")
+drugbank_dataframe <- drugbankR::dbxml2df( xmlfile = "data/drugbank/drugbank.xml",
+                                           version = "5.1.3") 
+```
+ 
+
 
 ## Phenotype metadata cleaning {#sec-metadata-phenotypes}
 
@@ -286,7 +373,6 @@ replicates_metadata_shortened <- replicates_metadata |>
                 -Duration_ID, -Concentrations_ID, 
                 -Replicates, -Comments)
 
-
 # replicates_metadata_deduplicated <- replicates_metadata |> 
 #   dplyr::distinct(Replicates_ID, .keep_all = TRUE)
 # all.equal(replicates_metadata, replicates_metadata_deduplicated)
@@ -294,17 +380,14 @@ replicates_metadata_shortened <- replicates_metadata |>
 
 ## Step 2) save the tidy phenotype metatada table ----
 readr::write_csv(replicates_metadata,
-                 file = paste0("data/pheno_data_metadata_", today_date,".csv"))
+                 file = paste0("data/replicates_barcode_metadata_comprehensive_", 
+                               today_date,".csv"))
+readr::write_csv(replicates_metadata_shortened,
+                 file = paste0("data/replicates_barcode_metadata_", today_date,".csv"))
 
-  dplyr::select(Batch_ID, Pathway, MoA,
-                Compound, Samples_ID, 
-                Replicates, Replicates_ID,
-                Concentrations, Concentrations_ID, 
-                Date, `Run date`, Duration, Duration_ID) |> 
-
-flextable::flextable(head(pheno_data_formatted)) |> 
+flextable::flextable(head(replicates_metadata_shortened)) |> 
   autofit() |> 
-  bold(part="header")
+  bold(part = "header")
 ```
 
 ::: {#tip-tidyformat .callout-tip title="Tidy Data Format (Key Principles)" collapse="true"}
