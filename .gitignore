@@ -15,7 +15,10 @@ Rplot**
 /.quarto/
 /docs/
 
-# ignore large databases, such as
+# ignore large databases, such as DrugBank
+data/drugbank/drugbank*
 
 # ignore temp files
-data/drugbank/drugbank*
+*test*
+*temp*
+

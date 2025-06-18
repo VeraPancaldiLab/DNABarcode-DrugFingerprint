@@ -49,16 +49,20 @@ set.seed(20)
 
 pheno_data <- readr::read_csv(paste0("./data/replicates_barcode_metadata_",
                                      today_date, ".csv"), 
-                              show_col_types = FALSE)
+                              show_col_types = FALSE) 
 barcode_files <- unique(pheno_data$Filename)
 
 ## 1) artificially add duplicated metadata ----
-    artificial_controls_metadata <- pheno_data |>
-      dplyr::filter(Compound == "Control" & Batch_ID == "exp200921") |>
-      dplyr::mutate(Batch_ID = "exp200921_dose_response", 
-                    Replicates_ID = gsub("run111021", "run101121", Replicates_ID))
+artificial_controls_metadata <- pheno_data |>
+  dplyr::filter(Compound == "Control" & Batch_ID == "exp200921") |>
+  dplyr::mutate(Batch_ID = "exp200921_dose_response", 
+                Replicates_ID = gsub("run111021", "run101121", Replicates_ID))
 pheno_data <- pheno_data |>
-  dplyr::bind_rows(artificial_controls_metadata)
+  dplyr::bind_rows(artificial_controls_metadata) |> 
+  # add a unique column per compound and biological condition
+  dplyr::mutate(Unique_compound = paste0(Compound, "_", Batch_ID, "_",
+                                        "Conc: ", Concentrations_Formatted, "_",
+                                        "Days: ", Duration, sep = "_"))
 
 barcode_counts_aggregated <- purrr::map(barcode_files, function(filename) {
   barcode_filepath <- file.path("./data/barcode-counts", filename)
@@ -135,7 +139,8 @@ summarized_before_filtering <- SummarizedExperiment::SummarizedExperiment(
 saveRDS(summarized_before_filtering, 
         paste0("./data/processed/SummarizedExperiment_before_filtering_", today_date, ".rds"))
 
-rm(artificial_controls_metadata, barcode_counts_aggregated, barcode_metadata, counts, samples, pheno_data)
+rm(artificial_controls_metadata, barcode_counts_aggregated,
+   barcode_metadata, counts, samples, pheno_data, barcode_files)
 ```
 
 ## Barcode quality controls
@@ -148,26 +153,412 @@ In this section, we use `bartools::thresholdCounts()` to determine an appropriat
 
 ```{r}
 #| label: remove-null-rows
-
+dge_count <- readRDS(paste0("./data/processed/DGEList_before_filtering_", today_date, ".rds"))
 dge_count <- dge_count[rowSums(dge_count$counts) != 0, ]
 ```
 
 ### Background noise filtering
 
-- Evaluate absolute thresholds on total read counts
+#### Background noise filtering based on absolute levels
+
+- Filter out based on a minimal absolute threshold of barcode in a minimal number of samples by `Compound`:
 
 ```{r}
-test_filtered <- bartools::thresholdCounts(
+#| label: background-filtering-absolute-compound
+#| include: true
+
+
+dge_filtered_absolute_1_N_1_by_compound <- bartools::thresholdCounts(
+  dge_count,
+  threshold = 1,
+  minSamples = 1,
+  plot = TRUE,
+  group = "Compound") +
+  theme(legend.position = "bottom")
+
+dge_filtered_absolute_10_N_1_by_compound <- bartools::thresholdCounts(
+  dge_count,
+  threshold = 10,
+  minSamples = 1,
+  plot = TRUE,
+  group = "Compound") +
+  theme(legend.position = "bottom")
+
+dge_filtered_absolute_10_N_5_by_compound <- bartools::thresholdCounts(
+  dge_count,
+  threshold = 10,
+  minSamples = 5,
+  plot = TRUE,
+  group = "Compound") +
+  theme(legend.position = "bottom")
+
+
+dge_filtered_compounds_plots <- gridExtra::marrangeGrob(grobs = list(alpha1_N1 = dge_filtered_absolute_1_N_1_by_compound, 
+                                                                     alpha10_N1 = dge_filtered_absolute_10_N_1_by_compound, 
+                                                                     alpha10_N5 = dge_filtered_absolute_10_N_5_by_compound), 
+                                                        nrow = 1, ncol = 1, top = "Plotting absolute barcode counts by compound, after applying filtering.")
+
+ggsave("./figures/barcode_filtering/dge_filterered_absolute_Compounds.pdf", 
+       dge_filtered_compounds_plots, dpi = 600, width = 14, height = 14)
+
+```
+
+
+
+- Filter out based on a minimal absolute threshold of barcode in a minimal number of samples by `Batch_ID`:
+
+```{r}
+#| label: background-filtering-absolute-batch
+#| include: true
+
+dge_filtered_absolute_1_N_1_by_batch <- bartools::thresholdCounts(
+  dge_count,
+  threshold = 1,
+  minSamples = 1,
+  plot = TRUE,
+  group = "Batch_ID") +
+  theme(legend.position = "bottom")
+
+dge_filtered_absolute_10_N_1_by_batch <- bartools::thresholdCounts(
+  dge_count,
+  threshold = 10,
+  minSamples = 1,
+  plot = TRUE,
+  group = "Batch_ID") +
+  theme(legend.position = "bottom")
+
+dge_filtered_absolute_10_N_5_by_batch <- bartools::thresholdCounts(
+  dge_count,
+  threshold = 10,
+  minSamples = 5,
+  plot = TRUE,
+  group = "Batch_ID") +
+  theme(legend.position = "bottom")
+
+dge_filtered_batches_plots <- gridExtra::marrangeGrob(list(alpha1_N1 = dge_filtered_absolute_1_N_1_by_batch, 
+                                                           alpha10_N1 = dge_filtered_absolute_10_N_1_by_batch, 
+                                                           alpha10_N5 = dge_filtered_absolute_10_N_5_by_batch), 
+                                                      nrow = 1, ncol = 1, 
+                                                      top = "Plotting absolute barcode counts by Batch ID, after applying filtering.")
+
+ggsave("./figures/barcode_filtering/dge_filterered_absolute_Batches.pdf", 
+       dge_filtered_batches_plots, dpi = 600, width = 14, height = 14)
+```
+
+
+#### Background noise filtering based on relative levels
+
+```{r}
+#| label: background-filtering-relative-batch
+#| include: true
+
+dge_filtered_relative_0.0001_N_10_by_batch <- bartools::thresholdCounts(
   dge_count,
   type = "relative",
-  threshold = 1e-5,
-  minSamples = 3,
+  threshold = 1e-4,
+  minSamples = 10,
   plot = TRUE,
-  group = "Compound"
-)
+  group = "Batch_ID") +
+  theme(legend.position = "bottom")
 
-ggsave("./figures/barcode_filtering/test_noise_filtering_plot.pdf", 
-       test_filtered, dpi = 600, width = 14, height = 14)
+dge_filtered_relative_0.001_N_10_by_batch <- bartools::thresholdCounts(
+  dge_count,
+  type = "relative",
+  threshold = 1e-3,
+  minSamples = 10,
+  plot = TRUE,
+  group = "Batch_ID") +
+  theme(legend.position = "bottom")
+
+dge_filtered_relative_0.01_N_10_by_batch <- bartools::thresholdCounts(
+  dge_count,
+  type = "relative",
+  threshold = 1e-2,
+  minSamples = 10,
+  plot = TRUE,
+  group = "Batch_ID") +
+  theme(legend.position = "bottom")
+
+dge_filtered_batches_plots <- gridExtra::marrangeGrob(list(alpha0.0001_N10 = dge_filtered_relative_0.0001_N_10_by_batch, 
+                                                           alpha0.001_N10 = dge_filtered_relative_0.001_N_10_by_batch, 
+                                                           alpha0.01_N10 = dge_filtered_relative_0.01_N_10_by_batch), 
+                                                      nrow = 1, ncol = 1, 
+                                                      top = "Plotting relative barcode counts by Batch ID, after applying filtering.")
+
+ggsave("./figures/barcode_filtering/dge_filterered_relative_Batches.pdf", 
+       dge_filtered_batches_plots, dpi = 600, width = 14, height = 14)
+```
+
+```{r}
+#| label: background-filtering-final-selection
+#| include: true
+
+# cleaning 
+rm(list = ls(pattern = "filtered"))
+gc()
+# final filtering selection
+dge_filtered <- bartools::thresholdCounts(dge_count,
+                                          type = "relative",
+                                          threshold = 1e-4,
+                                          minSamples = 10,
+                                          plot = FALSE) 
+saveRDS(dge_filtered, 
+        paste0("./results/dge_filtered_", today_date, ".rds"))
+
+```
+
+### Normalisation
+
+- [We used `TMM` normalisation rather than `CPM` normalisation as proposed in the `bartools` vignette, this technique being better fitted for visualisation purposes (but may require further $\log$ transformation).]{fg="red"}
+
+- [Finally, `tmm` normalisation does not work!!]{fg="red"}
+
+- [Even better, and recommended by Anaïs, apply `vst` or `rlog` transformation from `DeSeq2` package.]{fg="red"}. [Bonus: does not require pre-log transformation!!]{fg=green}. But not proposed by default in the vignette!!
+
+```{r}
+
+dge_cpm <- bartools::normaliseCounts(dge_filtered, method = "CPM")
+
+# raw counts per sample
+dge_filtered_plot_compound <- 
+  bartools::plotReadCounts(dge_filtered, group = "Compound") +
+  theme(legend.position = "bottom")
+dge_filtered_plot_batch <- 
+  bartools::plotReadCounts(dge_filtered, group = "Batch_ID") +
+  theme(legend.position = "bottom")
+
+# normalised counts per sample
+dge_normalised_plot_compound <- 
+  bartools::plotReadCounts(dge_cpm, group = "Compound") +
+  theme(legend.position = "bottom")
+dge_normalised_plot_batch <- 
+  bartools::plotReadCounts(dge_cpm, group = "Batch_ID") +
+  theme(legend.position = "bottom")
+
+# normalisation effect
+barplots_normalisation <- cowplot::plot_grid(
+  dge_filtered_plot_compound, dge_filtered_plot_batch,
+  dge_normalised_plot_compound, dge_normalised_plot_batch,
+  labels = "AUTO",
+  align = "hv", axis = "tblr", 
+  nrow = 2, ncol = 2)
+
+ggsave("./figures/barcode_filtering/dge_barplots_normalisation.pdf", 
+       barplots_normalisation, dpi = 300, width = 20, height = 20)
+```
+
+### Identify potentially duplicated (or more!!) MOIs
+
+- [Have to redo the function from scratch, to return a proper `ggplot2` object]{fg="red"}
+
+```{r}
+#| label: capture-high-MOIs
+
+
+bartools::plotBarcodeCounts(dge_cpm, log10 = FALSE)
+bartools::plotBarcodeCounts(dge_cpm, 
+                            log10 = TRUE)
+bartools::plotBarcodeCounts(dge_cpm, 
+                            order = TRUE,
+                            log10 = FALSE)
+bartools::plotBarcodeCounts(dge_cpm, 
+                            log10 = TRUE, 
+                            order = TRUE)
+
+# high_MOI_detection <- cowplot::plot_grid(p1, p2, p3, p4,
+#                                          labels = "AUTO",
+#                                          align = "hv", axis = "tblr", 
+#                                          nrow = 2, ncol = 2)
+
+# ggsave("./figures/barcode_filtering/dge_duplicated_transduction.pdf", 
+#        high_MOI_detection,
+#        dpi = 300, width = 20, height = 20)
+```
+
+### Check correlation between PCR replicates
+
+#### Scatter plots for correlation trends
+
+```{r}
+#| label: scatter-plot-correlations
+
+
+unique_samples <- unique(dge_filtered$samples$Unique_compound)
+
+# Plot all scatter plots per biological replicate
+scatter_plots_correlation <- lapply(unique_samples[1], function(x) {
+  # subset dge object to get replicates of sample
+  replicate_names <- colnames(dge_filtered)[dge_filtered$samples$group %in% as.character(x)]
+  bartools::plotBarcodeRegression(dge_filtered,
+                                  sample1 = replicate_names[1],
+                                  sample2 = replicate_names[2],
+                                  rug = TRUE,
+                                  trendline = TRUE,
+                                  trans = "log1p")
+})
+
+barcode_regression_scatter_osim3m_1vs_3 <- bartools::plotBarcodeRegression(
+  dge_filtered,
+  sample1 = "3m_osim1_100n_exp180123_run110723_41",
+  sample2 = "3m_osim4_100n_exp180123_run110723_44",
+  rug = TRUE,
+  trendline = TRUE,
+  trans = "log1p")
+
+ggsave("./figures/scatter-plots-correlation/osim3m_1vs_3.pdf",
+       barcode_regression_scatter_osim3m_1vs_3,
+       dpi = 300, width = 12, height = 12)
+
+barcode_regression_scatter_osim3m_1vs_2 <- bartools::plotBarcodeRegression(
+  dge_filtered,
+  sample1 = "3m_osim1_100n_exp180123_run110723_41",
+  sample2 = "3m_osim2_100n_exp180123_run110723_42",
+  rug = TRUE,
+  trendline = TRUE,
+  trans = "log1p")
+
+ggsave("./figures/scatter-plots-correlation/osim3m_1vs_2.pdf",
+       barcode_regression_scatter_osim3m_1vs_2,
+       dpi = 300, width = 12, height = 12)
+
+
+barcode_regression_scatter_osim3m_1vs_2_notransfo <- bartools::plotBarcodeRegression(
+  dge_filtered,
+  sample1 = "3m_osim1_100n_exp180123_run110723_41",
+  sample2 = "3m_osim2_100n_exp180123_run110723_42",
+  rug = TRUE,
+  trendline = TRUE,
+  trans = NULL)
+
+ggsave("./figures/scatter-plots-correlation/osim3m_1vs_2_no_transfo.pdf",
+       barcode_regression_scatter_osim3m_1vs_2_notransfo,
+       dpi = 300, width = 12, height = 12)
+```
+
+
+#### Correlation between replicates using `ggplot2`:
+
+- [TODO: compute by batch, and remove replicates poorly correlated]{fg="red"}
+
+```{r}
+#| label: pearson-correlation-replicate
+# Pearson correlation
+dge_filtered_time_course <- dge_filtered[, 
+                              dge_filtered$samples$Batch_ID %in% c("exp281022_time_course")]
+
+heatmap_pearson_correlation <- bartools::plotBarcodeCorrelation(dge_filtered_time_course,
+                                                                clustered = TRUE,
+                                                                upper = FALSE,
+                                                                method = "pearson")
+ggsave(heatmap_pearson_correlation,
+       filename = paste0("figures/correlation-heatmaps/heatmap-pearson-correlation-replicates-time-course-", today_date,".pdf"),
+       dpi = 300,
+       width = 14, height = 14)
+
+
+
+unique_batches <- unique(dge_filtered$samples$Batch_ID)
+heatmap_pearson_correlation_plots <- lapply(unique_batches, function(x) {
+  dge_filtered_per_batch <- dge_filtered[, 
+                                           dge_filtered$samples$Batch_ID == x]
+  
+  heatmap_correlation_per_batch <- bartools::plotBarcodeCorrelation(dge_filtered_per_batch,
+                                                                    clustered = TRUE,
+                                                                    upper = FALSE,
+                                                                    method = "pearson") +
+    labs(subtitle = paste("Batch ID:", x))
+  return(heatmap_correlation_per_batch)
+})
+names(heatmap_pearson_correlation_plots) <- unique_batches
+
+heatmap_pearson_correlation_plots <- gridExtra::marrangeGrob(grobs = heatmap_pearson_correlation_plots, 
+                                                             ncol = 1, nrow = 1)
+
+ggsave(heatmap_pearson_correlation_plots,
+       filename = paste0("figures/correlation-heatmaps/heatmap-pearson-correlation-all-", today_date,".pdf"),
+       dpi = 300,
+       width = 14, height = 14)
+```
+
+```{r}
+#| label: spearman-correlation-replicate
+# Spearman correlation
+heatmap_spearman_correlation <- bartools::plotBarcodeCorrelation(dge_filtered_time_course,
+                                                                clustered = TRUE,
+                                                                upper = FALSE,
+                                                                method = "spearman")
+ggsave(heatmap_spearman_correlation,
+       filename = paste0("figures/correlation-heatmaps/heatmap-spearman-correlation-replicates-time-course-", today_date,".pdf"),
+       dpi = 300,
+       width = 14, height = 14)
+```
+
+#### Compute correlation scores among replicates
+
+```{r}
+#| label: correlation-per-biological-replicates
+corrs_replicates_all <- bartools::calcReplicateCorr(dge_filtered,
+                                     corrThreshold = 0.9,
+                                     method = "spearman",
+                                     ignoreZero = TRUE,
+                                     group = "Unique_compound")
+corrs[which(corrs < 0.999)]
+```
+
+### Collapse PCR replicates
+
+- [Recommended to use the `sum` instead of the mean for sparse data, advised by both Anais and Mark Robinson]{fg="red"}
+
+```{r}
+#| label: collapse-replicates
+
+dge_filtered_collapsed <- bartools::collapseReplicates(
+  dge_filtered,
+  group = "Unique_compound",
+  method = "sum", 
+  renameCols = TRUE,
+  showReps = FALSE)
+
+```
+
+### Visualiation of barcode abundancies
+
+#### Barcode Barplots Abundancies
+
+```{r}
+#| label: barcode-abundancies
+
+barcode_barplots <- bartools::plotBarcodeHistogram(
+  dge_filtered_collapsed,
+  seedColors = 1,
+  topN = 10, 
+  alphaLowFreq = 0) +
+  theme(legend.position = "bottom")
+
+ggsave(barcode_barplots, 
+       filename = paste0("./figures/barcode_barplots/top_barcode_", today_date, ".pdf"), 
+       dpi = 100, width = 22, height = 12)
+
+```
+
+
+#### PCAs
+
+- [Re-render using dynamic, and/or annotated PCAs]{fg="red"}
+
+```{r}
+#| label: PCA-replicates
+pca_plot_replicates <- bartools::plotBarcodePCA(
+  dge_filtered_collapsed, 
+  groups = c("Compound"), 
+  ntop = 500,
+  pcs = c(1, 2)) +
+  theme(legend.position = "bottom")
+
+ggsave(pca_plot_replicates, 
+       filename = paste0("./figures/PCAs/pca_collapsed_replicates_", today_date, ".pdf"), 
+       dpi = 300, width = 14, height = 14)
+  
 ```
 
 

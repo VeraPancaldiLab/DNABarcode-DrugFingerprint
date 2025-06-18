@@ -1,84 +1,84 @@
 Batch_ID,Filename,Pathway,Old_Pathway,MoA,Old_MoA,Compound,Samples_ID,Kept,Date,Run date,Duration,Duration_ID,Concentrations_Formatted,Concentrations_ID,Concentrations,Replicates,Replicates_ID,Comments
-exp010821,exp010821.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-08-01,2021-08-18,0,0d,0,000u,0,2,Temps01_000u_exp010821_run180821_01,NA
-exp010821,exp010821.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-08-01,2021-08-18,0,0d,0,000u,0,2,Temps02_000u_exp010821_run180821_02,NA
-exp040821,exp040821.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-08-04,2021-08-18,0,0d,0,000u,0,2,Temps01_000u_exp040821_run180821_23,NA
-exp040821,exp040821.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-08-04,2021-08-18,0,0d,0,000u,0,2,Temps02_000u_exp040821_run180821_24,NA
-exp130921,exp130921.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-09-13,2021-09-29,0,0d,0,000u,0,1,Temps01_000u_exp130921_run290921_48,NA
-exp130921_in_vivo,exp130921.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-09-13,2021-11-10,0,0d,0,000u,0,1,Temps02_000u_exp130921_run101121_19,"In vivo, tumoral samples"
-exp200921_dose_response,exp200921.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-09-20,2021-11-10,0,0d,0,000u,0,2,Temps01_000u_exp200921_run101121_01,NA
-exp200921_dose_response,exp200921.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-09-20,2021-11-10,0,0d,0,000u,0,2,Temps02_000u_exp200921_run101121_02,NA
-exp181021,exp181021.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-10-18,2021-11-10,0,0d,0,000u,0,2,Temps01_000u_exp181021_run101121_36,NA
-exp181021,exp181021.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-10-18,2021-11-10,0,0d,0,000u,0,2,Temps02_000u_exp181021_run101121_37,NA
-exp151121,exp151121.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-11-15,2022-01-18,0,0d,0,000u,0,2,Temps01_000u_exp151121_run180122_01,Low cluster density
-exp151121,exp151121.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-11-15,2022-01-18,0,0d,0,000u,0,2,Temps02_000u_exp151121_run180122_02,Low cluster density
-exp271221,exp271221.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-12-27,2022-01-18,0,0d,0,000u,0,2,Temps01_000u_exp271221_run180122_15,Low cluster density
-exp271221,exp271221.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-12-27,2022-01-18,0,0d,0,000u,0,2,Temps02_000u_exp271221_run180122_16,Low cluster density
-exp070222,exp070222.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2022-02-07,2022-03-01,0,0d,0,000u,0,2,Temps01_000u_exp070222_run010322_45,NA
-exp070222,exp070222.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2022-02-07,2022-03-01,0,0d,0,000u,0,2,Temps02_000u_exp070222_run010322_46,NA
-exp220322,exp220322.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2022-03-22,2022-05-20,0,0d,0,000u,0,2,Temps01_000u_exp220322_run200522_45,NA
-exp220322,exp220322.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2022-03-22,2022-05-20,0,0d,0,000u,0,2,Temps02_000u_exp220322_run200522_46,NA
-exp010821,exp010821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-01,2021-08-18,9,9d,0,000u,0,4,Contro1_000u_exp010821_run180821_03,NA
-exp010821,exp010821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-01,2021-08-18,9,9d,0,000u,0,4,Contro2_000u_exp010821_run180821_04,NA
-exp010821,exp010821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-01,2021-08-18,9,9d,0,000u,0,4,Contro3_000u_exp010821_run180821_05,NA
-exp010821,exp010821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-01,2021-08-18,9,9d,0,000u,0,4,Contro4_000u_exp010821_run180821_06,NA
-exp040821,exp040821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-04,2021-08-18,9,9d,0,000u,0,4,Contro1_000u_exp040821_run180821_25,NA
-exp040821,exp040821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-04,2021-08-18,9,9d,0,000u,0,4,Contro2_000u_exp040821_run180821_26,NA
-exp040821,exp040821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-04,2021-08-18,9,9d,0,000u,0,4,Contro3_000u_exp040821_run180821_27,NA
-exp040821,exp040821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-04,2021-08-18,9,9d,0,000u,0,4,Contro4_000u_exp040821_run180821_28,NA
-exp181021,exp181021.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-10-18,2021-11-10,9,9d,0,000u,0,4,Contro1_000u_exp181021_run101121_38,NA
-exp181021,exp181021.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-10-18,2021-11-10,9,9d,0,000u,0,4,Contro2_000u_exp181021_run101121_39,NA
-exp181021,exp181021.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-10-18,2021-11-10,9,9d,0,000u,0,4,Contro3_000u_exp181021_run101121_40,NA
-exp181021,exp181021.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-10-18,2021-11-10,9,9d,0,000u,0,4,Contro4_000u_exp181021_run101121_41,NA
-exp300821,exp300821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-30,2021-09-29,9,9d,0,000u,0,4,Contro1_000u_exp300821_run290921_01,NA
-exp300821,exp300821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-30,2021-09-29,9,9d,0,000u,0,4,Contro2_000u_exp300821_run290921_02,NA
-exp300821,exp300821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-30,2021-09-29,9,9d,0,000u,0,4,Contro3_000u_exp300821_run290921_03,NA
-exp300821,exp300821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-30,2021-09-29,9,9d,0,000u,0,4,Contro4_000u_exp300821_run290921_04,NA
-exp130921,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-09-29,9,9d,0,000u,0,4,Contro1_000u_exp130921_run290921_32,NA
-exp130921,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-09-29,9,9d,0,000u,0,4,Contro2_000u_exp130921_run290921_33,NA
-exp130921,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-09-29,9,9d,0,000u,0,4,Contro3_000u_exp130921_run290921_34,NA
-exp130921,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-09-29,9,9d,0,000u,0,4,Contro4_000u_exp130921_run290921_35,NA
-exp200921,exp200921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-20,2021-10-11,9,9d,0,000u,0,4,Contro1_000u_exp200921_run111021_09,Dose Response
-exp200921,exp200921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-20,2021-10-11,9,9d,0,000u,0,4,Contro2_000u_exp200921_run111021_10,Dose Response
-exp200921,exp200921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-20,2021-10-11,9,9d,0,000u,0,4,Contro3_000u_exp200921_run111021_11,Dose Response
-exp200921,exp200921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-20,2021-10-11,9,9d,0,000u,0,4,Contro4_000u_exp200921_run111021_12,Dose Response
-exp151121,exp151121.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-11-15,2021-12-07,9,9d,0,000u,0,4,Contro1_000u_exp151121_run071221_01,NA
-exp151121,exp151121.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-11-15,2021-12-07,9,9d,0,000u,0,4,Contro2_000u_exp151121_run071221_02,NA
-exp151121,exp151121.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-11-15,2021-12-07,9,9d,0,000u,0,4,Contro3_000u_exp151121_run071221_03,NA
-exp151121,exp151121.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-11-15,2021-12-07,9,9d,0,000u,0,4,Contro4_000u_exp151121_run071221_04,NA
-exp271221,exp271221.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-12-27,2022-01-18,9,9d,0,000u,0,4,Contro1_000u_exp271221_run180122_17,NA
-exp271221,exp271221.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-12-27,2022-01-18,9,9d,0,000u,0,4,Contro2_000u_exp271221_run180122_18,NA
-exp271221,exp271221.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-12-27,2022-01-18,9,9d,0,000u,0,4,Contro3_000u_exp271221_run180122_19,NA
-exp271221,exp271221.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-12-27,2022-01-18,9,9d,0,000u,0,4,Contro4_000u_exp271221_run180122_20,NA
-exp070222,exp070222.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-02-07,2022-03-01,9,9d,0,000u,0,4,Contro1_000u_exp070222_run010322_01,NA
-exp070222,exp070222.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-02-07,2022-03-01,9,9d,0,000u,0,4,Contro2_000u_exp070222_run010322_02,NA
-exp070222,exp070222.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-02-07,2022-03-01,9,9d,0,000u,0,4,Contro3_000u_exp070222_run010322_03,NA
-exp070222,exp070222.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-02-07,2022-03-01,9,9d,0,000u,0,4,Contro4_000u_exp070222_run010322_04,NA
-exp220322,exp220322.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-03-22,2022-05-06,9,9d,0,000u,0,4,Contro1_000u_exp220322_run060522_25,NA
-exp220322,exp220322.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-03-22,2022-05-06,9,9d,0,000u,0,4,Contro2_000u_exp220322_run060522_26,NA
-exp220322,exp220322.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-03-22,2022-05-06,9,9d,0,000u,0,4,Contro3_000u_exp220322_run060522_27,NA
-exp220322,exp220322.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-03-22,2022-05-06,9,9d,0,000u,0,4,Contro4_000u_exp220322_run060522_28,NA
-exp130921_in_vivo,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-11-10,9,9d,0,000u,0,8,Contro1_000u_exp130921_run101121_20,"In vivo, tumoral samples"
-exp130921_in_vivo,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-11-10,9,9d,0,000u,0,8,Contro2_000u_exp130921_run101121_21,"In vivo, tumoral samples"
-exp130921_in_vivo,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-11-10,9,9d,0,000u,0,8,Contro3_000u_exp130921_run101121_22,"In vivo, tumoral samples"
-exp130921_in_vivo,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-11-10,9,9d,0,000u,0,8,Contro4_000u_exp130921_run101121_23,"In vivo, tumoral samples"
-exp130921_in_vivo,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-11-10,9,9d,0,000u,0,8,Contro5_000u_exp130921_run101121_24,"In vivo, tumoral samples"
-exp130921_in_vivo,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-11-10,9,9d,0,000u,0,8,Contro6_000u_exp130921_run101121_25,"In vivo, tumoral samples"
-exp130921_in_vivo,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-11-10,9,9d,0,000u,0,8,Contro7_000u_exp130921_run101121_26,"In vivo, tumoral samples"
-exp130921_in_vivo,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-11-10,9,9d,0,000u,0,8,Contro8_000u_exp130921_run101121_27,"In vivo, tumoral samples"
-exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-10-28,2022-12-14,9,9d,0,000u,0,4,Contro1_000u_exp281022_run141222_01,NA
-exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-10-28,2022-12-14,9,9d,0,000u,0,4,Contro2_000u_exp281022_run141222_02,NA
-exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-10-28,2022-12-14,9,9d,0,000u,0,4,Contro3_000u_exp281022_run141222_03,NA
-exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-10-28,2022-12-14,9,9d,0,000u,0,4,Contro4_000u_exp281022_run141222_04,NA
-exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,Control - T75,CTRL,FALSE,2022-10-28,2022-12-14,9,9d,0,000u,0,4,CTRL1_000u_exp281022_run141222_06,Control T 75 for `cetuximab`
-exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,Control - T75,CTRL,FALSE,2022-10-28,2022-12-14,9,9d,0,000u,0,4,CTRL2_000u_exp281022_run141222_07,Control T 75 for `cetuximab`
-exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,Control - T75,CTRL,FALSE,2022-10-28,2022-12-14,9,9d,0,000u,0,4,CTRL3_000u_exp281022_run141222_08,Control T 75 for `cetuximab`
-exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,Control - T75,CTRL,FALSE,2022-10-28,2022-12-14,9,9d,0,000u,0,4,CTRL4_000u_exp281022_run141222_09,Control T 75 for `cetuximab`
-exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,P42,p42,TRUE,2022-10-28,2022-12-14,9,9d,0,000u,0,1,p42_000u_exp281022_run141222_04,P42: evaluate drift
-exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,P43,p43,TRUE,2022-10-28,2022-12-14,9,9d,0,000u,0,1,p43_000u_exp281022_run141222_05,P43: evaluate drift
-exp281022_time_course,exp281022gamme.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-10-28,2023-07-11,9,9d,0,000u,0,4,9d_Contro1_000u_exp281022_run110723_01,Time Course
-exp281022_time_course,exp281022gamme.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-10-28,2023-07-11,9,9d,0,000u,0,4,9d_Contro2_000u_exp281022_run110723_02,Time Course
-exp281022_time_course,exp281022gamme.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-10-28,2023-07-11,9,9d,0,000u,0,4,9d_Contro3_000u_exp281022_run110723_03,Time Course
-exp281022_time_course,exp281022gamme.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-10-28,2023-07-11,9,9d,0,000u,0,4,9d_Contro4_000u_exp281022_run110723_04,Time Course
+exp010821,exp010821.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-08-01,2021-08-18,0,0d,000 uM,000u,0,2,Temps01_000u_exp010821_run180821_01,NA
+exp010821,exp010821.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-08-01,2021-08-18,0,0d,000 uM,000u,0,2,Temps02_000u_exp010821_run180821_02,NA
+exp040821,exp040821.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-08-04,2021-08-18,0,0d,000 uM,000u,0,2,Temps01_000u_exp040821_run180821_23,NA
+exp040821,exp040821.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-08-04,2021-08-18,0,0d,000 uM,000u,0,2,Temps02_000u_exp040821_run180821_24,NA
+exp130921,exp130921.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-09-13,2021-09-29,0,0d,000 uM,000u,0,1,Temps01_000u_exp130921_run290921_48,NA
+exp130921_in_vivo,exp130921.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-09-13,2021-11-10,0,0d,000 uM,000u,0,1,Temps02_000u_exp130921_run101121_19,"In vivo, tumoral samples"
+exp200921_dose_response,exp200921.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-09-20,2021-11-10,0,0d,000 uM,000u,0,2,Temps01_000u_exp200921_run101121_01,NA
+exp200921_dose_response,exp200921.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-09-20,2021-11-10,0,0d,000 uM,000u,0,2,Temps02_000u_exp200921_run101121_02,NA
+exp181021,exp181021.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-10-18,2021-11-10,0,0d,000 uM,000u,0,2,Temps01_000u_exp181021_run101121_36,NA
+exp181021,exp181021.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-10-18,2021-11-10,0,0d,000 uM,000u,0,2,Temps02_000u_exp181021_run101121_37,NA
+exp151121,exp151121.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-11-15,2022-01-18,0,0d,000 uM,000u,0,2,Temps01_000u_exp151121_run180122_01,Low cluster density
+exp151121,exp151121.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-11-15,2022-01-18,0,0d,000 uM,000u,0,2,Temps02_000u_exp151121_run180122_02,Low cluster density
+exp271221,exp271221.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-12-27,2022-01-18,0,0d,000 uM,000u,0,2,Temps01_000u_exp271221_run180122_15,Low cluster density
+exp271221,exp271221.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2021-12-27,2022-01-18,0,0d,000 uM,000u,0,2,Temps02_000u_exp271221_run180122_16,Low cluster density
+exp070222,exp070222.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2022-02-07,2022-03-01,0,0d,000 uM,000u,0,2,Temps01_000u_exp070222_run010322_45,NA
+exp070222,exp070222.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2022-02-07,2022-03-01,0,0d,000 uM,000u,0,2,Temps02_000u_exp070222_run010322_46,NA
+exp220322,exp220322.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2022-03-22,2022-05-20,0,0d,000 uM,000u,0,2,Temps01_000u_exp220322_run200522_45,NA
+exp220322,exp220322.tsv,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Control - time zero,Temps0,TRUE,2022-03-22,2022-05-20,0,0d,000 uM,000u,0,2,Temps02_000u_exp220322_run200522_46,NA
+exp010821,exp010821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-01,2021-08-18,9,9d,000 uM,000u,0,4,Contro1_000u_exp010821_run180821_03,NA
+exp010821,exp010821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-01,2021-08-18,9,9d,000 uM,000u,0,4,Contro2_000u_exp010821_run180821_04,NA
+exp010821,exp010821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-01,2021-08-18,9,9d,000 uM,000u,0,4,Contro3_000u_exp010821_run180821_05,NA
+exp010821,exp010821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-01,2021-08-18,9,9d,000 uM,000u,0,4,Contro4_000u_exp010821_run180821_06,NA
+exp040821,exp040821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-04,2021-08-18,9,9d,000 uM,000u,0,4,Contro1_000u_exp040821_run180821_25,NA
+exp040821,exp040821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-04,2021-08-18,9,9d,000 uM,000u,0,4,Contro2_000u_exp040821_run180821_26,NA
+exp040821,exp040821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-04,2021-08-18,9,9d,000 uM,000u,0,4,Contro3_000u_exp040821_run180821_27,NA
+exp040821,exp040821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-04,2021-08-18,9,9d,000 uM,000u,0,4,Contro4_000u_exp040821_run180821_28,NA
+exp181021,exp181021.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-10-18,2021-11-10,9,9d,000 uM,000u,0,4,Contro1_000u_exp181021_run101121_38,NA
+exp181021,exp181021.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-10-18,2021-11-10,9,9d,000 uM,000u,0,4,Contro2_000u_exp181021_run101121_39,NA
+exp181021,exp181021.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-10-18,2021-11-10,9,9d,000 uM,000u,0,4,Contro3_000u_exp181021_run101121_40,NA
+exp181021,exp181021.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-10-18,2021-11-10,9,9d,000 uM,000u,0,4,Contro4_000u_exp181021_run101121_41,NA
+exp300821,exp300821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-30,2021-09-29,9,9d,000 uM,000u,0,4,Contro1_000u_exp300821_run290921_01,NA
+exp300821,exp300821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-30,2021-09-29,9,9d,000 uM,000u,0,4,Contro2_000u_exp300821_run290921_02,NA
+exp300821,exp300821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-30,2021-09-29,9,9d,000 uM,000u,0,4,Contro3_000u_exp300821_run290921_03,NA
+exp300821,exp300821.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-08-30,2021-09-29,9,9d,000 uM,000u,0,4,Contro4_000u_exp300821_run290921_04,NA
+exp130921,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-09-29,9,9d,000 uM,000u,0,4,Contro1_000u_exp130921_run290921_32,NA
+exp130921,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-09-29,9,9d,000 uM,000u,0,4,Contro2_000u_exp130921_run290921_33,NA
+exp130921,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-09-29,9,9d,000 uM,000u,0,4,Contro3_000u_exp130921_run290921_34,NA
+exp130921,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-09-29,9,9d,000 uM,000u,0,4,Contro4_000u_exp130921_run290921_35,NA
+exp200921,exp200921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-20,2021-10-11,9,9d,000 uM,000u,0,4,Contro1_000u_exp200921_run111021_09,Dose Response
+exp200921,exp200921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-20,2021-10-11,9,9d,000 uM,000u,0,4,Contro2_000u_exp200921_run111021_10,Dose Response
+exp200921,exp200921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-20,2021-10-11,9,9d,000 uM,000u,0,4,Contro3_000u_exp200921_run111021_11,Dose Response
+exp200921,exp200921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-20,2021-10-11,9,9d,000 uM,000u,0,4,Contro4_000u_exp200921_run111021_12,Dose Response
+exp151121,exp151121.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-11-15,2021-12-07,9,9d,000 uM,000u,0,4,Contro1_000u_exp151121_run071221_01,NA
+exp151121,exp151121.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-11-15,2021-12-07,9,9d,000 uM,000u,0,4,Contro2_000u_exp151121_run071221_02,NA
+exp151121,exp151121.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-11-15,2021-12-07,9,9d,000 uM,000u,0,4,Contro3_000u_exp151121_run071221_03,NA
+exp151121,exp151121.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-11-15,2021-12-07,9,9d,000 uM,000u,0,4,Contro4_000u_exp151121_run071221_04,NA
+exp271221,exp271221.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-12-27,2022-01-18,9,9d,000 uM,000u,0,4,Contro1_000u_exp271221_run180122_17,NA
+exp271221,exp271221.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-12-27,2022-01-18,9,9d,000 uM,000u,0,4,Contro2_000u_exp271221_run180122_18,NA
+exp271221,exp271221.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-12-27,2022-01-18,9,9d,000 uM,000u,0,4,Contro3_000u_exp271221_run180122_19,NA
+exp271221,exp271221.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-12-27,2022-01-18,9,9d,000 uM,000u,0,4,Contro4_000u_exp271221_run180122_20,NA
+exp070222,exp070222.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-02-07,2022-03-01,9,9d,000 uM,000u,0,4,Contro1_000u_exp070222_run010322_01,NA
+exp070222,exp070222.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-02-07,2022-03-01,9,9d,000 uM,000u,0,4,Contro2_000u_exp070222_run010322_02,NA
+exp070222,exp070222.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-02-07,2022-03-01,9,9d,000 uM,000u,0,4,Contro3_000u_exp070222_run010322_03,NA
+exp070222,exp070222.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-02-07,2022-03-01,9,9d,000 uM,000u,0,4,Contro4_000u_exp070222_run010322_04,NA
+exp220322,exp220322.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-03-22,2022-05-06,9,9d,000 uM,000u,0,4,Contro1_000u_exp220322_run060522_25,NA
+exp220322,exp220322.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-03-22,2022-05-06,9,9d,000 uM,000u,0,4,Contro2_000u_exp220322_run060522_26,NA
+exp220322,exp220322.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-03-22,2022-05-06,9,9d,000 uM,000u,0,4,Contro3_000u_exp220322_run060522_27,NA
+exp220322,exp220322.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-03-22,2022-05-06,9,9d,000 uM,000u,0,4,Contro4_000u_exp220322_run060522_28,NA
+exp130921_in_vivo,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-11-10,9,9d,000 uM,000u,0,8,Contro1_000u_exp130921_run101121_20,"In vivo, tumoral samples"
+exp130921_in_vivo,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-11-10,9,9d,000 uM,000u,0,8,Contro2_000u_exp130921_run101121_21,"In vivo, tumoral samples"
+exp130921_in_vivo,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-11-10,9,9d,000 uM,000u,0,8,Contro3_000u_exp130921_run101121_22,"In vivo, tumoral samples"
+exp130921_in_vivo,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-11-10,9,9d,000 uM,000u,0,8,Contro4_000u_exp130921_run101121_23,"In vivo, tumoral samples"
+exp130921_in_vivo,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-11-10,9,9d,000 uM,000u,0,8,Contro5_000u_exp130921_run101121_24,"In vivo, tumoral samples"
+exp130921_in_vivo,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-11-10,9,9d,000 uM,000u,0,8,Contro6_000u_exp130921_run101121_25,"In vivo, tumoral samples"
+exp130921_in_vivo,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-11-10,9,9d,000 uM,000u,0,8,Contro7_000u_exp130921_run101121_26,"In vivo, tumoral samples"
+exp130921_in_vivo,exp130921.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2021-09-13,2021-11-10,9,9d,000 uM,000u,0,8,Contro8_000u_exp130921_run101121_27,"In vivo, tumoral samples"
+exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-10-28,2022-12-14,9,9d,000 uM,000u,0,4,Contro1_000u_exp281022_run141222_01,NA
+exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-10-28,2022-12-14,9,9d,000 uM,000u,0,4,Contro2_000u_exp281022_run141222_02,NA
+exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-10-28,2022-12-14,9,9d,000 uM,000u,0,4,Contro3_000u_exp281022_run141222_03,NA
+exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-10-28,2022-12-14,9,9d,000 uM,000u,0,4,Contro4_000u_exp281022_run141222_04,NA
+exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,Control - T75,CTRL,FALSE,2022-10-28,2022-12-14,9,9d,000 uM,000u,0,4,CTRL1_000u_exp281022_run141222_06,Control T 75 for `cetuximab`
+exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,Control - T75,CTRL,FALSE,2022-10-28,2022-12-14,9,9d,000 uM,000u,0,4,CTRL2_000u_exp281022_run141222_07,Control T 75 for `cetuximab`
+exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,Control - T75,CTRL,FALSE,2022-10-28,2022-12-14,9,9d,000 uM,000u,0,4,CTRL3_000u_exp281022_run141222_08,Control T 75 for `cetuximab`
+exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,Control - T75,CTRL,FALSE,2022-10-28,2022-12-14,9,9d,000 uM,000u,0,4,CTRL4_000u_exp281022_run141222_09,Control T 75 for `cetuximab`
+exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,P42,p42,TRUE,2022-10-28,2022-12-14,9,9d,000 uM,000u,0,1,p42_000u_exp281022_run141222_04,P42: evaluate drift
+exp281022_t25,exp281022t25.tsv,Control,Control,Control,Control,P43,p43,TRUE,2022-10-28,2022-12-14,9,9d,000 uM,000u,0,1,p43_000u_exp281022_run141222_05,P43: evaluate drift
+exp281022_time_course,exp281022gamme.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-10-28,2023-07-11,9,9d,000 uM,000u,0,4,9d_Contro1_000u_exp281022_run110723_01,Time Course
+exp281022_time_course,exp281022gamme.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-10-28,2023-07-11,9,9d,000 uM,000u,0,4,9d_Contro2_000u_exp281022_run110723_02,Time Course
+exp281022_time_course,exp281022gamme.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-10-28,2023-07-11,9,9d,000 uM,000u,0,4,9d_Contro3_000u_exp281022_run110723_03,Time Course
+exp281022_time_course,exp281022gamme.tsv,Control,Control,Control,Control,Control,Contro,TRUE,2022-10-28,2023-07-11,9,9d,000 uM,000u,0,4,9d_Contro4_000u_exp281022_run110723_04,Time Course
 exp130921_in_vivo,exp130921.tsv,RTK,EGFR,EGFR inhibitor (3rd gen.),3rd generation EGFR-TKIs,Osimertinb,Osimer,TRUE,2021-09-13,2021-11-10,9,9d,1 mg/kg,001m,0.001,8,Osimer1_001m_exp130921_run101121_28,"In vivo, tumoral samples"
 exp130921_in_vivo,exp130921.tsv,RTK,EGFR,EGFR inhibitor (3rd gen.),3rd generation EGFR-TKIs,Osimertinb,Osimer,TRUE,2021-09-13,2021-11-10,9,9d,1 mg/kg,001m,0.001,8,Osimer2_001m_exp130921_run101121_29,"In vivo, tumoral samples"
 exp130921_in_vivo,exp130921.tsv,RTK,EGFR,EGFR inhibitor (3rd gen.),3rd generation EGFR-TKIs,Osimertinb,Osimer,TRUE,2021-09-13,2021-11-10,9,9d,1 mg/kg,001m,0.001,8,Osimer3_001m_exp130921_run101121_30,"In vivo, tumoral samples"

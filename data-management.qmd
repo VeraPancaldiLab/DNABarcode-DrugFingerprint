@@ -233,8 +233,7 @@ samples_metadata <- samples_metadata |>
 
 ## format concentrations, creating both 'Concentrations_ID' and 'Concentrations' in Moles ----
 samples_metadata <- samples_metadata |> 
-  dplyr::mutate(Concentrations=if_else(grepl("^(Control|P42|P43)", Compound), "000 uM", Concentrations_Formatted)) |> 
-  dplyr::mutate(Concentrations=if_else(Compound == "Osimertinb+sorafenib", "015 uM", Concentrations)) |>
+  dplyr::mutate(Concentrations = if_else(Compound == "Osimertinb+sorafenib", "015 uM", Concentrations_Formatted)) |>
   tidyr::separate_wider_delim(Concentrations, delim = " ", names = c("Concentrations Value", "Unit"), cols_remove = FALSE) |>
   dplyr::mutate(Unit = case_when(
     Unit %in% c("uM", "µM", "µg/ml") ~ "u",
